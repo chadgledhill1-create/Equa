@@ -217,6 +217,23 @@
     text-decoration: none;
     font-weight: 500;
   }
+  .nav-drawer-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 14px 24px;
+    background: none;
+    border: none;
+    font-family: var(--font-ui);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.12s;
+  }
+  .nav-drawer-item:active { background: var(--bg-card2); }
 
   /* WHAT IS EQUA screen */
   .info-screen-wrap {
@@ -961,35 +978,98 @@
   <!-- ============ HOME ============ -->
   <!-- ============ LANDING SCREEN ============ -->
   <div id="screen-landing" class="screen">
-    <div class="landing-screen">
-      <div class="landing-hero">
-        <div class="landing-mark">Behavioral Health</div>
-        <div class="landing-headline">Recovery support, <em>ready</em> when you need it most.</div>
-        <div class="landing-sub">EQUA gives you a personalized plan that works even when you can't think straight.</div>
 
-        <button class="landing-cta-primary" data-action="screen" data-val="screen-home">
-          <span>Get started</span>
-          <span>→</span>
-        </button>
-        <button class="landing-cta-ghost" data-action="screen" data-val="screen-what-is-equa">
-          <span>What is EQUA?</span>
-          <span style="opacity:0.5;">→</span>
-        </button>
-        <button class="landing-cta-ghost" data-action="screen" data-val="screen-how-it-works">
-          <span>How it works</span>
-          <span style="opacity:0.5;">→</span>
-        </button>
+    <!-- Hamburger menu drawer overlay -->
+    <div id="nav-drawer" style="position:absolute;inset:0;z-index:100;display:none;">
+      <!-- Backdrop -->
+      <div id="nav-backdrop" data-action="closeNav" style="position:absolute;inset:0;background:rgba(0,0,0,0.45);backdrop-filter:blur(2px);"></div>
+      <!-- Drawer panel -->
+      <div style="position:absolute;top:0;right:0;bottom:0;width:80%;max-width:300px;background:var(--bg-card);border-left:1px solid var(--border);display:flex;flex-direction:column;padding:max(48px,env(safe-area-inset-top,48px)) 0 max(32px,env(safe-area-inset-bottom,32px));">
+        <!-- Close -->
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:0 24px 24px;">
+          <span style="font-family:var(--font-display);font-size:20px;letter-spacing:0.06em;color:var(--text);">EQUA</span>
+          <button data-action="closeNav" style="background:none;border:none;color:var(--text-muted);font-size:22px;cursor:pointer;padding:4px;">✕</button>
+        </div>
+        <div style="height:1px;background:var(--border);margin:0 24px 8px;"></div>
 
-        <div class="landing-divider"></div>
-        <div class="landing-signin">Already have an account? <a href="#" data-action="screen" data-val="screen-home">Sign in →</a></div>
+        <!-- Nav items -->
+        <div style="flex:1;overflow-y:auto;padding:8px 0;">
+          <div style="padding:4px 12px;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-dim);font-weight:600;">Explore</div>
+          <button class="nav-drawer-item" data-action="navTo" data-val="screen-what-is-equa">
+            <span>What is EQUA?</span><span style="opacity:0.4;font-size:14px;">→</span>
+          </button>
+          <button class="nav-drawer-item" data-action="navTo" data-val="screen-how-it-works">
+            <span>How it works</span><span style="opacity:0.4;font-size:14px;">→</span>
+          </button>
+
+          <div style="height:1px;background:var(--border);margin:12px 24px;"></div>
+          <div style="padding:4px 12px;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-dim);font-weight:600;">My Account</div>
+          <button class="nav-drawer-item" data-action="navTo" data-val="screen-plan-0">
+            <span>My Plan</span><span style="opacity:0.4;font-size:14px;">→</span>
+          </button>
+          <button class="nav-drawer-item" data-action="navTo" data-val="screen-handoff">
+            <span>Recovery Log</span><span style="opacity:0.4;font-size:14px;">→</span>
+          </button>
+
+          <div style="height:1px;background:var(--border);margin:12px 24px;"></div>
+          <div style="padding:4px 12px;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-dim);font-weight:600;">Providers</div>
+          <button class="nav-drawer-item" data-action="navTo" data-val="screen-clinician">
+            <span>For Clinicians</span><span style="opacity:0.4;font-size:14px;">→</span>
+          </button>
+        </div>
+
+        <div style="padding:0 24px;">
+          <div class="emergency-btn" data-action="callEmergency" style="margin-top:0;">
+            <div><div class="emergency-text">988 · 911 · Crisis Line</div></div>
+            <span style="color:var(--danger);">→</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Landing content -->
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:max(24px,env(safe-area-inset-top,24px)) 28px max(40px,env(safe-area-inset-bottom,40px));">
+
+      <!-- Top bar with hamburger -->
+      <div style="width:100%;display:flex;justify-content:flex-end;">
+        <button data-action="openNav" style="background:none;border:none;cursor:pointer;padding:8px;display:flex;flex-direction:column;gap:5px;align-items:flex-end;">
+          <span style="display:block;width:22px;height:2px;background:var(--text);border-radius:2px;"></span>
+          <span style="display:block;width:16px;height:2px;background:var(--text);border-radius:2px;"></span>
+          <span style="display:block;width:22px;height:2px;background:var(--text);border-radius:2px;"></span>
+        </button>
       </div>
 
-      <div style="padding:0 24px 32px;">
+      <!-- Logo block -->
+      <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+        <div style="font-family:var(--font-display);font-size:64px;letter-spacing:0.06em;color:var(--text);line-height:1;">EQUA</div>
+        <div style="font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);font-weight:500;">Behavioral Health</div>
+        <div style="font-size:14px;color:var(--text-muted);text-align:center;line-height:1.6;max-width:240px;margin-top:4px;">Your recovery plan, ready when you need it most.</div>
+      </div>
+
+      <!-- CTAs -->
+      <div style="display:flex;flex-direction:column;gap:12px;width:100%;">
+        <button class="landing-cta-primary" data-action="screen" data-val="screen-home">
+          <span>Get started</span><span>→</span>
+        </button>
+        <button class="landing-cta-ghost" data-action="screen" data-val="screen-what-is-equa">
+          <span>What is EQUA?</span><span style="opacity:0.4;">→</span>
+        </button>
+        <button class="landing-cta-ghost" data-action="screen" data-val="screen-how-it-works">
+          <span>How it works</span><span style="opacity:0.4;">→</span>
+        </button>
+        <div style="text-align:center;font-size:13px;color:var(--text-dim);padding-top:4px;">
+          Already have an account? <span style="color:var(--accent);font-weight:500;cursor:pointer;" data-action="screen" data-val="screen-home">Sign in →</span>
+        </div>
+      </div>
+
+      <!-- Crisis footer -->
+      <div style="width:100%;">
         <div class="emergency-btn" data-action="callEmergency">
           <div><div class="emergency-text">988 · 911 · Crisis Line</div><div class="emergency-sub">If you're not safe right now</div></div>
           <span style="color:var(--danger);">→</span>
         </div>
       </div>
+
     </div>
   </div>
 
@@ -1898,6 +1978,9 @@
     else if (a === 'submitFeedback') submitFeedback(el);
     else if (a === 'generateHandoff') generateHandoff(el);
     else if (a === 'callEmergency') callEmergency();
+    else if (a === 'openNav') { document.getElementById('nav-drawer').style.display = 'block'; }
+    else if (a === 'closeNav') { document.getElementById('nav-drawer').style.display = 'none'; }
+    else if (a === 'navTo') { document.getElementById('nav-drawer').style.display = 'none'; showScreen(t.dataset.val); }
     else if (a === 'showComingSoon') showComingSoon(el);
     else if (a === 'startPathway') startPathway();
     else if (a === 'startSD') startSD();
