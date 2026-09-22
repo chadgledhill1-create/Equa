@@ -110,6 +110,157 @@
   }
   .logo span { color: var(--accent); }
 
+  /* LANDING SCREEN */
+  .landing-screen {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    background: var(--bg);
+  }
+  .landing-hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 48px 28px 32px;
+    gap: 0;
+  }
+  .landing-mark {
+    font-family: var(--font-display);
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .landing-mark::before {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 1px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+  .landing-headline {
+    font-family: var(--font-display);
+    font-size: 38px;
+    line-height: 1.12;
+    color: var(--text);
+    text-wrap: balance;
+    margin-bottom: 16px;
+  }
+  .landing-headline em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .landing-sub {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.65;
+    max-width: 300px;
+    margin-bottom: 36px;
+  }
+  .landing-cta-primary {
+    width: 100%;
+    padding: 18px 24px;
+    background: var(--text);
+    color: var(--bg);
+    border: none;
+    border-radius: 14px;
+    font-family: var(--font-ui);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: opacity 0.15s, transform 0.1s;
+    margin-bottom: 10px;
+    letter-spacing: 0.01em;
+  }
+  .landing-cta-primary:active { opacity: 0.85; transform: scale(0.98); }
+  .landing-cta-ghost {
+    width: 100%;
+    padding: 16px 24px;
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    font-family: var(--font-ui);
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.15s, border-color 0.15s;
+    margin-bottom: 10px;
+  }
+  .landing-cta-ghost:active { background: var(--bg-card); }
+  .landing-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 8px 0 16px;
+  }
+  .landing-signin {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-dim);
+    padding-bottom: 32px;
+  }
+  .landing-signin a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  /* WHAT IS EQUA screen */
+  .info-screen-wrap {
+    flex: 1;
+    overflow-y: auto;
+    padding: 32px 24px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .info-headline {
+    font-family: var(--font-display);
+    font-size: 28px;
+    line-height: 1.2;
+    color: var(--text);
+    text-wrap: balance;
+  }
+  .info-block {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .info-block-num {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .info-block-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .info-block-body {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+  .info-divider {
+    height: 1px;
+    background: var(--border);
+  }
+
   /* HOME */
   .home-hero {
     padding: 40px 24px 28px;
@@ -808,7 +959,110 @@
 <div id="app">
 
   <!-- ============ HOME ============ -->
-  <div id="screen-home" class="screen">
+  <!-- ============ LANDING SCREEN ============ -->
+  <div id="screen-landing" class="screen">
+    <div class="landing-screen">
+      <div class="landing-hero">
+        <div class="landing-mark">Behavioral Health</div>
+        <div class="landing-headline">Recovery support, <em>ready</em> when you need it most.</div>
+        <div class="landing-sub">EQUA gives you a personalized plan that works even when you can't think straight.</div>
+
+        <button class="landing-cta-primary" data-action="screen" data-val="screen-home">
+          <span>Get started</span>
+          <span>→</span>
+        </button>
+        <button class="landing-cta-ghost" data-action="screen" data-val="screen-what-is-equa">
+          <span>What is EQUA?</span>
+          <span style="opacity:0.5;">→</span>
+        </button>
+        <button class="landing-cta-ghost" data-action="screen" data-val="screen-how-it-works">
+          <span>How it works</span>
+          <span style="opacity:0.5;">→</span>
+        </button>
+
+        <div class="landing-divider"></div>
+        <div class="landing-signin">Already have an account? <a href="#" data-action="screen" data-val="screen-home">Sign in →</a></div>
+      </div>
+
+      <div style="padding:0 24px 32px;">
+        <div class="emergency-btn" data-action="callEmergency">
+          <div><div class="emergency-text">988 · 911 · Crisis Line</div><div class="emergency-sub">If you're not safe right now</div></div>
+          <span style="color:var(--danger);">→</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ WHAT IS EQUA ============ -->
+  <div id="screen-what-is-equa" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-landing">← Back</button>
+      <span class="logo">EQU<span>A</span></span>
+    </div>
+    <div class="info-screen-wrap">
+      <div class="info-headline">Built for the moments when you can't build anything.</div>
+
+      <div class="info-block">
+        <div class="info-block-num">The problem</div>
+        <div class="info-block-title">Recovery plans fail at the worst times.</div>
+        <div class="info-block-body">When you're in crisis, your prefrontal cortex — the part that makes plans — goes offline. You can't access what you know. EQUA is built for that exact moment.</div>
+      </div>
+      <div class="info-divider"></div>
+      <div class="info-block">
+        <div class="info-block-num">The solution</div>
+        <div class="info-block-title">A plan built when you're clear. Used when you're not.</div>
+        <div class="info-block-body">You build your recovery plan during a calm moment — your values, your warning signs, your support contacts. When crisis hits, EQUA walks you through it step by step.</div>
+      </div>
+      <div class="info-divider"></div>
+      <div class="info-block">
+        <div class="info-block-num">The science</div>
+        <div class="info-block-title">Every intervention is evidence-based.</div>
+        <div class="info-block-body">Box breathing, physiological sighs, grounding, Opposite Action — all DBT and neuroscience-backed protocols. Not wellness fluff. Real tools that work on your nervous system.</div>
+      </div>
+      <div class="info-divider"></div>
+
+      <button class="landing-cta-primary" data-action="screen" data-val="screen-home" style="margin-top:8px;">
+        <span>Get started</span><span>→</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ============ HOW IT WORKS ============ -->
+  <div id="screen-how-it-works" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-landing">← Back</button>
+      <span class="logo">EQU<span>A</span></span>
+    </div>
+    <div class="info-screen-wrap">
+      <div class="info-headline">Three steps. No thinking required.</div>
+
+      <div class="info-block">
+        <div class="info-block-num">Step 01</div>
+        <div class="info-block-title">Build your plan — once.</div>
+        <div class="info-block-body">Answer a few questions about what you're protecting, your warning signs, and your support network. Takes about 5 minutes. You only do this when you're calm and clear.</div>
+      </div>
+      <div class="info-divider"></div>
+      <div class="info-block">
+        <div class="info-block-num">Step 02</div>
+        <div class="info-block-title">When crisis hits — tap "I need help."</div>
+        <div class="info-block-body">One button. EQUA identifies what's happening — craving, shutting down, escalating, or overwhelmed — and gives you the right intervention for that state.</div>
+      </div>
+      <div class="info-divider"></div>
+      <div class="info-block">
+        <div class="info-block-num">Step 03</div>
+        <div class="info-block-title">Follow the steps. One at a time.</div>
+        <div class="info-block-body">Each intervention is broken into timed, guided steps. You don't have to think — just do the next thing. When you're through, EQUA checks in and logs the outcome.</div>
+      </div>
+      <div class="info-divider"></div>
+
+      <button class="landing-cta-primary" data-action="screen" data-val="screen-home" style="margin-top:8px;">
+        <span>I'm ready. Let's go.</span><span>→</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ============ HOME (logged in) ============ -->
+  <div id="screen-home" class="screen hidden">
     <div class="header">
       <span class="logo">EQU<span>A</span></span>
       <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-clinician">For clinicians</button>
