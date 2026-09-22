@@ -1,0 +1,1574 @@
+<title>EQUA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap">
+
+<style>
+  :root {
+    --bg: #0F1117;
+    --bg-card: #1A1D27;
+    --bg-card2: #232638;
+    --border: #2E3249;
+    --text: #F0EDE8;
+    --text-muted: #8A8DA8;
+    --text-dim: #5A5D78;
+    --accent: #7C9E87;
+    --accent-glow: rgba(124,158,135,0.15);
+    --danger: #C0392B;
+    --danger-glow: rgba(192,57,43,0.15);
+    --warn: #E67E22;
+    --safe: #27AE60;
+    --font-ui: 'DM Sans', system-ui, sans-serif;
+    --font-display: 'DM Serif Display', Georgia, serif;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --bg: #F5F3EF;
+      --bg-card: #FFFFFF;
+      --bg-card2: #EEECE8;
+      --border: #DDDAD4;
+      --text: #1A1A2E;
+      --text-muted: #5A5870;
+      --text-dim: #9A98AA;
+      --accent: #4A7A58;
+      --accent-glow: rgba(74,122,88,0.10);
+      --danger: #C0392B;
+      --danger-glow: rgba(192,57,43,0.08);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F1117;
+    --bg-card: #1A1D27;
+    --bg-card2: #232638;
+    --border: #2E3249;
+    --text: #F0EDE8;
+    --text-muted: #8A8DA8;
+    --text-dim: #5A5D78;
+    --accent: #7C9E87;
+    --accent-glow: rgba(124,158,135,0.15);
+    --danger: #C0392B;
+    --danger-glow: rgba(192,57,43,0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-ui);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+
+  #app {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    max-width: 480px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* SCREENS */
+  .screen {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    transition: transform 0.38s cubic-bezier(0.4,0,0.2,1), opacity 0.38s;
+    overflow: hidden;
+  }
+  .screen.hidden { transform: translateX(100%); opacity: 0; pointer-events: none; }
+  .screen.hidden-left { transform: translateX(-100%); opacity: 0; pointer-events: none; }
+
+  /* SAFE AREA */
+  .safe-top { padding-top: max(20px, env(safe-area-inset-top, 20px)); }
+  .safe-bot { padding-bottom: max(24px, env(safe-area-inset-bottom, 24px)); }
+
+  /* HEADER */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    padding-top: max(20px, env(safe-area-inset-top, 20px));
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .logo {
+    font-family: var(--font-display);
+    font-size: 22px;
+    letter-spacing: 0.04em;
+    color: var(--text);
+  }
+  .logo span { color: var(--accent); }
+
+  /* HOME */
+  .home-hero {
+    padding: 40px 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .home-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .home-headline {
+    font-family: var(--font-display);
+    font-size: 30px;
+    line-height: 1.2;
+    color: var(--text);
+    text-wrap: balance;
+  }
+  .home-sub {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    line-height: 1.6;
+  }
+  .home-actions {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 18px 20px;
+    font-family: var(--font-ui);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: opacity 0.15s, transform 0.1s;
+    text-align: left;
+  }
+  .btn-primary:active { opacity: 0.85; transform: scale(0.98); }
+  .btn-primary.danger { background: var(--danger); }
+  .btn-secondary {
+    background: var(--bg-card);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    font-family: var(--font-ui);
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: opacity 0.15s, background 0.15s;
+  }
+  .btn-secondary:active { opacity: 0.8; }
+  .btn-icon { font-size: 18px; opacity: 0.7; }
+
+  /* NAV TABS */
+  .nav-tabs {
+    display: flex;
+    padding: 10px 20px;
+    gap: 8px;
+    background: var(--bg);
+  }
+  .nav-tab {
+    flex: 1;
+    padding: 8px 6px;
+    font-size: 12px;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+    font-family: var(--font-ui);
+  }
+  .nav-tab.active {
+    background: var(--bg-card2);
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  /* SECTION */
+  .section { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    font-weight: 500;
+  }
+
+  /* CARD */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .card-row {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+  .card-row:last-child { border-bottom: none; }
+  .card-row:active { background: var(--bg-card2); }
+  .card-row-icon { font-size: 18px; width: 28px; text-align: center; }
+  .card-row-content { flex: 1; }
+  .card-row-title { font-size: 14px; font-weight: 500; color: var(--text); }
+  .card-row-sub { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
+  .card-row-arrow { color: var(--text-dim); font-size: 14px; }
+
+  /* PLAN BADGE */
+  .plan-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 20px;
+    background: var(--accent-glow);
+    border-radius: 10px;
+    margin: 0 20px;
+    border: 1px solid rgba(124,158,135,0.25);
+  }
+  .plan-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .plan-status-text { font-size: 13px; color: var(--accent); font-weight: 500; }
+
+  /* EMERGENCY BANNER */
+  .emergency-btn {
+    margin: 0 20px 16px;
+    padding: 12px 16px;
+    background: var(--danger-glow);
+    border: 1px solid rgba(192,57,43,0.35);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .emergency-btn:active { background: rgba(192,57,43,0.25); }
+  .emergency-text { font-size: 13px; color: var(--danger); font-weight: 600; }
+  .emergency-sub { font-size: 11px; color: var(--text-muted); }
+
+  /* -------- BUILD PLAN SCREEN -------- */
+  .plan-step {
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: max(80px, env(safe-area-inset-bottom, 80px));
+  }
+  .step-q {
+    font-family: var(--font-display);
+    font-size: 24px;
+    line-height: 1.25;
+    color: var(--text);
+    text-wrap: balance;
+  }
+  .step-hint { font-size: 13px; color: var(--text-muted); }
+  .text-input {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    font-family: var(--font-ui);
+    font-size: 15px;
+    color: var(--text);
+    width: 100%;
+    resize: none;
+    min-height: 80px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .text-input:focus { border-color: var(--accent); }
+  .text-input::placeholder { color: var(--text-dim); }
+
+  /* chip grid */
+  .chip-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    padding: 8px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    font-size: 13px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font-ui);
+  }
+  .chip.selected {
+    background: var(--accent-glow);
+    border-color: var(--accent);
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* person card */
+  .person-list { display: flex; flex-direction: column; gap: 10px; }
+  .person-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .person-avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: var(--accent-glow);
+    border: 1px solid rgba(124,158,135,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; color: var(--accent); font-weight: 600;
+    flex-shrink: 0;
+  }
+  .person-info { flex: 1; }
+  .person-name { font-size: 14px; font-weight: 500; }
+  .person-role { font-size: 12px; color: var(--text-muted); }
+  .person-call { font-size: 20px; cursor: pointer; color: var(--accent); }
+  .add-person {
+    background: transparent;
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: var(--font-ui);
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .add-person:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* action tiers */
+  .tier { display: flex; flex-direction: column; gap: 8px; }
+  .tier-label {
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    font-weight: 600;
+    padding: 4px 0;
+  }
+  .tier-label.low { color: var(--safe); }
+  .tier-label.mid { color: var(--warn); }
+  .tier-label.high { color: var(--danger); }
+  .tier-action {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font-ui);
+    text-align: left;
+  }
+  .tier-action.selected {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+    color: var(--text);
+  }
+  .tier-action .check { color: var(--accent); font-size: 15px; opacity: 0; }
+  .tier-action.selected .check { opacity: 1; }
+
+  /* sticky footer */
+  .sticky-footer {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    padding: 12px 20px;
+    padding-bottom: max(24px, env(safe-area-inset-bottom, 24px));
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    z-index: 20;
+  }
+  .btn-full {
+    flex: 1;
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-ui);
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .btn-full:active { opacity: 0.85; transform: scale(0.98); }
+  .btn-full.primary { background: var(--accent); color: #fff; }
+  .btn-full.ghost { background: var(--bg-card); color: var(--text-muted); border: 1px solid var(--border); }
+
+  /* progress dots */
+  .progress-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 0 4px;
+  }
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 3px;
+    background: var(--border);
+    transition: all 0.25s;
+  }
+  .dot.active { width: 18px; background: var(--accent); }
+
+  /* -------- HELP NOW SCREEN -------- */
+  .help-step {
+    padding: 28px 24px;
+    -webkit-overflow-scrolling: touch;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: max(80px, env(safe-area-inset-bottom, 80px));
+  }
+  .help-q {
+    font-family: var(--font-display);
+    font-size: 26px;
+    line-height: 1.2;
+    color: var(--text);
+  }
+  .help-sub { font-size: 14px; color: var(--text-muted); }
+
+  /* type selector */
+  .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .type-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: left;
+  }
+  .type-card:active { opacity: 0.8; }
+  .type-card.selected {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+  }
+  .type-card.inactive { opacity: 0.4; }
+  .type-card-icon { font-size: 24px; margin-bottom: 8px; }
+  .type-card-label { font-size: 14px; font-weight: 600; color: var(--text); }
+  .type-card-label2 { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+  /* intensity slider */
+  .intensity-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+  }
+  .intensity-num {
+    font-family: var(--font-display);
+    font-size: 72px;
+    line-height: 1;
+    color: var(--text);
+    transition: color 0.3s;
+  }
+  .intensity-label { font-size: 13px; color: var(--text-muted); letter-spacing: 0.06em; text-transform: uppercase; }
+  .slider {
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--border);
+    outline: none;
+    cursor: pointer;
+  }
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    transition: background 0.2s;
+  }
+
+  /* context binary */
+  .binary-row { display: flex; gap: 10px; }
+  .binary-btn {
+    flex: 1;
+    padding: 18px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: var(--font-ui);
+    transition: all 0.15s;
+    text-align: center;
+  }
+  .binary-btn.selected {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+    color: var(--accent);
+  }
+  .binary-btn:active { opacity: 0.8; }
+
+  /* action reveal */
+  .action-reveal {
+    background: var(--bg-card);
+    border: 1px solid var(--accent);
+    border-radius: 16px;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .action-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .action-text {
+    font-family: var(--font-display);
+    font-size: 22px;
+    line-height: 1.3;
+    color: var(--text);
+  }
+  .action-detail { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+  .action-cta-row { display: flex; gap: 10px; margin-top: 4px; }
+  .action-cta {
+    flex: 1;
+    padding: 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-ui);
+    transition: opacity 0.15s;
+    text-align: center;
+  }
+  .action-cta:active { opacity: 0.8; }
+  .action-cta.call { background: var(--accent); color: #fff; }
+  .action-cta.alt { background: var(--bg-card2); color: var(--text-muted); border: 1px solid var(--border); }
+
+  /* timer */
+  .timer-display {
+    text-align: center;
+    padding: 8px 0;
+  }
+  .timer-num {
+    font-family: var(--font-display);
+    font-size: 56px;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .timer-sub { font-size: 12px; color: var(--text-dim); margin-top: 4px; }
+  .timer-btn {
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid var(--accent);
+    background: transparent;
+    color: var(--accent);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--font-ui);
+    transition: all 0.15s;
+  }
+  .timer-btn:hover { background: var(--accent-glow); }
+  .timer-btn.running { background: var(--accent-glow); }
+  .timer-btn:active { opacity: 0.8; }
+
+  /* reassess */
+  .reassess-delta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 8px 0;
+  }
+  .delta-box {
+    text-align: center;
+  }
+  .delta-num {
+    font-family: var(--font-display);
+    font-size: 40px;
+    color: var(--text);
+    line-height: 1;
+  }
+  .delta-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .delta-arrow { font-size: 24px; color: var(--accent); }
+
+  /* outcome */
+  .outcome-card {
+    background: var(--accent-glow);
+    border: 1px solid rgba(124,158,135,0.3);
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .outcome-icon { font-size: 32px; }
+  .outcome-title { font-size: 17px; font-weight: 600; color: var(--text); }
+  .outcome-sub { font-size: 13px; color: var(--text-muted); }
+
+  /* -------- CLINICIAN SCREEN -------- */
+  .clinician-hero {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .clinician-tag {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--accent-glow);
+    color: var(--accent);
+    border: 1px solid rgba(124,158,135,0.3);
+    width: fit-content;
+  }
+  .clinician-title {
+    font-family: var(--font-display);
+    font-size: 26px;
+    line-height: 1.2;
+    color: var(--text);
+  }
+  .clinician-body { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+
+  .q-list { display: flex; flex-direction: column; gap: 10px; }
+  .q-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    gap: 12px;
+  }
+  .q-num {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    flex-shrink: 0;
+    padding-top: 2px;
+    width: 20px;
+    font-variant-numeric: tabular-nums;
+  }
+  .q-text { font-size: 14px; color: var(--text); line-height: 1.5; }
+
+  .feedback-area {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .feedback-label { font-size: 12px; color: var(--text-muted); }
+  .feedback-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: var(--font-ui);
+    font-size: 14px;
+    color: var(--text);
+    min-height: 80px;
+    resize: none;
+    width: 100%;
+  }
+  .feedback-input::placeholder { color: var(--text-dim); }
+  .follow-up-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+  }
+  .toggle-box {
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    color: var(--accent);
+    transition: all 0.15s;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .toggle-box.checked { background: var(--accent); border-color: var(--accent); color: white; }
+  .follow-up-text { font-size: 14px; color: var(--text); line-height: 1.4; }
+
+  /* -------- DISCHARGE HANDOFF (the big idea) -------- */
+  .handoff-hero {
+    padding: 28px 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .handoff-title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--text);
+  }
+  .handoff-sub { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+  .handoff-form { padding: 20px; display: flex; flex-direction: column; gap: 16px; padding-bottom: 120px; }
+  .field-label { font-size: 12px; color: var(--text-muted); font-weight: 500; letter-spacing: 0.04em; margin-bottom: 6px; }
+  .field-input {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 13px 14px;
+    font-family: var(--font-ui);
+    font-size: 14px;
+    color: var(--text);
+    width: 100%;
+    outline: none;
+    transition: border-color 0.15px;
+  }
+  .field-input:focus { border-color: var(--accent); }
+  .field-input::placeholder { color: var(--text-dim); }
+  .field-group { display: flex; flex-direction: column; }
+  .preview-ready {
+    background: var(--accent-glow);
+    border: 1px solid rgba(124,158,135,0.3);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 4px;
+  }
+  .preview-ready-icon { font-size: 18px; color: var(--accent); flex-shrink: 0; margin-top: 1px; }
+  .preview-ready-text { font-size: 13px; color: var(--accent); line-height: 1.5; }
+
+  /* -------- ANIMATIONS -------- */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-in { animation: fadeUp 0.35s ease both; }
+  .fade-in-2 { animation: fadeUp 0.35s 0.08s ease both; }
+  .fade-in-3 { animation: fadeUp 0.35s 0.16s ease both; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+
+<div id="app">
+
+  <!-- ============ HOME ============ -->
+  <div id="screen-home" class="screen">
+    <div class="header">
+      <span class="logo">EQU<span>A</span></span>
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-clinician">For clinicians</button>
+    </div>
+
+    <div style="flex:1;overflow-y:auto;padding-bottom:24px;">
+      <div class="home-hero fade-in">
+        <div class="home-eyebrow">Recovery Navigation</div>
+        <div class="home-headline">Your plan, ready when you can't think straight.</div>
+        <div class="home-sub">Built when you're clear. Used when you're not.</div>
+      </div>
+
+      <div class="home-actions fade-in-2">
+        <button class="btn-primary danger" data-action="screen" data-val="screen-help-1">
+          <span>I need help right now</span>
+          <span class="btn-icon">→</span>
+        </button>
+        <button class="btn-secondary" data-action="screen" data-val="screen-plan-0">
+          <span>Build my recovery plan</span>
+          <span class="btn-icon">→</span>
+        </button>
+        <button class="btn-secondary" data-action="screen" data-val="screen-handoff">
+          <span>Discharge handoff</span>
+          <span style="font-size:11px;color:var(--accent);font-weight:600;padding:3px 8px;background:var(--accent-glow);border-radius:6px;">NEW</span>
+        </button>
+      </div>
+
+      <div style="padding:20px 20px 0;">
+        <div id="plan-status-banner" class="plan-status" style="display:none;">
+          <div class="plan-dot"></div>
+          <div class="plan-status-text">Your recovery plan is active</div>
+        </div>
+      </div>
+
+      <div style="height:24px;"></div>
+      <div class="emergency-btn" data-action="callEmergency">
+        <div>
+          <div class="emergency-text">988 · 911 · Crisis Line</div>
+          <div class="emergency-sub">If this is a medical emergency or you're not safe</div>
+        </div>
+        <span style="color:var(--danger);font-size:18px;">→</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ PLAN SCREENS ============ -->
+
+  <!-- Plan Step 0: What are you protecting? -->
+  <div id="screen-plan-0" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-home">← Back</button>
+      <div class="progress-dots">
+        <div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      </div>
+    </div>
+    <div class="plan-step">
+      <div class="step-q fade-in">What are you protecting?</div>
+      <div class="step-hint fade-in-2">When things get hard, what keeps you from walking away?</div>
+      <textarea class="text-input fade-in-3" id="plan-anchor" placeholder="My kids. My health. The person I'm becoming..." rows="4"></textarea>
+    </div>
+    <div class="sticky-footer">
+      <button class="btn-full ghost" data-action="screen" data-val="screen-home">Cancel</button>
+      <button class="btn-full primary" data-action="screen" data-val="screen-plan-1">Continue →</button>
+    </div>
+  </div>
+
+  <!-- Plan Step 1: Support people -->
+  <div id="screen-plan-1" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-plan-0">← Back</button>
+      <div class="progress-dots">
+        <div class="dot"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+      </div>
+    </div>
+    <div class="plan-step">
+      <div class="step-q fade-in">Who will you call?</div>
+      <div class="step-hint fade-in-2">2–3 people who know what you're working on. They should be reachable at 2am.</div>
+      <div class="person-list fade-in-3" id="person-list">
+        <div class="person-card">
+          <div class="person-avatar">S</div>
+          <div class="person-info">
+            <div class="person-name">Sponsor / AA contact</div>
+            <div class="person-role">Tap to add number</div>
+          </div>
+          <div class="person-call">📞</div>
+        </div>
+        <div class="person-card">
+          <div class="person-avatar">T</div>
+          <div class="person-info">
+            <div class="person-name">Therapist / Counselor</div>
+            <div class="person-role">Tap to add number</div>
+          </div>
+          <div class="person-call">📞</div>
+        </div>
+        <button class="add-person">+ Add another person</button>
+      </div>
+    </div>
+    <div class="sticky-footer">
+      <button class="btn-full ghost" data-action="screen" data-val="screen-plan-0">← Back</button>
+      <button class="btn-full primary" data-action="screen" data-val="screen-plan-2">Continue →</button>
+    </div>
+  </div>
+
+  <!-- Plan Step 2: Triggers -->
+  <div id="screen-plan-2" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-plan-1">← Back</button>
+      <div class="progress-dots">
+        <div class="dot"></div><div class="dot"></div><div class="dot active"></div><div class="dot"></div>
+      </div>
+    </div>
+    <div class="plan-step">
+      <div class="step-q fade-in">What tends to precede a hard moment?</div>
+      <div class="step-hint fade-in-2">Select all that apply. You can be honest here.</div>
+      <div class="chip-grid fade-in-3">
+        <div class="chip" data-action="toggleChip">Alone at night</div>
+        <div class="chip" data-action="toggleChip">Boredom</div>
+        <div class="chip" data-action="toggleChip">Stress at work</div>
+        <div class="chip" data-action="toggleChip">Conflict with someone</div>
+        <div class="chip" data-action="toggleChip">Financial pressure</div>
+        <div class="chip" data-action="toggleChip">Social situations</div>
+        <div class="chip" data-action="toggleChip">Driving past old places</div>
+        <div class="chip" data-action="toggleChip">Feeling celebrated</div>
+        <div class="chip" data-action="toggleChip">Physical pain</div>
+        <div class="chip" data-action="toggleChip">Insomnia</div>
+        <div class="chip" data-action="toggleChip">Old contacts reaching out</div>
+        <div class="chip" data-action="toggleChip">Feeling shame</div>
+      </div>
+    </div>
+    <div class="sticky-footer">
+      <button class="btn-full ghost" data-action="screen" data-val="screen-plan-1">← Back</button>
+      <button class="btn-full primary" data-action="screen" data-val="screen-plan-3">Continue →</button>
+    </div>
+  </div>
+
+  <!-- Plan Step 3: Pre-committed actions by tier -->
+  <div id="screen-plan-3" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-plan-2">← Back</button>
+      <div class="progress-dots">
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot active"></div>
+      </div>
+    </div>
+    <div class="plan-step">
+      <div class="step-q fade-in">What do you do when it gets hard?</div>
+      <div class="step-hint fade-in-2">Pick one action per level. Your future self will execute these, not choose them.</div>
+
+      <div class="tier fade-in-3">
+        <div class="tier-label low">Low intensity (1–4)</div>
+        <button class="tier-action selected" data-action="selectAction" data-val="low"><span class="check">✓</span> Call my sponsor</button>
+        <button class="tier-action" data-action="selectAction" data-val="low"><span class="check">✓</span> Go for a walk, change environment</button>
+        <button class="tier-action" data-action="selectAction" data-val="low"><span class="check">✓</span> 5-minute grounding (5-4-3-2-1 senses)</button>
+        <button class="tier-action" data-action="selectAction" data-val="low"><span class="check">✓</span> Text my accountability partner</button>
+      </div>
+
+      <div class="tier">
+        <div class="tier-label mid">Moderate intensity (5–7)</div>
+        <button class="tier-action selected" data-action="selectAction" data-val="mid"><span class="check">✓</span> Call support person immediately</button>
+        <button class="tier-action" data-action="selectAction" data-val="mid"><span class="check">✓</span> Go to a meeting (find nearest AA)</button>
+        <button class="tier-action" data-action="selectAction" data-val="mid"><span class="check">✓</span> Box breathing for 5 minutes</button>
+        <button class="tier-action" data-action="selectAction" data-val="mid"><span class="check">✓</span> Drive to a public place</button>
+      </div>
+
+      <div class="tier">
+        <div class="tier-label high">High intensity (8–10)</div>
+        <button class="tier-action selected" data-action="selectAction" data-val="high"><span class="check">✓</span> Call sponsor + counselor, don't be alone</button>
+        <button class="tier-action" data-action="selectAction" data-val="high"><span class="check">✓</span> Call 988 crisis line</button>
+        <button class="tier-action" data-action="selectAction" data-val="high"><span class="check">✓</span> Go to an ER or urgent care</button>
+      </div>
+    </div>
+    <div class="sticky-footer">
+      <button class="btn-full ghost" data-action="screen" data-val="screen-plan-2">← Back</button>
+      <button class="btn-full primary" data-action="completePlan">Save my plan →</button>
+    </div>
+  </div>
+
+  <!-- Plan Complete -->
+  <div id="screen-plan-done" class="screen hidden">
+    <div class="header">
+      <span class="logo">EQU<span>A</span></span>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;gap:24px;text-align:center;">
+      <div style="font-size:52px;">🌿</div>
+      <div style="font-family:var(--font-display);font-size:28px;line-height:1.25;color:var(--text);">Your plan is set.</div>
+      <div style="font-size:15px;color:var(--text-muted);line-height:1.7;max-width:280px;">You built this while you were clear. EQUA will surface it when you're not.</div>
+      <div class="plan-status" style="width:100%;margin:0;">
+        <div class="plan-dot"></div>
+        <div class="plan-status-text">Recovery navigation active</div>
+      </div>
+      <button class="btn-full primary" style="margin-top:8px;" data-action="home">Back to home</button>
+    </div>
+  </div>
+
+  <!-- ============ HELP NOW SCREENS ============ -->
+
+  <!-- Help 1: What's happening -->
+  <div id="screen-help-1" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-home">← Back</button>
+      <div style="font-size:11px;color:var(--text-dim);letter-spacing:0.06em;text-transform:uppercase;">Help Now</div>
+    </div>
+    <div class="help-step">
+      <div class="help-q fade-in">What's happening right now?</div>
+      <div class="type-grid fade-in-2">
+        <div class="type-card selected" data-action="selectType">
+          <div class="type-card-icon">🔥</div>
+          <div class="type-card-label">Craving</div>
+          <div class="type-card-label2">Urge to use</div>
+        </div>
+        <div class="type-card inactive" data-action="showComingSoon">
+          <div class="type-card-icon">😶‍🌫️</div>
+          <div class="type-card-label">Shutting down</div>
+          <div class="type-card-label2">Isolation / numb</div>
+        </div>
+        <div class="type-card inactive" data-action="showComingSoon">
+          <div class="type-card-icon">⚡</div>
+          <div class="type-card-label">Escalating</div>
+          <div class="type-card-label2">Anger / panic</div>
+        </div>
+        <div class="type-card inactive" data-action="showComingSoon">
+          <div class="type-card-icon">🌀</div>
+          <div class="type-card-label">Overwhelmed</div>
+          <div class="type-card-label2">Too much at once</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--text-dim);text-align:center;" class="fade-in-3">Other pathways coming soon. Craving is fully built.</div>
+    </div>
+    <div class="sticky-footer">
+      <button class="btn-full ghost" data-action="screen" data-val="screen-home">Cancel</button>
+      <button class="btn-full primary" data-action="screen" data-val="screen-help-2">This is what's happening →</button>
+    </div>
+  </div>
+
+  <!-- Help 2: Intensity -->
+  <div id="screen-help-2" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-help-1">← Back</button>
+      <div style="font-size:11px;color:var(--text-dim);letter-spacing:0.06em;text-transform:uppercase;">Help Now</div>
+    </div>
+    <div class="help-step">
+      <div class="help-q fade-in">How strong is it?</div>
+      <div class="intensity-display fade-in-2">
+        <div class="intensity-num" id="intensity-num">5</div>
+        <div class="intensity-label" id="intensity-label">Noticeable but manageable</div>
+      </div>
+      <input type="range" class="slider fade-in-3" min="1" max="10" value="5" id="intensity-slider">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim);margin-top:-12px;">
+        <span>Mild</span><span>Extreme</span>
+      </div>
+    </div>
+    <div class="sticky-footer">
+      <button class="btn-full ghost" data-action="screen" data-val="screen-help-1">← Back</button>
+      <button class="btn-full primary" data-action="screen" data-val="screen-help-3">Continue →</button>
+    </div>
+  </div>
+
+  <!-- Help 3: Context -->
+  <div id="screen-help-3" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-help-2">← Back</button>
+      <div style="font-size:11px;color:var(--text-dim);letter-spacing:0.06em;text-transform:uppercase;">Help Now</div>
+    </div>
+    <div class="help-step">
+      <div class="help-q fade-in">Are you alone right now?</div>
+      <div class="help-sub fade-in-2">This changes what we recommend first.</div>
+      <div class="binary-row fade-in-3">
+        <button class="binary-btn selected" id="btn-alone-yes" data-action="selectAlone" data-val="yes">Yes, alone</button>
+        <button class="binary-btn" id="btn-alone-no" data-action="selectAlone" data-val="no">No, with people</button>
+      </div>
+    </div>
+    <div class="sticky-footer">
+      <button class="btn-full ghost" data-action="screen" data-val="screen-help-2">← Back</button>
+      <button class="btn-full primary" data-action="showAction">Show me what to do →</button>
+    </div>
+  </div>
+
+  <!-- Help 4: Action -->
+  <div id="screen-help-4" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-help-3">← Back</button>
+      <div style="font-size:11px;color:var(--text-dim);letter-spacing:0.06em;text-transform:uppercase;">Your Plan</div>
+    </div>
+    <div class="help-step">
+      <div class="help-sub fade-in" style="font-size:12px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);">Your pre-committed action</div>
+      <div class="action-reveal fade-in-2" id="action-reveal-card">
+        <div class="action-eyebrow" id="action-eyebrow">Step 1 of your plan</div>
+        <div class="action-text" id="action-text">Call your sponsor.</div>
+        <div class="action-detail" id="action-detail">You said this is what you'd do. Do it now, before anything else. Even if it goes to voicemail, make the call.</div>
+        <div class="action-cta-row">
+          <button class="action-cta call" id="action-call-btn" data-action="logAction">📞 Call now</button>
+          <button class="action-cta alt" data-action="showTimer">Set 5-min timer</button>
+        </div>
+      </div>
+
+      <div id="timer-block" style="display:none;" class="fade-in">
+        <div class="timer-display">
+          <div class="timer-num" id="timer-display">5:00</div>
+          <div class="timer-sub">Stay with it. Just the next 5 minutes.</div>
+        </div>
+        <button class="timer-btn" id="timer-btn" data-action="toggleTimer">Start timer</button>
+      </div>
+
+      <div class="emergency-btn" data-action="callEmergency" style="margin:0;">
+        <div>
+          <div class="emergency-text">This is a crisis</div>
+          <div class="emergency-sub">988 · 911 · Emergency line</div>
+        </div>
+        <span style="color:var(--danger);">→</span>
+      </div>
+    </div>
+    <div class="sticky-footer">
+      <button class="btn-full primary" data-action="screen" data-val="screen-help-5">I did it. Reassess →</button>
+    </div>
+  </div>
+
+  <!-- Help 5: Reassess -->
+  <div id="screen-help-5" class="screen hidden" style="display:flex;flex-direction:column;">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-help-4">← Back</button>
+      <div style="font-size:11px;color:var(--text-dim);letter-spacing:0.06em;text-transform:uppercase;">Reassess</div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:32px 24px;gap:28px;">
+      <div class="help-q fade-in">Where is the craving now?</div>
+      <div class="reassess-delta fade-in-2">
+        <div class="delta-box">
+          <div class="delta-num" id="delta-before">5</div>
+          <div class="delta-label">Before</div>
+        </div>
+        <div class="delta-arrow">→</div>
+        <div class="delta-box">
+          <div class="delta-num" id="delta-after" style="color:var(--accent);">3</div>
+          <div class="delta-label">Now</div>
+        </div>
+      </div>
+      <div>
+        <input type="range" class="slider fade-in-3" min="1" max="10" value="3" id="reassess-slider">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim);margin-top:-12px;"><span>Gone</span><span>Still intense</span></div>
+      </div>
+      <button id="record-btn" data-action="showOutcome" style="width:100%;padding:18px;background:var(--accent);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:600;font-family:var(--font-ui);cursor:pointer;-webkit-appearance:none;touch-action:manipulation;position:relative;z-index:999;">Record this →</button>
+    </div>
+  </div>
+
+  <!-- Help 6: Outcome -->
+  <div id="screen-help-6" class="screen hidden">
+    <div class="header">
+      <span class="logo">EQU<span>A</span></span>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;gap:20px;text-align:center;">
+      <div class="outcome-card" id="outcome-card" style="width:100%;">
+        <div class="outcome-icon">🌿</div>
+        <div class="outcome-title" id="outcome-title">Navigation recorded.</div>
+        <div class="outcome-sub" id="outcome-sub">You executed your plan. That's the work.</div>
+      </div>
+      <div style="font-size:13px;color:var(--text-muted);line-height:1.7;max-width:280px;" id="outcome-detail">
+        The craving dropped from 5 to 3. Your plan worked. Every navigation you complete is data that makes the next one easier.
+      </div>
+      <button class="btn-full ghost" data-action="screen" data-val="screen-home" style="margin-top:8px;">Back to home</button>
+      <button class="btn-full primary" data-action="screen" data-val="screen-help-1">I need help again</button>
+    </div>
+    <div style="padding:12px 20px 24px;">
+      <div class="emergency-btn" data-action="callEmergency">
+        <div><div class="emergency-text">Still not safe?</div><div class="emergency-sub">988 · 911 · Crisis Line</div></div>
+        <span style="color:var(--danger);">→</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ CLINICIAN SCREEN ============ -->
+  <div id="screen-clinician" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-home">← Back</button>
+      <span style="font-size:12px;color:var(--text-dim);">Clinician Review</span>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding-bottom:40px;">
+      <div class="clinician-hero">
+        <div class="clinician-tag">For behavioral health professionals</div>
+        <div class="clinician-title">Help me build this responsibly.</div>
+        <div class="clinician-body">
+          EQUA is an experimental recovery-navigation concept. It is not a medical device, it does not diagnose, and it does not replace therapy, psychiatry, medication, AA/peer support, or emergency services.<br><br>
+          I'm a patient in IOP at Old Vineyard. I built this because I've experienced what it's trying to solve: knowing what to do and being unable to execute it when activated.<br><br>
+          I'd rather you find the holes now.
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">The discharge handoff concept</div>
+        <div class="card">
+          <div class="card-row" style="cursor:default;">
+            <div style="font-size:18px;">📋</div>
+            <div class="card-row-content">
+              <div class="card-row-title">Clinician fills a structured form during treatment</div>
+              <div class="card-row-sub">Triggers, support people, pre-committed actions by craving level, escalation plan</div>
+            </div>
+          </div>
+          <div class="card-row" style="cursor:default;">
+            <div style="font-size:18px;">📱</div>
+            <div class="card-row-content">
+              <div class="card-row-title">Patient downloads EQUA on discharge day</div>
+              <div class="card-row-sub">App is already populated. Their regulated self, with clinical guidance, already built the map.</div>
+            </div>
+          </div>
+          <div class="card-row" style="cursor:default;border-bottom:none;">
+            <div style="font-size:18px;">🧭</div>
+            <div class="card-row-content">
+              <div class="card-row-title">The activated self just navigates</div>
+              <div class="card-row-sub">No setup. No reasoning under pressure. Execute the plan.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">10 questions I need you to answer</div>
+        <div class="q-list">
+          <div class="q-item"><div class="q-num">01</div><div class="q-text">Where could this cause harm?</div></div>
+          <div class="q-item"><div class="q-num">02</div><div class="q-text">What part misunderstands how recovery actually works?</div></div>
+          <div class="q-item"><div class="q-num">03</div><div class="q-text">What do patients struggle with most immediately after leaving structured care?</div></div>
+          <div class="q-item"><div class="q-num">04</div><div class="q-text">What do you wish patients could access between sessions?</div></div>
+          <div class="q-item"><div class="q-num">05</div><div class="q-text">Would a tool like this create useful continuity or more noise?</div></div>
+          <div class="q-item"><div class="q-num">06</div><div class="q-text">What information would actually be useful to a care team, with patient consent?</div></div>
+          <div class="q-item"><div class="q-num">07</div><div class="q-text">What information should never be collected or shared?</div></div>
+          <div class="q-item"><div class="q-num">08</div><div class="q-text">Which patient populations should not use this?</div></div>
+          <div class="q-item"><div class="q-num">09</div><div class="q-text">What would you need to see before recommending something like this?</div></div>
+          <div class="q-item"><div class="q-num">10</div><div class="q-text">Who else should I talk to?</div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">Your feedback (optional)</div>
+        <div class="feedback-area">
+          <div class="feedback-label">Notes, concerns, clinical perspective</div>
+          <textarea class="feedback-input" placeholder="What jumped out at you..."></textarea>
+        </div>
+        <div class="follow-up-row" data-action="toggleFollowUp">
+          <div class="toggle-box" id="follow-up-toggle">✓</div>
+          <div class="follow-up-text">I'd be willing to give Chad another 20 minutes of product feedback.</div>
+        </div>
+        <button class="btn-full primary" data-action="submitFeedback" style="padding:16px;">Submit feedback</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ DISCHARGE HANDOFF ============ -->
+  <div id="screen-handoff" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-home">← Back</button>
+      <span style="font-size:11px;color:var(--accent);font-weight:600;padding:4px 10px;background:var(--accent-glow);border-radius:6px;border:1px solid rgba(124,158,135,0.3);">Clinician Tool</span>
+    </div>
+    <div style="flex:1;overflow-y:auto;">
+      <div class="handoff-hero">
+        <div class="clinician-tag">Discharge Handoff Protocol</div>
+        <div class="handoff-title">Set your patient up before they walk out the door.</div>
+        <div class="handoff-sub">Fill this out with or for your patient during treatment. They download EQUA and the app is already populated with their plan, their people, and their escalation strategy.</div>
+      </div>
+      <div class="handoff-form">
+        <div class="field-group">
+          <div class="field-label">Patient first name</div>
+          <input class="field-input" type="text" placeholder="First name only" id="hf-name">
+        </div>
+        <div class="field-group">
+          <div class="field-label">Primary anchor (what they're protecting)</div>
+          <input class="field-input" type="text" placeholder="e.g. My kids, my health, the person I'm becoming" id="hf-anchor">
+        </div>
+        <div class="field-group">
+          <div class="field-label">Support person 1 — name + role</div>
+          <input class="field-input" type="text" placeholder="e.g. James (AA sponsor)" id="hf-person1">
+        </div>
+        <div class="field-group">
+          <div class="field-label">Support person 2 — name + role</div>
+          <input class="field-input" type="text" placeholder="e.g. Dr. Kim (outpatient therapist)" id="hf-person2">
+        </div>
+        <div class="field-group">
+          <div class="field-label">Top 2–3 identified triggers</div>
+          <input class="field-input" type="text" placeholder="e.g. Alone at night, financial stress, old contacts" id="hf-triggers">
+        </div>
+        <div class="field-group">
+          <div class="field-label">Low craving action (1–4)</div>
+          <input class="field-input" type="text" placeholder="e.g. Call sponsor, go for a walk" id="hf-low">
+        </div>
+        <div class="field-group">
+          <div class="field-label">Moderate craving action (5–7)</div>
+          <input class="field-input" type="text" placeholder="e.g. Call sponsor immediately, go to a meeting" id="hf-mid">
+        </div>
+        <div class="field-group">
+          <div class="field-label">High craving / crisis action (8–10)</div>
+          <input class="field-input" type="text" placeholder="e.g. Call 988, do not be alone, go to ER if needed" id="hf-high">
+        </div>
+        <div class="preview-ready">
+          <div class="preview-ready-icon">📱</div>
+          <div class="preview-ready-text">When complete, patient scans a QR code. EQUA opens with their name, plan, and people already inside. The first time they open it, they're already set up.</div>
+        </div>
+        <button class="btn-full primary" data-action="generateHandoff">Generate patient setup →</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ---------- STATE ----------
+  let currentIntensity = 5;
+  let isAlone = true;
+  let timerInterval = null;
+  let timerSeconds = 300;
+  let timerRunning = false;
+  let followUpChecked = true;
+  let planActive = false;
+
+  // ---------- EVENT DELEGATION ----------
+  document.addEventListener('click', function(e) {
+    const el = e.target.closest('[data-action]');
+    if (!el) return;
+    e.preventDefault();
+    const a = el.dataset.action;
+    const v = el.dataset.val;
+    if (a === 'screen') showScreen(v);
+    else if (a === 'home') showHome();
+    else if (a === 'completePlan') completePlan();
+    else if (a === 'selectType') selectType(el);
+    else if (a === 'selectAlone') selectAlone(v);
+    else if (a === 'showAction') showAction();
+    else if (a === 'showTimer') showTimer();
+    else if (a === 'toggleTimer') toggleTimer();
+    else if (a === 'logAction') logAction();
+    else if (a === 'showOutcome') showOutcome();
+    else if (a === 'toggleChip') toggleChip(el);
+    else if (a === 'selectAction') selectAction(el, v);
+    else if (a === 'toggleFollowUp') toggleFollowUp();
+    else if (a === 'submitFeedback') submitFeedback(el);
+    else if (a === 'generateHandoff') generateHandoff(el);
+    else if (a === 'callEmergency') callEmergency();
+    else if (a === 'showComingSoon') showComingSoon(el);
+  });
+
+  // ---------- NAVIGATION ----------
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => {
+      s.classList.remove('hidden', 'hidden-left');
+      if (s.id !== id) s.classList.add('hidden');
+    });
+    const s = document.getElementById(id);
+    if (s) s.scrollTop = 0;
+  }
+
+  function showHome() {
+    if (planActive) {
+      document.getElementById('plan-status-banner').style.display = 'flex';
+    }
+    showScreen('screen-home');
+  }
+
+  // ---------- PLAN ----------
+  function toggleChip(el) {
+    el.classList.toggle('selected');
+  }
+
+  function selectAction(el, tier) {
+    const parent = el.parentElement;
+    parent.querySelectorAll('.tier-action').forEach(a => a.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function completePlan() {
+    planActive = true;
+    try { localStorage.setItem('equa_plan_active', '1'); } catch(e) {}
+    showScreen('screen-plan-done');
+  }
+
+  // ---------- HELP NOW ----------
+  function selectType(el) {
+    document.querySelectorAll('.type-card').forEach(c => {
+      c.classList.remove('selected');
+      c.classList.add('inactive');
+    });
+    el.classList.remove('inactive');
+    el.classList.add('selected');
+  }
+
+  function showComingSoon(el) {
+    if (!el) return;
+    el.style.opacity = '0.6';
+    setTimeout(() => el.style.opacity = '', 300);
+  }
+
+  const intensityLabels = {
+    1: 'Barely there', 2: 'Very mild', 3: 'Mild', 4: 'Noticeable',
+    5: 'Noticeable but manageable', 6: 'Getting harder',
+    7: 'Difficult to ignore', 8: 'Very strong', 9: 'Overwhelming', 10: 'At my limit'
+  };
+
+  function updateIntensity(v) {
+    currentIntensity = parseInt(v);
+    document.getElementById('intensity-num').textContent = v;
+    document.getElementById('intensity-label').textContent = intensityLabels[v] || '';
+    const colors = { low: '#7C9E87', mid: '#E67E22', high: '#C0392B' };
+    const col = v <= 4 ? colors.low : v <= 7 ? colors.mid : colors.high;
+    document.getElementById('intensity-num').style.color = col;
+  }
+
+  function selectAlone(val) {
+    isAlone = val === 'yes';
+    document.getElementById('btn-alone-yes').classList.toggle('selected', isAlone);
+    document.getElementById('btn-alone-no').classList.toggle('selected', !isAlone);
+  }
+
+  function showAction() {
+    let eyebrow, actionText, detail, callLabel;
+    if (currentIntensity <= 4) {
+      eyebrow = 'Low intensity · Pre-committed action';
+      actionText = isAlone ? 'Call your sponsor.' : 'Tell someone near you what\'s happening.';
+      detail = isAlone
+        ? 'You said this is what you\'d do at this level. Make the call now, even if it goes to voicemail.'
+        : 'You\'re not alone. Let someone around you know what\'s happening. You don\'t have to explain everything.';
+      callLabel = '📞 Call sponsor';
+    } else if (currentIntensity <= 7) {
+      eyebrow = 'Moderate intensity · Pre-committed action';
+      actionText = isAlone ? 'Call your sponsor immediately.' : 'Find a meeting in the next hour.';
+      detail = isAlone
+        ? 'Intensity at ' + currentIntensity + '/10 — don\'t wait. This is the level you planned for. Your sponsor expects this call.'
+        : 'You built this plan knowing this moment would come. A meeting creates structure and human presence. Find the nearest one now.';
+      callLabel = isAlone ? '📞 Call now' : '📍 Find a meeting';
+    } else {
+      eyebrow = 'High intensity · Crisis protocol';
+      actionText = 'Do not be alone. Call now.';
+      detail = 'Intensity at ' + currentIntensity + '/10. Your plan for this level: call your sponsor and counselor, don\'t be alone. If you can\'t reach them, call 988 or go to an ER.';
+      callLabel = '📞 Call sponsor';
+    }
+    document.getElementById('action-eyebrow').textContent = eyebrow;
+    document.getElementById('action-text').textContent = actionText;
+    document.getElementById('action-detail').textContent = detail;
+    document.getElementById('action-call-btn').textContent = callLabel;
+
+    document.getElementById('delta-before').textContent = currentIntensity;
+    const newVal = Math.max(1, Math.round(currentIntensity * 0.6));
+    document.getElementById('delta-after').textContent = newVal;
+    document.getElementById('reassess-slider').value = newVal;
+
+    showScreen('screen-help-4');
+  }
+
+  function showTimer() {
+    const block = document.getElementById('timer-block');
+    block.style.display = block.style.display === 'none' ? 'block' : 'none';
+  }
+
+  function toggleTimer() {
+    if (timerRunning) {
+      clearInterval(timerInterval);
+      timerRunning = false;
+      document.getElementById('timer-btn').textContent = 'Resume timer';
+      document.getElementById('timer-btn').classList.remove('running');
+    } else {
+      timerRunning = true;
+      document.getElementById('timer-btn').textContent = 'Pause';
+      document.getElementById('timer-btn').classList.add('running');
+      timerInterval = setInterval(() => {
+        timerSeconds--;
+        if (timerSeconds <= 0) {
+          clearInterval(timerInterval);
+          timerRunning = false;
+          document.getElementById('timer-display').textContent = 'Done';
+          document.getElementById('timer-btn').textContent = 'Timer complete';
+          return;
+        }
+        const m = Math.floor(timerSeconds / 60);
+        const s = timerSeconds % 60;
+        document.getElementById('timer-display').textContent = m + ':' + String(s).padStart(2, '0');
+      }, 1000);
+    }
+  }
+
+  function logAction() {
+    const btn = document.getElementById('action-call-btn');
+    btn.textContent = '✓ Logged';
+    btn.style.background = 'var(--safe)';
+  }
+
+  function updateReassess(v) {
+    document.getElementById('delta-after').textContent = v;
+  }
+
+  function showOutcome() {
+    try {
+    const beforeEl = document.getElementById('delta-before');
+    const sliderEl = document.getElementById('reassess-slider');
+    const before = parseInt(beforeEl ? beforeEl.textContent : currentIntensity) || currentIntensity;
+    const after = parseInt(sliderEl ? sliderEl.value : 3) || 3;
+    const diff = before - after;
+
+    let icon, title, sub, detail;
+    if (diff >= 3) {
+      icon = '🌿'; title = 'Navigation recorded.';
+      sub = 'You executed your plan. That\'s the work.';
+      detail = `The craving dropped from ${before} to ${after}. Your plan worked. Every navigation you complete is data that makes the next one easier.`;
+    } else if (diff > 0) {
+      icon = '📍'; title = 'Logged.';
+      sub = 'A small shift is still a shift.';
+      detail = `It moved from ${before} to ${after}. Stay with what you chose. Call a support person if it climbs back up.`;
+    } else {
+      icon = '🚨'; title = 'Still intense.';
+      sub = 'Escalate now.';
+      detail = `The craving is still at ${after}. Call your sponsor or 988. Don't stay alone with this.`;
+    }
+
+    document.getElementById('outcome-icon').textContent = icon;
+    document.getElementById('outcome-title').textContent = title;
+    document.getElementById('outcome-sub').textContent = sub;
+    document.getElementById('outcome-detail').textContent = detail;
+
+    if (diff < 1) {
+      document.getElementById('outcome-card').style.background = 'var(--danger-glow)';
+      document.getElementById('outcome-card').style.borderColor = 'rgba(192,57,43,0.3)';
+    }
+
+    showScreen('screen-help-6');
+    } catch(err) {
+      alert('EQUA error: ' + err.message);
+    }
+  }
+
+  // ---------- CLINICIAN ----------
+  function toggleFollowUp() {
+    followUpChecked = !followUpChecked;
+    const box = document.getElementById('follow-up-toggle');
+    box.classList.toggle('checked', followUpChecked);
+    box.textContent = followUpChecked ? '✓' : '';
+  }
+
+  function submitFeedback(btn) {
+    btn.textContent = '✓ Feedback received — thank you';
+    btn.style.background = 'var(--safe)';
+    btn.disabled = true;
+  }
+
+  // ---------- HANDOFF ----------
+  function generateHandoff(btn) {
+    const name = document.getElementById('hf-name').value || 'your patient';
+    btn.textContent = '✓ Setup ready for ' + name;
+    btn.style.background = 'var(--safe)';
+    setTimeout(() => {
+      btn.textContent = 'Generate patient setup →';
+      btn.style.background = '';
+    }, 2500);
+  }
+
+  // ---------- EMERGENCY ----------
+  function callEmergency() {
+    if (confirm('This will open emergency resources. Continue?')) {
+      window.open('tel:988', '_self');
+    }
+  }
+
+  // ---------- INIT ----------
+  document.getElementById('intensity-slider').addEventListener('input', function() { updateIntensity(this.value); });
+  document.getElementById('reassess-slider').addEventListener('input', function() { updateReassess(this.value); });
+
+  try {
+    if (localStorage.getItem('equa_plan_active') === '1') {
+      planActive = true;
+      document.getElementById('plan-status-banner').style.display = 'flex';
+    }
+  } catch(e) {}
+</script>
