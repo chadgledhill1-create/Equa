@@ -1828,75 +1828,213 @@
   <!-- ============ CLINICIAN SCREEN ============ -->
   <div id="screen-clinician" class="screen hidden">
     <div class="header">
-      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-home">← Back</button>
-      <span style="font-size:12px;color:var(--text-dim);">Clinician Review</span>
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-landing">← Back</button>
+      <span style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);">For Clinicians</span>
     </div>
     <div style="flex:1;overflow-y:auto;padding-bottom:40px;">
-      <div class="clinician-hero">
-        <div class="clinician-tag">For behavioral health professionals</div>
-        <div class="clinician-title">Help me build this responsibly.</div>
-        <div class="clinician-body">
-          EQUA is an experimental recovery-navigation concept. It is not a medical device, it does not diagnose, and it does not replace therapy, psychiatry, medication, AA/peer support, or emergency services.<br><br>
-          I'm a patient in IOP at Old Vineyard. I built this because I've experienced what it's trying to solve: knowing what to do and being unable to execute it when activated.<br><br>
-          I'd rather you find the holes now.
+
+      <!-- Hero -->
+      <div style="padding:32px 24px 24px;border-bottom:1px solid var(--border);">
+        <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:12px;">Behavioral Health Technology</div>
+        <div style="font-family:var(--font-display);font-size:26px;line-height:1.2;color:var(--text);margin-bottom:12px;text-wrap:balance;">Real-time patient visibility between sessions.</div>
+        <div style="font-size:14px;color:var(--text-muted);line-height:1.65;">EQUA gives your IOP and PHP patients a structured crisis tool — and gives you a window into how they're actually doing between check-ins.</div>
+      </div>
+
+      <!-- What it does for clinicians -->
+      <div style="padding:24px 24px 0;">
+        <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);font-weight:600;margin-bottom:14px;">How it helps your practice</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;gap:14px;align-items:flex-start;">
+            <div style="font-size:22px;flex-shrink:0;">📊</div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px;">Real-time crisis visibility</div>
+              <div style="font-size:13px;color:var(--text-muted);line-height:1.6;">See when a patient activates a crisis pathway, what intervention they used, and whether their distress level dropped. No more waiting until next session to find out.</div>
+            </div>
+          </div>
+          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;gap:14px;align-items:flex-start;">
+            <div style="font-size:22px;flex-shrink:0;">📋</div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px;">Daily check-in data</div>
+              <div style="font-size:13px;color:var(--text-muted);line-height:1.6;">Patients answer the same questions you ask in group — safety, sleep, medications, mood — and you see the trend over time, not just today's answer.</div>
+            </div>
+          </div>
+          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;gap:14px;align-items:flex-start;">
+            <div style="font-size:22px;flex-shrink:0;">🧭</div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px;">Discharge continuity</div>
+              <div style="font-size:13px;color:var(--text-muted);line-height:1.6;">The plan built during treatment travels with them. What you co-create in IOP doesn't disappear on discharge day — it becomes their tool on day one.</div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="section">
-        <div class="section-label">The discharge handoff concept</div>
-        <div class="card">
-          <div class="card-row" style="cursor:default;">
-            <div style="font-size:18px;">📋</div>
-            <div class="card-row-content">
-              <div class="card-row-title">Clinician fills a structured form during treatment</div>
-              <div class="card-row-sub">Triggers, support people, pre-committed actions by craving level, escalation plan</div>
-            </div>
+      <!-- Daily check-in questions -->
+      <div style="padding:24px 24px 0;">
+        <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);font-weight:600;margin-bottom:14px;">Daily check-in (what patients answer)</div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+          <div style="padding:14px 16px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text);display:flex;justify-content:space-between;"><span>Thoughts of harming yourself?</span><span style="color:var(--safe);font-weight:600;">No</span></div>
+          <div style="padding:14px 16px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text);display:flex;justify-content:space-between;"><span>Plan to harm yourself?</span><span style="color:var(--safe);font-weight:600;">No</span></div>
+          <div style="padding:14px 16px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text);display:flex;justify-content:space-between;"><span>How did you sleep?</span><span style="color:var(--warn);font-weight:600;">Poorly</span></div>
+          <div style="padding:14px 16px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text);display:flex;justify-content:space-between;"><span>Taking medications as prescribed?</span><span style="color:var(--safe);font-weight:600;">Yes</span></div>
+          <div style="padding:14px 16px;font-size:13px;color:var(--text);display:flex;justify-content:space-between;"><span>Need to see a doctor?</span><span style="color:var(--safe);font-weight:600;">No</span></div>
+        </div>
+        <div style="font-size:12px;color:var(--text-dim);margin-top:8px;padding:0 4px;">This is example data. Real answers are patient-reported and timestamped.</div>
+      </div>
+
+      <!-- Patient profile CTA -->
+      <div style="padding:24px;">
+        <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);font-weight:600;margin-bottom:14px;">Example patient view</div>
+        <button data-action="screen" data-val="screen-patient-demo" style="width:100%;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;display:flex;align-items:center;gap:14px;text-align:left;">
+          <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#7C9E87,#4A7A58);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:18px;color:#fff;flex-shrink:0;">C</div>
+          <div style="flex:1;">
+            <div style="font-size:15px;font-weight:600;color:var(--text);">Courtney Sanders</div>
+            <div style="font-size:12px;color:var(--text-muted);">IOP · Week 3 of 6 · Last check-in: Today</div>
           </div>
-          <div class="card-row" style="cursor:default;">
-            <div style="font-size:18px;">📱</div>
-            <div class="card-row-content">
-              <div class="card-row-title">Patient downloads EQUA on discharge day</div>
-              <div class="card-row-sub">App is already populated. Their regulated self, with clinical guidance, already built the map.</div>
-            </div>
-          </div>
-          <div class="card-row" style="cursor:default;border-bottom:none;">
-            <div style="font-size:18px;">🧭</div>
-            <div class="card-row-content">
-              <div class="card-row-title">The activated self just navigates</div>
-              <div class="card-row-sub">No setup. No reasoning under pressure. Execute the plan.</div>
-            </div>
+          <div style="color:var(--accent);font-size:18px;">→</div>
+        </button>
+      </div>
+
+      <!-- Disclaimer -->
+      <div style="margin:0 24px 24px;padding:14px 16px;background:var(--danger-glow);border:1px solid rgba(192,57,43,0.2);border-radius:10px;">
+        <div style="font-size:12px;color:var(--text-muted);line-height:1.6;"><strong style="color:var(--text);">Not a medical device.</strong> EQUA is a prototype. It does not diagnose, prescribe, or replace clinical care. Built by a patient in IOP — seeking clinical feedback before any real-world deployment.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ PATIENT DEMO: COURTNEY SANDERS ============ -->
+  <div id="screen-patient-demo" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-clinician">← Back</button>
+      <span style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);">Patient View</span>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding-bottom:40px;">
+
+      <!-- Patient header -->
+      <div style="padding:24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;">
+        <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#7C9E87,#4A7A58);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:24px;color:#fff;flex-shrink:0;">C</div>
+        <div>
+          <div style="font-size:18px;font-weight:600;color:var(--text);font-family:var(--font-display);">Courtney Sanders</div>
+          <div style="font-size:13px;color:var(--text-muted);margin-top:2px;">IOP · Week 3 of 6</div>
+          <div style="display:flex;gap:8px;margin-top:6px;">
+            <span style="font-size:11px;font-weight:600;padding:3px 8px;background:var(--accent-glow);color:var(--accent);border-radius:20px;">Active</span>
+            <span style="font-size:11px;font-weight:600;padding:3px 8px;background:var(--bg-card2);color:var(--text-muted);border-radius:20px;">Alcohol Use Disorder</span>
           </div>
         </div>
       </div>
 
-      <div class="section">
-        <div class="section-label">10 questions I need you to answer</div>
-        <div class="q-list">
-          <div class="q-item"><div class="q-num">01</div><div class="q-text">Where could this cause harm?</div></div>
-          <div class="q-item"><div class="q-num">02</div><div class="q-text">What part misunderstands how recovery actually works?</div></div>
-          <div class="q-item"><div class="q-num">03</div><div class="q-text">What do patients struggle with most immediately after leaving structured care?</div></div>
-          <div class="q-item"><div class="q-num">04</div><div class="q-text">What do you wish patients could access between sessions?</div></div>
-          <div class="q-item"><div class="q-num">05</div><div class="q-text">Would a tool like this create useful continuity or more noise?</div></div>
-          <div class="q-item"><div class="q-num">06</div><div class="q-text">What information would actually be useful to a care team, with patient consent?</div></div>
-          <div class="q-item"><div class="q-num">07</div><div class="q-text">What information should never be collected or shared?</div></div>
-          <div class="q-item"><div class="q-num">08</div><div class="q-text">Which patient populations should not use this?</div></div>
-          <div class="q-item"><div class="q-num">09</div><div class="q-text">What would you need to see before recommending something like this?</div></div>
-          <div class="q-item"><div class="q-num">10</div><div class="q-text">Who else should I talk to?</div></div>
+      <!-- Today's check-in -->
+      <div style="padding:20px 24px 0;">
+        <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);font-weight:600;margin-bottom:12px;">Today's Check-in · Sep 22, 7:14 AM</div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+          <div style="padding:13px 16px;border-bottom:1px solid var(--border);font-size:13px;display:flex;justify-content:space-between;align-items:center;">
+            <span style="color:var(--text);">Thoughts of harming yourself?</span>
+            <span style="color:var(--safe);font-weight:600;font-size:12px;">No</span>
+          </div>
+          <div style="padding:13px 16px;border-bottom:1px solid var(--border);font-size:13px;display:flex;justify-content:space-between;align-items:center;">
+            <span style="color:var(--text);">Plan to harm yourself?</span>
+            <span style="color:var(--safe);font-weight:600;font-size:12px;">No</span>
+          </div>
+          <div style="padding:13px 16px;border-bottom:1px solid var(--border);font-size:13px;display:flex;justify-content:space-between;align-items:center;">
+            <span style="color:var(--text);">Sleep quality last night?</span>
+            <span style="color:var(--warn);font-weight:600;font-size:12px;">Restless · 4 hrs</span>
+          </div>
+          <div style="padding:13px 16px;border-bottom:1px solid var(--border);font-size:13px;display:flex;justify-content:space-between;align-items:center;">
+            <span style="color:var(--text);">Medications as prescribed?</span>
+            <span style="color:var(--safe);font-weight:600;font-size:12px;">Yes</span>
+          </div>
+          <div style="padding:13px 16px;font-size:13px;display:flex;justify-content:space-between;align-items:center;">
+            <span style="color:var(--text);">Need to see a doctor?</span>
+            <span style="color:var(--safe);font-weight:600;font-size:12px;">No</span>
+          </div>
         </div>
       </div>
 
-      <div class="section">
-        <div class="section-label">Your feedback (optional)</div>
-        <div class="feedback-area">
-          <div class="feedback-label">Notes, concerns, clinical perspective</div>
-          <textarea class="feedback-input" placeholder="What jumped out at you..."></textarea>
+      <!-- Crisis events this week -->
+      <div style="padding:20px 24px 0;">
+        <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);font-weight:600;margin-bottom:12px;">Crisis Navigations · This Week</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+              <span style="font-size:13px;font-weight:600;color:var(--text);">Craving</span>
+              <span style="font-size:11px;color:var(--text-dim);">Sep 21 · 9:42 PM</span>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <span style="font-size:12px;color:var(--text-muted);">Intensity 8 → 4</span>
+              <span style="font-size:11px;padding:2px 8px;background:var(--accent-glow);color:var(--accent);border-radius:20px;font-weight:600;">De-escalated ✓</span>
+            </div>
+            <div style="font-size:12px;color:var(--text-dim);margin-top:6px;">Urge surfing + called support person</div>
+          </div>
+          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+              <span style="font-size:13px;font-weight:600;color:var(--text);">Overwhelmed</span>
+              <span style="font-size:11px;color:var(--text-dim);">Sep 20 · 3:17 PM</span>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <span style="font-size:12px;color:var(--text-muted);">Intensity 7 → 3</span>
+              <span style="font-size:11px;padding:2px 8px;background:var(--accent-glow);color:var(--accent);border-radius:20px;font-weight:600;">De-escalated ✓</span>
+            </div>
+            <div style="font-size:12px;color:var(--text-dim);margin-top:6px;">5-4-3-2-1 grounding + physiological sigh</div>
+          </div>
+          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+              <span style="font-size:13px;font-weight:600;color:var(--text);">Shutting Down</span>
+              <span style="font-size:11px;color:var(--text-dim);">Sep 19 · 7:05 PM</span>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <span style="font-size:12px;color:var(--text-muted);">Intensity 9 → 6</span>
+              <span style="font-size:11px;padding:2px 8px;background:rgba(230,126,34,0.15);color:var(--warn);border-radius:20px;font-weight:600;">Partial ↗</span>
+            </div>
+            <div style="font-size:12px;color:var(--text-dim);margin-top:6px;">Cold water + movement. Didn't call anyone.</div>
+          </div>
         </div>
-        <div class="follow-up-row" data-action="toggleFollowUp">
-          <div class="toggle-box" id="follow-up-toggle">✓</div>
-          <div class="follow-up-text">I'd be willing to give Chad another 20 minutes of product feedback.</div>
-        </div>
-        <button class="btn-full primary" data-action="submitFeedback" style="padding:16px;">Submit feedback</button>
       </div>
+
+      <!-- Mood trend -->
+      <div style="padding:20px 24px 0;">
+        <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);font-weight:600;margin-bottom:12px;">Distress Trend · 7 Days</div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px;">
+          <div style="display:flex;align-items:flex-end;gap:6px;height:60px;margin-bottom:8px;">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+              <div style="width:100%;background:var(--warn);border-radius:4px 4px 0 0;height:52px;opacity:0.7;"></div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+              <div style="width:100%;background:var(--accent);border-radius:4px 4px 0 0;height:36px;opacity:0.7;"></div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+              <div style="width:100%;background:var(--danger);border-radius:4px 4px 0 0;height:60px;opacity:0.7;"></div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+              <div style="width:100%;background:var(--accent);border-radius:4px 4px 0 0;height:30px;opacity:0.7;"></div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+              <div style="width:100%;background:var(--warn);border-radius:4px 4px 0 0;height:44px;opacity:0.7;"></div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+              <div style="width:100%;background:var(--accent);border-radius:4px 4px 0 0;height:26px;opacity:0.7;"></div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+              <div style="width:100%;background:var(--accent);border-radius:4px 4px 0 0;height:20px;opacity:0.7;"></div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <div style="flex:1;text-align:center;font-size:10px;color:var(--text-dim);">M</div>
+            <div style="flex:1;text-align:center;font-size:10px;color:var(--text-dim);">T</div>
+            <div style="flex:1;text-align:center;font-size:10px;color:var(--text-dim);">W</div>
+            <div style="flex:1;text-align:center;font-size:10px;color:var(--text-dim);">T</div>
+            <div style="flex:1;text-align:center;font-size:10px;color:var(--text-dim);">F</div>
+            <div style="flex:1;text-align:center;font-size:10px;color:var(--text-dim);">S</div>
+            <div style="flex:1;text-align:center;font-size:10px;color:var(--text-dim);">S</div>
+          </div>
+          <div style="font-size:12px;color:var(--text-dim);margin-top:10px;">Peak distress Wednesday (9/18). Trending down.</div>
+        </div>
+      </div>
+
+      <!-- Clinician note -->
+      <div style="margin:20px 24px 0;padding:14px 16px;background:var(--accent-glow);border:1px solid rgba(124,158,135,0.3);border-radius:10px;">
+        <div style="font-size:12px;color:var(--text-muted);line-height:1.6;"><strong style="color:var(--accent);">Demo only.</strong> This is a fictional patient profile to illustrate what clinician-facing visibility could look like. Real patient data would require consent, HIPAA compliance, and proper backend infrastructure.</div>
+      </div>
+
     </div>
   </div>
 
