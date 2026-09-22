@@ -1155,17 +1155,24 @@
     <div class="header">
       <span class="logo">EQU<span>A</span></span>
     </div>
-    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;gap:20px;text-align:center;">
-      <div class="outcome-card" id="outcome-card" style="width:100%;">
-        <div class="outcome-icon" id="outcome-icon">🌿</div>
-        <div class="outcome-title" id="outcome-title">Navigation recorded.</div>
-        <div class="outcome-sub" id="outcome-sub">You executed your plan. That's the work.</div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px 24px;gap:0;text-align:center;">
+
+      <!-- Big warm moment -->
+      <div id="outcome-icon" style="font-size:52px;line-height:1;margin-bottom:20px;">🌿</div>
+      <div id="outcome-title" style="font-family:var(--font-display);font-size:28px;font-weight:600;color:var(--text);margin-bottom:10px;text-wrap:balance;">You did it.</div>
+      <div id="outcome-sub" style="font-size:15px;color:var(--text-muted);line-height:1.6;max-width:260px;margin-bottom:24px;text-wrap:balance;">Your nervous system just did exactly what it's supposed to do.</div>
+
+      <!-- Science note — small, warm, grounded -->
+      <div id="outcome-card" style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;width:100%;text-align:left;margin-bottom:28px;">
+        <div style="font-size:11px;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;">What just happened</div>
+        <div id="outcome-detail" style="font-size:13px;color:var(--text-muted);line-height:1.7;">Your biology responded. That's not willpower — that's your nervous system doing its job.</div>
       </div>
-      <div style="font-size:13px;color:var(--text-muted);line-height:1.7;max-width:280px;" id="outcome-detail">
-        The craving dropped from 5 to 3. Your plan worked. Every navigation you complete is data that makes the next one easier.
+
+      <!-- CTAs -->
+      <div style="display:flex;flex-direction:column;gap:10px;width:100%;">
+        <button class="btn-full primary" data-action="screen" data-val="screen-home">I'm good. Back to home →</button>
+        <button class="btn-full ghost" data-action="screen" data-val="screen-help-1">I need help again</button>
       </div>
-      <button class="btn-full ghost" data-action="screen" data-val="screen-home" style="margin-top:8px;">Back to home</button>
-      <button class="btn-full primary" data-action="screen" data-val="screen-help-1">I need help again</button>
     </div>
     <div style="padding:12px 20px 24px;">
       <div class="emergency-btn" data-action="callEmergency">
@@ -1821,17 +1828,17 @@
       const diff = before - after;
       let icon, title, sub, detail;
       if (diff >= 3) {
-        icon = '🌿'; title = 'You came back online.';
-        sub = 'The intervention worked. That\'s the data.';
-        detail = `Shutdown dropped from ${before} to ${after}. Cold water, one text, movement — you executed the steps. That\'s what breaking the freeze looks like.`;
+        icon = '🌿'; title = 'You came back.';
+        sub = 'That freeze had you. And you broke through it.';
+        detail = `From ${before} down to ${after}. Cold water activated your dive reflex, reaching out interrupted the isolation, movement restarted your sympathetic system. You came back online. That's not small.`;
       } else if (diff > 0) {
-        icon = '📍'; title = 'A small shift.';
-        sub = 'Movement in the right direction.';
-        detail = `It moved from ${before} to ${after}. Keep going — call one person or step outside. The freeze lifts with small, consistent actions.`;
+        icon = '💛'; title = 'You\'re coming back.';
+        sub = 'The freeze is lifting. Keep going.';
+        detail = `From ${before} to ${after}. You\'re thawing. Call one person or step outside — even a short walk keeps the momentum going.`;
       } else {
-        icon = '🚨'; title = 'Still disconnected.';
-        sub = 'Escalate. Don\'t stay alone with this.';
-        detail = `Still at ${after}. Call your counselor, sponsor, or 988. Shutdown at this level needs another person involved.`;
+        icon = '🚨'; title = 'This one needs a person.';
+        sub = 'Not a screen. A voice.';
+        detail = `Still at ${after}. When the freeze is this deep, it needs another human — not an app. Call your counselor, sponsor, or 988. You don't have to explain everything. Just say you need someone.`;
       }
       document.getElementById('outcome-icon').textContent = icon;
       document.getElementById('outcome-title').textContent = title;
@@ -1950,17 +1957,17 @@
       const diff = before - after;
       let icon, title, sub, detail;
       if (diff >= 3) {
-        icon = '🌿'; title = 'De-escalated.';
-        sub = 'Your nervous system responded. That\'s the work.';
-        detail = `Escalation dropped from ${before} to ${after}. Box breathing activated your parasympathetic nervous system. The movement discharged the cortisol. You executed the protocol.`;
+        icon = '🌿'; title = 'You did it.';
+        sub = 'That escalation had you. And you came back.';
+        detail = `You dropped from ${before} to ${after}. The box breathing activated your parasympathetic nervous system and the movement discharged the cortisol. That wasn't willpower — that was biology. Your biology.`;
       } else if (diff > 0) {
-        icon = '📍'; title = 'Partially regulated.';
-        sub = 'You\'re moving in the right direction.';
-        detail = `Down from ${before} to ${after}. Stay with the breathing. Repeat the cycle — it compounds. If it climbs back up, call someone.`;
+        icon = '💛'; title = 'You\'re coming down.';
+        sub = 'It\'s working. Stay with it.';
+        detail = `From ${before} to ${after}. The regulation is happening — it just takes time. Keep breathing. Repeat a cycle if you need to. You don't have to be at zero, just lower.`;
       } else {
-        icon = '🚨'; title = 'Still escalated.';
-        sub = 'Call someone now. Don\'t be alone.';
-        detail = `Still at ${after}. This level needs another person. Call your sponsor, counselor, or 988. Leave the environment if you haven\'t.`;
+        icon = '🚨'; title = 'This one needs a person.';
+        sub = 'Not a screen. A voice.';
+        detail = `Still at ${after}. That's okay — some moments need more than an app. Call your sponsor, counselor, or 988. Say: "I need help right now." That's enough.`;
       }
       document.getElementById('outcome-icon').textContent = icon;
       document.getElementById('outcome-title').textContent = title;
@@ -2079,17 +2086,17 @@
       const diff = before - after;
       let icon, title, sub, detail;
       if (diff >= 3) {
-        icon = '🌿'; title = 'Load reduced.';
-        sub = 'You narrowed the focus. That\'s the skill.';
-        detail = `Overwhelm dropped from ${before} to ${after}. Grounding anchored you to the present. Writing the list offloaded working memory. Now execute the one thing you circled.`;
+        icon = '🌿'; title = 'You did it.';
+        sub = 'You found the ground under all that noise.';
+        detail = `From ${before} down to ${after}. The grounding interrupted the spiral by pulling your brain into the present. Writing the list freed your working memory. You went from everywhere to one thing. That's huge.`;
       } else if (diff > 0) {
-        icon = '📍'; title = 'A little clearer.';
-        sub = 'The list is the tool. Keep using it.';
-        detail = `Down from ${before} to ${after}. You\'re not supposed to solve everything — just the next one thing. What\'s the one thing?`;
+        icon = '💛'; title = 'A little clearer.';
+        sub = 'You don\'t need to solve it all. Just one thing.';
+        detail = `From ${before} to ${after}. You made space. Go do the one thing you circled — not the whole list, just that one. The rest can wait.`;
       } else {
-        icon = '🚨'; title = 'Still overwhelmed.';
-        sub = 'Call someone. Don\'t carry this alone.';
-        detail = `Still at ${after}. This level of overwhelm needs a voice, not a screen. Call your counselor or a trusted person and say: "I\'m overwhelmed and I need help thinking."`;
+        icon = '🚨'; title = 'This one needs a person.';
+        sub = 'Not a screen. A voice.';
+        detail = `Still at ${after}. Some overwhelm is too heavy to carry alone. Call your counselor or someone you trust and say: "I'm overwhelmed and I need help thinking." That's enough.`;
       }
       document.getElementById('outcome-icon').textContent = icon;
       document.getElementById('outcome-title').textContent = title;
@@ -2219,17 +2226,17 @@
 
     let icon, title, sub, detail;
     if (diff >= 3) {
-      icon = '🌿'; title = 'Navigation recorded.';
-      sub = 'You executed your plan. That\'s the work.';
-      detail = `The craving dropped from ${before} to ${after}. Your plan worked. Every navigation you complete is data that makes the next one easier.`;
+      icon = '🌿'; title = 'You did it.';
+      sub = 'That craving was real. And you didn\'t follow it.';
+      detail = `From ${before} down to ${after}. You ran the plan when it was hardest to. Every time you do this, the pathway between craving and action gets a little weaker. That's how recovery works.`;
     } else if (diff > 0) {
-      icon = '📍'; title = 'Logged.';
-      sub = 'A small shift is still a shift.';
-      detail = `It moved from ${before} to ${after}. Stay with what you chose. Call a support person if it climbs back up.`;
+      icon = '💛'; title = 'You held on.';
+      sub = 'Still going. That matters.';
+      detail = `From ${before} to ${after}. You\'re not at zero — that\'s okay. Stay with your plan. Call a support person if it climbs back.`;
     } else {
-      icon = '🚨'; title = 'Still intense.';
-      sub = 'Escalate now.';
-      detail = `The craving is still at ${after}. Call your sponsor or 988. Don't stay alone with this.`;
+      icon = '🚨'; title = 'This one needs a person.';
+      sub = 'Not a screen. A voice.';
+      detail = `Still at ${after}. Call your sponsor or 988. You don't have to explain everything — just say "I need someone right now." That's enough.`;
     }
 
     document.getElementById('outcome-icon').textContent = icon;
