@@ -1071,6 +1071,34 @@
       </div>
 
     </div>
+
+    <!-- Floating SOS button -->
+    <button data-action="screen" data-val="screen-help-1" style="
+      position:absolute;
+      bottom:max(100px,calc(env(safe-area-inset-bottom,0px) + 100px));
+      right:24px;
+      width:64px;
+      height:64px;
+      border-radius:50%;
+      background:#C0392B;
+      border:none;
+      cursor:pointer;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:1px;
+      box-shadow:0 4px 20px rgba(192,57,43,0.5), 0 0 0 4px rgba(192,57,43,0.15);
+      transition:transform 0.1s, box-shadow 0.1s;
+      z-index:50;
+    "
+    onmousedown="this.style.transform='scale(0.93)'"
+    onmouseup="this.style.transform='scale(1)'"
+    ontouchstart="this.style.transform='scale(0.93)'"
+    ontouchend="this.style.transform='scale(1)'">
+      <span style="color:#fff;font-size:11px;font-weight:700;letter-spacing:0.08em;font-family:var(--font-ui);">SOS</span>
+    </button>
+
   </div>
 
   <!-- ============ WHAT IS EQUA ============ -->
