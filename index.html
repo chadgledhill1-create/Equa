@@ -235,6 +235,237 @@
   }
   .nav-drawer-item:active { background: var(--bg-card2); }
 
+  /* DAILY CHECK-IN */
+  .checkin-progress {
+    display: flex;
+    gap: 4px;
+    padding: 14px 20px 0;
+  }
+  .checkin-progress-bar {
+    flex: 1;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--border);
+    transition: background 0.3s;
+  }
+  .checkin-progress-bar.done { background: var(--accent); }
+  .checkin-progress-bar.active { background: var(--accent); opacity: 0.5; }
+
+  .checkin-section {
+    display: none;
+    flex-direction: column;
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 20px 100px;
+    gap: 20px;
+  }
+  .checkin-section.active { display: flex; }
+
+  .checkin-section-title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    line-height: 1.25;
+    color: var(--text);
+    text-wrap: balance;
+  }
+  .checkin-section-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: -12px;
+    line-height: 1.5;
+  }
+
+  .checkin-q {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .checkin-q-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.4;
+  }
+  .checkin-q-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: -4px;
+  }
+
+  /* Toggle row: No / Yes / N/A */
+  .checkin-toggle {
+    display: flex;
+    gap: 6px;
+  }
+  .checkin-toggle-btn {
+    flex: 1;
+    padding: 10px 6px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--text-muted);
+    font-family: var(--font-ui);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+  .checkin-toggle-btn.sel-no { border-color: var(--accent); background: var(--accent-glow); color: var(--accent); }
+  .checkin-toggle-btn.sel-yes { border-color: var(--danger); background: var(--danger-glow); color: var(--danger); }
+  .checkin-toggle-btn.sel-na { border-color: var(--text-dim); background: var(--bg-card2); color: var(--text); }
+
+  /* Mood emoji strip (reused style, scoped here for checkin) */
+  .checkin-mood-strip {
+    display: flex;
+    gap: 6px;
+  }
+  .checkin-mood-opt {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 10px 4px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: var(--font-ui);
+    transition: all 0.15s;
+  }
+  .checkin-mood-opt.selected { border-color: var(--accent); background: var(--accent-glow); }
+  .checkin-mood-opt span:first-child { font-size: 20px; }
+  .checkin-mood-opt span:last-child { font-size: 10px; color: var(--text-muted); font-weight: 500; }
+
+  /* Text input */
+  .checkin-input {
+    width: 100%;
+    padding: 12px 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-family: var(--font-ui);
+    font-size: 14px;
+    resize: none;
+    outline: none;
+    transition: border-color 0.15s;
+    line-height: 1.5;
+  }
+  .checkin-input:focus { border-color: var(--accent); }
+  .checkin-input::placeholder { color: var(--text-dim); }
+
+  /* Sleep stepper */
+  .checkin-stepper {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    width: fit-content;
+  }
+  .checkin-stepper-btn {
+    width: 48px; height: 48px;
+    border: none;
+    background: transparent;
+    color: var(--text);
+    font-size: 22px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.1s;
+  }
+  .checkin-stepper-btn:active { background: var(--bg-card2); }
+  .checkin-stepper-val {
+    min-width: 56px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* CSSRS block */
+  .cssrs-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: border-color 0.15s;
+  }
+  .cssrs-row.flagged { border-color: var(--danger); background: var(--danger-glow); }
+  .cssrs-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    width: 16px;
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+  .cssrs-text {
+    flex: 1;
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .cssrs-btns {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .cssrs-btn {
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: transparent;
+    font-family: var(--font-ui);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: all 0.15s;
+  }
+  .cssrs-btn.sel-no { border-color: var(--accent); background: var(--accent-glow); color: var(--accent); }
+  .cssrs-btn.sel-yes { border-color: var(--danger); background: var(--danger-glow); color: var(--danger); }
+
+  /* Crisis escalation banner */
+  .checkin-crisis-banner {
+    display: none;
+    background: var(--danger-glow);
+    border: 1px solid var(--danger);
+    border-radius: 14px;
+    padding: 16px;
+    gap: 10px;
+    flex-direction: column;
+  }
+  .checkin-crisis-banner.visible { display: flex; }
+  .checkin-crisis-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--danger);
+  }
+  .checkin-crisis-body {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* Sticky footer nav */
+  .checkin-footer {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 12px 20px max(20px, env(safe-area-inset-bottom, 20px));
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+  }
+
   /* HAMBURGER */
   .hamburger {
     display: flex;
@@ -400,6 +631,212 @@
   }
   .home-counter-dot.lit {
     background: var(--accent);
+  }
+
+  /* Sobriety screen */
+  /* AUDIT-C option buttons */
+  .ac-opt {
+    width: 100%;
+    padding: 11px 14px;
+    background: var(--bg-card2);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 14px;
+    text-align: left;
+    cursor: pointer;
+    font-family: var(--font-ui);
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .ac-opt.selected {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* PHQ-9 row */
+  .phq9-row {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+  .phq9-row-q {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+  .phq9-row-opts {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+  .phq9-opt {
+    padding: 8px 4px;
+    background: var(--bg-card2);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-muted);
+    font-size: 11px;
+    text-align: center;
+    cursor: pointer;
+    font-family: var(--font-ui);
+    line-height: 1.2;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .phq9-opt.selected {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .phq9-opt-num {
+    font-size: 16px;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 2px;
+  }
+  /* DAST-10 */
+  .dast10-row { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 10px; }
+  .dast10-row-q { font-size: 14px; font-weight: 500; line-height: 1.4; margin-bottom: 10px; }
+  .dast10-q-num { font-weight: 700; color: var(--accent); }
+  .dast10-row-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .dast10-opt {
+    padding: 10px; background: var(--bg-card2); border: 1.5px solid var(--border);
+    border-radius: 8px; color: var(--text-muted); font-size: 14px; font-weight: 600;
+    text-align: center; cursor: pointer; font-family: var(--font-ui);
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .dast10-opt.selected { border-color: var(--accent); background: var(--accent-glow); color: var(--accent); }
+
+  .sobriety-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px 32px;
+    gap: 6px;
+    text-align: center;
+  }
+  .sobriety-big-num {
+    font-family: var(--font-display);
+    font-size: 88px;
+    line-height: 1;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -2px;
+  }
+  .sobriety-big-unit {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    margin-top: 4px;
+  }
+  .sobriety-since {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+  .sobriety-milestones {
+    display: flex;
+    gap: 8px;
+    padding: 0 24px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .sobriety-milestones::-webkit-scrollbar { display: none; }
+  .sobriety-milestone {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 12px 16px;
+    min-width: 80px;
+  }
+  .sobriety-milestone.reached {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+  }
+  .sobriety-milestone-days {
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .sobriety-milestone-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+  }
+  .sobriety-milestone.reached .sobriety-milestone-label { color: var(--accent); }
+  .sobriety-date-form {
+    padding: 24px 24px 12px;
+  }
+  .sobriety-date-form-title {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+  }
+  .sobriety-date-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .sobriety-date-select {
+    flex: 1;
+    appearance: none;
+    -webkit-appearance: none;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-family: var(--font-ui);
+    font-size: 15px;
+    padding: 12px 10px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+  }
+  .sobriety-date-select:focus { border-color: var(--accent); }
+  .sobriety-date-sep { color: var(--text-dim); font-size: 18px; font-weight: 300; }
+  .sobriety-save-btn {
+    width: 100%;
+    margin-top: 14px;
+    padding: 16px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    font-family: var(--font-ui);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .sobriety-save-btn:active { opacity: 0.8; }
+  .sobriety-reset {
+    text-align: center;
+    padding: 10px 24px;
+    font-size: 13px;
+    color: var(--text-dim);
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: var(--font-ui);
+    width: 100%;
   }
 
   /* Check-in mood strip */
@@ -1247,6 +1684,26 @@
 
   <!-- Global nav drawer -->
   <!-- Hamburger menu drawer overlay -->
+    <!-- CARE ALERT MODAL -->
+    <div id="care-alert-modal" class="hidden" style="display:none;position:absolute;inset:0;z-index:200;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);padding:24px;">
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:20px;padding:28px 24px;max-width:380px;width:100%;text-align:center;">
+        <div style="font-size:32px;margin-bottom:12px;">🫂</div>
+        <div style="font-family:var(--font-display);font-size:20px;color:var(--text);margin-bottom:8px;">Flag for your care team?</div>
+        <div style="font-size:14px;color:var(--text-muted);line-height:1.6;margin-bottom:20px;">
+          Your <strong id="cam-instrument" style="color:var(--text);">score</strong> of <strong id="cam-score" style="color:var(--accent);">—</strong> (<span id="cam-label" style="color:var(--text-muted);">—</span>) suggests extra support may help.<br><br>
+          Want us to notify your care team so they can follow up with you?
+        </div>
+        <div style="font-size:12px;color:var(--text-dim);background:var(--bg-card2);border-radius:8px;padding:10px 12px;margin-bottom:20px;text-align:left;line-height:1.5;">
+          <strong style="color:var(--text-muted);">Your choice, your control.</strong> This sends a brief note to your program's care team. It includes your name, your score, and the date — nothing else. You can say no.
+        </div>
+        <div style="display:flex;gap:10px;flex-direction:column;">
+          <button onclick="careAlertConfirm()" style="width:100%;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:var(--font-ui);">Yes, flag my care team</button>
+          <button onclick="careAlertDismiss()" style="width:100%;padding:14px;background:transparent;color:var(--text-muted);border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-weight:500;cursor:pointer;font-family:var(--font-ui);">No thanks, I'm okay</button>
+        </div>
+        <div id="cam-status" style="display:none;margin-top:14px;font-size:13px;font-weight:500;"></div>
+      </div>
+    </div>
+
     <div id="nav-drawer" style="position:absolute;inset:0;z-index:100;display:none;">
       <!-- Backdrop -->
       <div id="nav-backdrop" data-action="closeNav" style="position:absolute;inset:0;background:rgba(0,0,0,0.45);backdrop-filter:blur(2px);"></div>
@@ -1271,6 +1728,27 @@
 
           <div style="height:1px;background:var(--border);margin:12px 24px;"></div>
           <div style="padding:4px 12px;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-dim);font-weight:600;">My Account</div>
+          <button class="nav-drawer-item" data-action="navTo" data-val="screen-sobriety">
+            <span>Sobriety Counter</span><span style="opacity:0.4;font-size:14px;">→</span>
+          </button>
+          <button class="nav-drawer-item" data-action="navTo" data-val="screen-checkin">
+            <span>Daily Check-In</span><span style="opacity:0.4;font-size:14px;">→</span>
+          </button>
+          <button class="nav-drawer-item" data-action="navTo" data-val="screen-phq9">
+            <span>Weekly PHQ-9</span><span style="opacity:0.4;font-size:14px;">→</span>
+          </button>
+          <button class="nav-drawer-item" data-action="navTo" data-val="screen-auditc">
+            <span>AUDIT-C Screen</span><span style="opacity:0.4;font-size:14px;">→</span>
+          </button>
+          <button class="nav-drawer-item" data-action="navTo" data-val="screen-dast10">
+            <span>DAST-10 Drug Screen</span><span style="opacity:0.4;font-size:14px;">→</span>
+          </button>
+          <button class="nav-drawer-item" data-action="navTo" data-val="screen-progress">
+            <span>My Progress</span><span style="opacity:0.4;font-size:14px;">→</span>
+          </button>
+          <button class="nav-drawer-item" data-action="navTo" data-val="screen-aftercare">
+            <span>After Care</span><span style="opacity:0.4;font-size:14px;">→</span>
+          </button>
           <button class="nav-drawer-item" data-action="navTo" data-val="screen-plan-0">
             <span>My Plan</span><span style="opacity:0.4;font-size:14px;">→</span>
           </button>
@@ -1282,6 +1760,9 @@
           <div style="padding:4px 12px;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-dim);font-weight:600;">Providers</div>
           <button class="nav-drawer-item" data-action="navTo" data-val="screen-clinician">
             <span>For Clinicians</span><span style="opacity:0.4;font-size:14px;">→</span>
+          </button>
+          <button class="nav-drawer-item" data-action="navTo" data-val="screen-provider">
+            <span>Provider Dashboard</span><span style="opacity:0.4;font-size:14px;">→</span>
           </button>
         </div>
 
@@ -1384,7 +1865,23 @@
         <span></span><span></span><span></span>
       </button>
     </div>
-    <div class="info-screen-wrap">
+
+    <!-- Toggle: Patient / Clinician -->
+    <div style="padding:12px 20px 0;background:var(--bg);">
+      <div style="display:flex;background:var(--bg-card2);border-radius:12px;padding:3px;gap:3px;">
+        <button id="toggle-patient" data-action="infoToggle" data-val="patient"
+          style="flex:1;padding:9px;border:none;border-radius:9px;font-family:var(--font-ui);font-size:13px;font-weight:600;cursor:pointer;background:var(--bg);color:var(--text);transition:all 0.2s;">
+          For Patients
+        </button>
+        <button id="toggle-clinician" data-action="infoToggle" data-val="clinician"
+          style="flex:1;padding:9px;border:none;border-radius:9px;font-family:var(--font-ui);font-size:13px;font-weight:600;cursor:pointer;background:transparent;color:var(--text-muted);transition:all 0.2s;">
+          For Clinicians
+        </button>
+      </div>
+    </div>
+
+    <!-- PATIENT VIEW -->
+    <div id="info-patient" class="info-screen-wrap">
       <div class="info-headline">Support that knows you before the crisis hits.</div>
 
       <div class="info-block">
@@ -1409,6 +1906,634 @@
       <button class="landing-cta-primary" data-action="screen" data-val="screen-home" style="margin-top:8px;">
         <span>Get started</span><span>→</span>
       </button>
+    </div>
+
+    <!-- CLINICIAN VIEW -->
+    <div id="info-clinician" class="info-screen-wrap" style="display:none;">
+      <div class="info-headline">A structured discharge tool your patients will actually use.</div>
+
+      <div class="info-block">
+        <div class="info-block-num">The gap</div>
+        <div class="info-block-title">Discharge plans don't survive first contact with real life.</div>
+        <div class="info-block-body">Patients leave IOP or PHP with a paper safety plan they won't find when they need it. EQUA puts that plan on their phone, in a guided format that works even when their nervous system is dysregulated.</div>
+      </div>
+      <div class="info-divider"></div>
+      <div class="info-block">
+        <div class="info-block-num">For your team</div>
+        <div class="info-block-title">Built around evidence-based protocols you already use.</div>
+        <div class="info-block-body">EQUA's crisis interventions are drawn from DBT (Opposite Action, TIPP, grounding), CBT thought challenging, and standard safety planning frameworks. Nothing to retrain your staff on.</div>
+      </div>
+      <div class="info-divider"></div>
+      <div class="info-block">
+        <div class="info-block-num">Handoff tool</div>
+        <div class="info-block-title">Send a structured summary at discharge.</div>
+        <div class="info-block-body">When a patient completes their plan, EQUA generates a discharge handoff — warning signs, coping strategies, support contacts, and aftercare commitments — formatted for your records or the receiving provider.</div>
+      </div>
+      <div class="info-divider"></div>
+      <div class="info-block">
+        <div class="info-block-num">Designed for IOP & PHP</div>
+        <div class="info-block-title">Piloted at Old Vineyard Behavioral Health.</div>
+        <div class="info-block-body">EQUA was developed with patients in a partial hospitalization program in Winston-Salem, NC. It reflects the real moments of breakdown that happen between sessions — not a clinical theory of what those moments look like.</div>
+      </div>
+      <div class="info-divider"></div>
+
+      <button class="landing-cta-primary" data-action="screen" data-val="screen-handoff" style="margin-top:8px;">
+        <span>See the discharge handoff tool</span><span>→</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ============ SOBRIETY COUNTER ============ -->
+  <div id="screen-sobriety" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-home">← Back</button>
+      <span style="font-size:13px;font-weight:600;color:var(--text-muted);">My Sobriety</span>
+      <button class="hamburger" data-action="openNav" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <div style="flex:1;overflow-y:auto;">
+      <!-- Big counter -->
+      <div class="sobriety-hero">
+        <div class="sobriety-big-num" id="sob-day-count">–</div>
+        <div class="sobriety-big-unit" id="sob-day-unit">days sober</div>
+        <div class="sobriety-since" id="sob-since-label">Set your sobriety date below</div>
+      </div>
+
+      <!-- Milestone chips -->
+      <div class="sobriety-milestones" id="sob-milestones">
+        <div class="sobriety-milestone" id="sob-m1"><div class="sobriety-milestone-days">1</div><div class="sobriety-milestone-label">Day</div></div>
+        <div class="sobriety-milestone" id="sob-m7"><div class="sobriety-milestone-days">7</div><div class="sobriety-milestone-label">Week</div></div>
+        <div class="sobriety-milestone" id="sob-m30"><div class="sobriety-milestone-days">30</div><div class="sobriety-milestone-label">Month</div></div>
+        <div class="sobriety-milestone" id="sob-m60"><div class="sobriety-milestone-days">60</div><div class="sobriety-milestone-label">2 Months</div></div>
+        <div class="sobriety-milestone" id="sob-m90"><div class="sobriety-milestone-days">90</div><div class="sobriety-milestone-label">3 Months</div></div>
+        <div class="sobriety-milestone" id="sob-m180"><div class="sobriety-milestone-days">180</div><div class="sobriety-milestone-label">6 Months</div></div>
+        <div class="sobriety-milestone" id="sob-m365"><div class="sobriety-milestone-days">365</div><div class="sobriety-milestone-label">1 Year</div></div>
+      </div>
+
+      <!-- Date entry form -->
+      <div class="sobriety-date-form">
+        <div class="sobriety-date-form-title">Your sobriety date</div>
+        <div class="sobriety-date-row">
+          <select class="sobriety-date-select" id="sob-month" aria-label="Month">
+            <option value="">Mo</option>
+            <option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option>
+            <option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option>
+            <option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option>
+            <option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option>
+          </select>
+          <div class="sobriety-date-sep">/</div>
+          <select class="sobriety-date-select" id="sob-day" aria-label="Day">
+            <option value="">Day</option>
+          </select>
+          <div class="sobriety-date-sep">/</div>
+          <select class="sobriety-date-select" id="sob-year" aria-label="Year" style="flex:1.4;">
+            <option value="">Year</option>
+          </select>
+        </div>
+        <button class="sobriety-save-btn" data-action="sobSave">Save date</button>
+      </div>
+
+      <button class="sobriety-reset" data-action="sobReset">Reset counter</button>
+
+      <div style="height:32px;"></div>
+    </div>
+  </div>
+
+  <!-- ============ DAILY CHECK-IN ============ -->
+  <!-- ============ PHQ-9 SCREEN ============ -->
+  <!-- After Care: post-discharge companion -->
+  <div id="screen-aftercare" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-home">← Back</button>
+      <span style="font-size:13px;font-weight:600;color:var(--text-muted);">After Care</span>
+      <button class="hamburger" data-action="openNav" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:20px 16px 100px;">
+
+      <!-- Hero: days sober + streak -->
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px;text-align:center;">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.14em;color:var(--text-dim);margin-bottom:8px;">Days in Recovery</div>
+        <div id="ac-days-sober" style="font-family:var(--font-display);font-size:72px;line-height:1;color:var(--accent);font-variant-numeric:tabular-nums;">–</div>
+        <div id="ac-sober-label" style="font-size:13px;color:var(--text-muted);margin-top:6px;">Set your sobriety date to start tracking</div>
+        <div id="ac-streak-row" style="display:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--border);display:flex;justify-content:center;gap:32px;">
+          <div style="text-align:center;">
+            <div style="font-size:22px;font-weight:700;color:var(--text);font-variant-numeric:tabular-nums;" id="ac-streak-num">0</div>
+            <div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.08em;">Day streak</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:22px;font-weight:700;color:var(--text);font-variant-numeric:tabular-nums;" id="ac-checkin-total">0</div>
+            <div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.08em;">Check-ins</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHQ-9 snapshot -->
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <div style="font-size:13px;font-weight:600;color:var(--text);">Depression (PHQ-9)</div>
+          <button onclick="showScreen('screen-phq9')" style="background:none;border:none;color:var(--accent);font-size:12px;cursor:pointer;font-family:var(--font-ui);">Take now →</button>
+        </div>
+        <div id="ac-phq9-empty" style="font-size:13px;color:var(--text-dim);">No scores yet. Take your first PHQ-9 to start tracking.</div>
+        <div id="ac-phq9-data" style="display:none;">
+          <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:6px;">
+            <div id="ac-phq9-score" style="font-family:var(--font-display);font-size:40px;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums;"></div>
+            <div>
+              <div id="ac-phq9-label" style="font-size:13px;font-weight:600;"></div>
+              <div id="ac-phq9-trend" style="font-size:12px;color:var(--text-muted);margin-top:2px;"></div>
+            </div>
+          </div>
+          <div id="ac-phq9-next" style="font-size:12px;color:var(--text-dim);padding:8px 10px;background:var(--bg-card2);border-radius:8px;margin-top:4px;"></div>
+        </div>
+      </div>
+
+      <!-- AUDIT-C snapshot -->
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <div style="font-size:13px;font-weight:600;color:var(--text);">Alcohol Use (AUDIT-C)</div>
+          <button onclick="showScreen('screen-auditc')" style="background:none;border:none;color:var(--accent);font-size:12px;cursor:pointer;font-family:var(--font-ui);">Take now →</button>
+        </div>
+        <div id="ac-auditc-empty" style="font-size:13px;color:var(--text-dim);">No scores yet.</div>
+        <div id="ac-auditc-data" style="display:none;">
+          <div style="display:flex;align-items:baseline;gap:10px;">
+            <div id="ac-auditc-score" style="font-family:var(--font-display);font-size:40px;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums;"></div>
+            <div>
+              <div id="ac-auditc-label" style="font-size:13px;font-weight:600;"></div>
+              <div id="ac-auditc-trend" style="font-size:12px;color:var(--text-muted);margin-top:2px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DAST-10 snapshot -->
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <div style="font-size:13px;font-weight:600;color:var(--text);">Drug Use (DAST-10)</div>
+          <button onclick="showScreen('screen-dast10')" style="background:none;border:none;color:var(--accent);font-size:12px;cursor:pointer;font-family:var(--font-ui);">Take now →</button>
+        </div>
+        <div id="ac-dast10-empty" style="font-size:13px;color:var(--text-dim);">No scores yet.</div>
+        <div id="ac-dast10-data" style="display:none;">
+          <div style="display:flex;align-items:baseline;gap:10px;">
+            <div id="ac-dast10-score" style="font-family:var(--font-display);font-size:40px;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums;"></div>
+            <div>
+              <div id="ac-dast10-label" style="font-size:13px;font-weight:600;"></div>
+              <div id="ac-dast10-trend" style="font-size:12px;color:var(--text-muted);margin-top:2px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: If you need support -->
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.12em;font-weight:600;color:var(--text-dim);margin-bottom:10px;">If you need support</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px;">
+        <a href="tel:988" style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--danger-glow);border:1px solid rgba(192,57,43,0.25);border-radius:12px;text-decoration:none;">
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--danger);">988 Suicide & Crisis Lifeline</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Call or text — 24/7, free, confidential</div>
+          </div>
+          <span style="color:var(--danger);font-size:18px;">→</span>
+        </a>
+        <a href="sms:741741&body=HELLO" style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;text-decoration:none;">
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--text);">Crisis Text Line</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Text HOME to 741741</div>
+          </div>
+          <span style="color:var(--text-muted);font-size:18px;">→</span>
+        </a>
+        <a href="tel:18009624357" style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;text-decoration:none;">
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--text);">SAMHSA Helpline</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">1-800-662-4357 · Free treatment referrals</div>
+          </div>
+          <span style="color:var(--text-muted);font-size:18px;">→</span>
+        </a>
+      </div>
+
+      <!-- Section: Keep going -->
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.12em;font-weight:600;color:var(--text-dim);margin-bottom:10px;">Keep going</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <button onclick="showScreen('screen-checkin')" style="width:100%;padding:13px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:14px;font-weight:500;cursor:pointer;text-align:left;font-family:var(--font-ui);">Daily check-in →</button>
+        <button onclick="showScreen('screen-phq9')" style="width:100%;padding:13px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:14px;font-weight:500;cursor:pointer;text-align:left;font-family:var(--font-ui);">Weekly PHQ-9 →</button>
+        <button onclick="showScreen('screen-plan-0')" style="width:100%;padding:13px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:14px;font-weight:500;cursor:pointer;text-align:left;font-family:var(--font-ui);">Recovery plan →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAST-10 Drug Abuse Screening -->
+  <div id="screen-dast10" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-home">← Back</button>
+      <span style="font-size:13px;font-weight:600;color:var(--text-muted);">DAST-10</span>
+      <button class="hamburger" data-action="openNav" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:20px 16px 100px;">
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px;">
+        <div style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:4px;">Drug Abuse Screening Test</div>
+        <div style="font-size:12px;color:var(--text-muted);line-height:1.5;">Answer YES or NO about the past 12 months. "Drug use" refers to non-medical use of any substance — not including alcohol or tobacco.</div>
+      </div>
+      <div id="dast10-questions"></div>
+      <div id="dast10-result" style="display:none;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:12px;text-align:center;">
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:4px;">Your DAST-10 Score</div>
+        <div id="dast10-score-num" style="font-size:40px;font-weight:700;color:var(--accent);font-family:var(--font-display);"></div>
+        <div id="dast10-score-label" style="font-size:14px;font-weight:600;margin:4px 0;"></div>
+        <div id="dast10-score-desc" style="font-size:12px;color:var(--text-muted);line-height:1.5;margin-top:6px;"></div>
+      </div>
+      <button id="dast10-submit-btn" style="width:100%;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;margin-top:16px;" onclick="dast10Submit()">Calculate Score</button>
+      <button onclick="showScreen('screen-progress')" style="width:100%;padding:12px;background:none;border:none;color:var(--text-muted);font-size:13px;cursor:pointer;margin-top:8px;">View score history →</button>
+    </div>
+  </div>
+
+  <div id="screen-phq9" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-home">← Back</button>
+      <span style="font-size:13px;font-weight:600;color:var(--text-muted);">PHQ-9 · Weekly</span>
+      <button class="hamburger" data-action="openNav" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:20px 20px 100px;">
+      <div style="font-size:12px;color:var(--text-muted);line-height:1.5;margin-bottom:20px;background:var(--bg-card2);padding:12px 14px;border-radius:10px;">
+        Over the <strong>last 2 weeks</strong>, how often have you been bothered by any of the following problems?
+        <div style="margin-top:6px;display:flex;gap:12px;font-size:11px;flex-wrap:wrap;">
+          <span style="color:var(--text-dim);">0 = Not at all</span>
+          <span style="color:var(--text-dim);">1 = Several days</span>
+          <span style="color:var(--text-dim);">2 = More than half the days</span>
+          <span style="color:var(--text-dim);">3 = Nearly every day</span>
+        </div>
+      </div>
+
+      <div id="phq9-questions"></div>
+
+      <div id="phq9-score-display" style="display:none;margin:20px 0 12px;padding:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;text-align:center;">
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:4px;">PHQ-9 Score</div>
+        <div id="phq9-score-num" style="font-family:var(--font-display);font-size:52px;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums;">–</div>
+        <div id="phq9-score-label" style="font-size:13px;font-weight:600;margin-top:4px;"></div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:6px;">Scores saved automatically each week</div>
+      </div>
+
+      <button id="phq9-submit-btn" style="width:100%;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;margin-top:8px;" onclick="phq9Submit()">Calculate Score</button>
+      <button onclick="showScreen('screen-progress')" style="width:100%;padding:12px;background:none;border:none;color:var(--text-muted);font-size:13px;cursor:pointer;margin-top:8px;">View score history →</button>
+    </div>
+  </div>
+
+  <!-- ============ AUDIT-C SCREEN ============ -->
+  <div id="screen-auditc" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-home">← Back</button>
+      <span style="font-size:13px;font-weight:600;color:var(--text-muted);">AUDIT-C · Alcohol Screen</span>
+      <button class="hamburger" data-action="openNav" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:20px 20px 100px;">
+      <div style="font-size:12px;color:var(--text-muted);line-height:1.5;margin-bottom:20px;background:var(--bg-card2);padding:12px 14px;border-radius:10px;">
+        The <strong>AUDIT-C</strong> is a validated 3-question alcohol misuse screen used in clinical settings. Answer based on the <strong>past year</strong>.
+      </div>
+
+      <!-- Q1 -->
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;">
+        <div style="font-size:14px;font-weight:600;margin-bottom:12px;line-height:1.4;">How often did you have a drink containing alcohol in the past year?</div>
+        <div id="ac-q1-opts" style="display:flex;flex-direction:column;gap:8px;">
+          <button class="ac-opt" data-q="1" data-val="0" onclick="acSelect(this)">Never</button>
+          <button class="ac-opt" data-q="1" data-val="1" onclick="acSelect(this)">Monthly or less</button>
+          <button class="ac-opt" data-q="1" data-val="2" onclick="acSelect(this)">2–4 times a month</button>
+          <button class="ac-opt" data-q="1" data-val="3" onclick="acSelect(this)">2–3 times a week</button>
+          <button class="ac-opt" data-q="1" data-val="4" onclick="acSelect(this)">4 or more times a week</button>
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;">
+        <div style="font-size:14px;font-weight:600;margin-bottom:12px;line-height:1.4;">How many drinks containing alcohol did you have on a typical day when you were drinking?</div>
+        <div id="ac-q2-opts" style="display:flex;flex-direction:column;gap:8px;">
+          <button class="ac-opt" data-q="2" data-val="0" onclick="acSelect(this)">1 or 2</button>
+          <button class="ac-opt" data-q="2" data-val="1" onclick="acSelect(this)">3 or 4</button>
+          <button class="ac-opt" data-q="2" data-val="2" onclick="acSelect(this)">5 or 6</button>
+          <button class="ac-opt" data-q="2" data-val="3" onclick="acSelect(this)">7 to 9</button>
+          <button class="ac-opt" data-q="2" data-val="4" onclick="acSelect(this)">10 or more</button>
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:20px;">
+        <div style="font-size:14px;font-weight:600;margin-bottom:12px;line-height:1.4;">How often did you have 6 or more drinks on one occasion in the past year?</div>
+        <div id="ac-q3-opts" style="display:flex;flex-direction:column;gap:8px;">
+          <button class="ac-opt" data-q="3" data-val="0" onclick="acSelect(this)">Never</button>
+          <button class="ac-opt" data-q="3" data-val="1" onclick="acSelect(this)">Less than monthly</button>
+          <button class="ac-opt" data-q="3" data-val="2" onclick="acSelect(this)">Monthly</button>
+          <button class="ac-opt" data-q="3" data-val="3" onclick="acSelect(this)">Weekly</button>
+          <button class="ac-opt" data-q="3" data-val="4" onclick="acSelect(this)">Daily or almost daily</button>
+        </div>
+      </div>
+
+      <div id="auditc-score-display" style="display:none;margin-bottom:12px;padding:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;text-align:center;">
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:4px;">AUDIT-C Score</div>
+        <div id="auditc-score-num" style="font-family:var(--font-display);font-size:52px;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums;">–</div>
+        <div id="auditc-score-label" style="font-size:13px;font-weight:600;margin-top:4px;"></div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:6px;">Score saved — share with your care team</div>
+      </div>
+
+      <button id="auditc-submit-btn" style="width:100%;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;" onclick="auditcSubmit()">Calculate Score</button>
+      <button onclick="showScreen('screen-progress')" style="width:100%;padding:12px;background:none;border:none;color:var(--text-muted);font-size:13px;cursor:pointer;margin-top:8px;">View score history →</button>
+    </div>
+  </div>
+
+  <!-- ============ PROGRESS SCREEN ============ -->
+  <div id="screen-progress" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-home">← Back</button>
+      <span style="font-size:13px;font-weight:600;color:var(--text-muted);">My Progress</span>
+      <button class="hamburger" data-action="openNav" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:20px 20px 100px;">
+      <!-- Stat tiles -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:14px;">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-dim);margin-bottom:4px;">Days Sober</div>
+          <div id="prog-days-sober" style="font-family:var(--font-display);font-size:36px;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums;">–</div>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:14px;">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-dim);margin-bottom:4px;">Last PHQ-9</div>
+          <div id="prog-last-phq9" style="font-family:var(--font-display);font-size:36px;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums;">–</div>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:14px;">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-dim);margin-bottom:4px;">Last AUDIT-C</div>
+          <div id="prog-last-auditc" style="font-family:var(--font-display);font-size:36px;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums;">–</div>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:14px;">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-dim);margin-bottom:4px;">Last DAST-10</div>
+          <div id="prog-last-dast10" style="font-family:var(--font-display);font-size:36px;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums;">–</div>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:14px;">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-dim);margin-bottom:4px;">Check-Ins</div>
+          <div id="prog-checkins" style="font-family:var(--font-display);font-size:36px;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums;">–</div>
+        </div>
+      </div>
+
+      <!-- PHQ-9 history -->
+      <div style="margin-bottom:20px;">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.12em;font-weight:600;color:var(--text-dim);margin-bottom:10px;">PHQ-9 History</div>
+        <div id="phq9-history-chart" style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px;min-height:120px;">
+          <canvas id="phq9-canvas" width="300" height="100" style="width:100%;height:auto;"></canvas>
+          <div id="phq9-no-data" style="text-align:center;padding:20px;color:var(--text-dim);font-size:13px;">No PHQ-9 scores yet.<br><button onclick="showScreen('screen-phq9')" style="background:none;border:none;color:var(--accent);cursor:pointer;font-size:13px;margin-top:6px;">Take the PHQ-9 →</button></div>
+        </div>
+      </div>
+
+      <!-- AUDIT-C history -->
+      <div style="margin-bottom:20px;">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.12em;font-weight:600;color:var(--text-dim);margin-bottom:10px;">AUDIT-C History</div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px;min-height:80px;">
+          <canvas id="auditc-canvas" width="300" height="80" style="width:100%;height:auto;"></canvas>
+          <div id="auditc-no-data" style="text-align:center;padding:20px;color:var(--text-dim);font-size:13px;">No AUDIT-C scores yet.<br><button onclick="showScreen('screen-auditc')" style="background:none;border:none;color:var(--accent);cursor:pointer;font-size:13px;margin-top:6px;">Take the AUDIT-C →</button></div>
+        </div>
+      </div>
+
+      <!-- DAST-10 history -->
+      <div style="margin-bottom:20px;">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.12em;font-weight:600;color:var(--text-dim);margin-bottom:10px;">DAST-10 History</div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px;min-height:80px;">
+          <canvas id="dast10-canvas" width="300" height="80" style="width:100%;height:auto;"></canvas>
+          <div id="dast10-no-data" style="text-align:center;padding:20px;color:var(--text-dim);font-size:13px;">No DAST-10 scores yet.<br><button onclick="showScreen('screen-dast10')" style="background:none;border:none;color:var(--accent);cursor:pointer;font-size:13px;margin-top:6px;">Take the DAST-10 →</button></div>
+        </div>
+      </div>
+
+      <!-- Quick actions -->
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <button onclick="showScreen('screen-phq9')" style="width:100%;padding:13px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;font-weight:500;cursor:pointer;text-align:left;">PHQ-9 weekly assessment →</button>
+        <button onclick="showScreen('screen-auditc')" style="width:100%;padding:13px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;font-weight:500;cursor:pointer;text-align:left;">AUDIT-C alcohol screen →</button>
+        <button onclick="showScreen('screen-dast10')" style="width:100%;padding:13px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;font-weight:500;cursor:pointer;text-align:left;">DAST-10 drug screen →</button>
+        <button onclick="showScreen('screen-checkin')" style="width:100%;padding:13px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;font-weight:500;cursor:pointer;text-align:left;">Daily check-in →</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="screen-checkin" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-home">← Back</button>
+      <span style="font-size:13px;font-weight:600;color:var(--text-muted);">Daily Check-In</span>
+      <button class="hamburger" data-action="openNav" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <!-- Progress bars: 4 sections -->
+    <div class="checkin-progress">
+      <div class="checkin-progress-bar active" id="ci-bar-0"></div>
+      <div class="checkin-progress-bar" id="ci-bar-1"></div>
+      <div class="checkin-progress-bar" id="ci-bar-2"></div>
+      <div class="checkin-progress-bar" id="ci-bar-3"></div>
+    </div>
+
+    <!-- SECTION 1: Basics -->
+    <div class="checkin-section active" id="ci-sec-0">
+      <div class="checkin-section-title">How's your day starting?</div>
+
+      <div class="checkin-q">
+        <div class="checkin-q-label">In one word — what's your mood today?</div>
+        <input class="checkin-input" id="ci-mood-word" type="text" placeholder="e.g. Present, Anxious, Hopeful…" />
+      </div>
+
+      <div class="checkin-q">
+        <div class="checkin-q-label">How many hours of sleep did you get?</div>
+        <div class="checkin-stepper">
+          <button class="checkin-stepper-btn" data-action="sleepAdj" data-val="-1">−</button>
+          <div class="checkin-stepper-val" id="ci-sleep-val">7</div>
+          <button class="checkin-stepper-btn" data-action="sleepAdj" data-val="1">+</button>
+        </div>
+      </div>
+
+      <div class="checkin-q">
+        <div class="checkin-q-label">Type of service today</div>
+        <div class="checkin-toggle">
+          <button class="checkin-toggle-btn" data-action="ciToggle" data-group="service" data-val="in-person">In-Person</button>
+          <button class="checkin-toggle-btn" data-action="ciToggle" data-group="service" data-val="telehealth">Telehealth</button>
+        </div>
+      </div>
+
+      <div class="checkin-q">
+        <div class="checkin-q-label">Did you attend work or school since last session?</div>
+        <div class="checkin-toggle">
+          <button class="checkin-toggle-btn" data-action="ciToggle" data-group="work" data-val="no">No</button>
+          <button class="checkin-toggle-btn" data-action="ciToggle" data-group="work" data-val="yes">Yes</button>
+          <button class="checkin-toggle-btn" data-action="ciToggle" data-group="work" data-val="na">N/A</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2: Self-care & coping -->
+    <div class="checkin-section" id="ci-sec-1">
+      <div class="checkin-section-title">Self-care & coping</div>
+
+      <div class="checkin-q">
+        <div class="checkin-q-label">What did you do for self-care in the last 24 hours?</div>
+        <textarea class="checkin-input" id="ci-selfcare" rows="3" placeholder="e.g. Called my counselor, went for a walk, practiced a grounding exercise…"></textarea>
+      </div>
+
+      <div class="checkin-q">
+        <div class="checkin-q-label">If you weren't able to meet your self-care goals, what got in the way?</div>
+        <textarea class="checkin-input" id="ci-barriers" rows="2" placeholder="N/A if you met them"></textarea>
+      </div>
+
+      <div class="checkin-q">
+        <div class="checkin-q-label">What coping skill are you working on?</div>
+        <input class="checkin-input" id="ci-coping" type="text" placeholder="e.g. Better self-esteem, Opposite Action…" />
+      </div>
+    </div>
+
+    <!-- SECTION 3: Safety & sobriety -->
+    <div class="checkin-section" id="ci-sec-2">
+      <div class="checkin-section-title">Safety check</div>
+      <div class="checkin-section-sub">These questions are standard for every session.</div>
+
+      <div class="checkin-q">
+        <div class="checkin-q-label">Have you maintained sobriety since last group?</div>
+        <div class="checkin-toggle">
+          <button class="checkin-toggle-btn" data-action="ciToggle" data-group="sobriety" data-val="no">No</button>
+          <button class="checkin-toggle-btn" data-action="ciToggle" data-group="sobriety" data-val="yes">Yes</button>
+          <button class="checkin-toggle-btn" data-action="ciToggle" data-group="sobriety" data-val="na">N/A</button>
+        </div>
+      </div>
+      <div class="checkin-q" id="ci-use-detail" style="display:none;">
+        <div class="checkin-q-label">Date of last use, substance used, and amount:</div>
+        <textarea class="checkin-input" id="ci-last-use" rows="2" placeholder="e.g. 9/20, alcohol, 3 beers"></textarea>
+      </div>
+
+      <div class="checkin-q">
+        <div class="checkin-q-label">Medications taken as prescribed in the last 24 hours?</div>
+        <div class="checkin-toggle">
+          <button class="checkin-toggle-btn" data-action="ciToggle" data-group="meds" data-val="no">No</button>
+          <button class="checkin-toggle-btn" data-action="ciToggle" data-group="meds" data-val="yes">Yes</button>
+          <button class="checkin-toggle-btn" data-action="ciToggle" data-group="meds" data-val="na">N/A</button>
+        </div>
+      </div>
+
+      <div class="checkin-q">
+        <div class="checkin-q-label">Any side effects?</div>
+        <div class="checkin-toggle">
+          <button class="checkin-toggle-btn" data-action="ciToggle" data-group="sideeffects" data-val="no">No</button>
+          <button class="checkin-toggle-btn" data-action="ciToggle" data-group="sideeffects" data-val="yes">Yes</button>
+          <button class="checkin-toggle-btn" data-action="ciToggle" data-group="sideeffects" data-val="na">N/A</button>
+        </div>
+      </div>
+      <div class="checkin-q" id="ci-sideeffect-detail" style="display:none;">
+        <textarea class="checkin-input" id="ci-sideeffect-txt" rows="2" placeholder="Describe side effects…"></textarea>
+      </div>
+
+      <div class="checkin-q">
+        <div class="checkin-q-label">Any new medical concerns?</div>
+        <textarea class="checkin-input" id="ci-medical" rows="2" placeholder="Describe or write N/A"></textarea>
+      </div>
+
+      <div class="checkin-q">
+        <div class="checkin-q-label">Do you need to speak with the Nurse/Doctor today?</div>
+        <div class="checkin-toggle">
+          <button class="checkin-toggle-btn" data-action="ciToggle" data-group="nursedoc" data-val="no">No</button>
+          <button class="checkin-toggle-btn" data-action="ciToggle" data-group="nursedoc" data-val="yes">Yes</button>
+        </div>
+      </div>
+      <div class="checkin-q" id="ci-nursedoc-concern" style="display:none;">
+        <textarea class="checkin-input" id="ci-nursedoc-txt" rows="2" placeholder="What would you like to report?"></textarea>
+      </div>
+
+      <div class="checkin-q">
+        <div class="checkin-q-label">Are you experiencing feelings of worthlessness?</div>
+        <div class="checkin-toggle">
+          <button class="checkin-toggle-btn" data-action="ciToggle" data-group="worthless" data-val="no">No</button>
+          <button class="checkin-toggle-btn" data-action="ciToggle" data-group="worthless" data-val="yes">Yes</button>
+        </div>
+      </div>
+
+      <div class="checkin-q">
+        <div class="checkin-q-label">Are you feeling hopeless and/or helpless?</div>
+        <div class="checkin-toggle">
+          <button class="checkin-toggle-btn" data-action="ciToggle" data-group="hopeless" data-val="no">No</button>
+          <button class="checkin-toggle-btn" data-action="ciToggle" data-group="hopeless" data-val="yes">Yes</button>
+        </div>
+      </div>
+
+      <div class="checkin-q">
+        <div class="checkin-q-label">Are you experiencing any thoughts of harming other people?</div>
+        <div class="checkin-toggle">
+          <button class="checkin-toggle-btn" data-action="ciToggle" data-group="harmothers" data-val="no">No</button>
+          <button class="checkin-toggle-btn" data-action="ciToggle" data-group="harmothers" data-val="yes">Yes</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 4: CSSRS -->
+    <div class="checkin-section" id="ci-sec-3">
+      <div class="checkin-section-title">Columbia Safety Scale</div>
+      <div class="checkin-section-sub">Since your last session — answer each question honestly. Your care team reviews these.</div>
+
+      <!-- CSSRS Q1 -->
+      <div class="cssrs-row" id="cssrs-r1">
+        <div class="cssrs-num">1</div>
+        <div class="cssrs-text">Have you wished you were dead or wished you could go to sleep and not wake up?</div>
+        <div class="cssrs-btns">
+          <button class="cssrs-btn" data-action="cssrs" data-q="1" data-val="no">No</button>
+          <button class="cssrs-btn" data-action="cssrs" data-q="1" data-val="yes">Yes</button>
+        </div>
+      </div>
+
+      <!-- CSSRS Q2 -->
+      <div class="cssrs-row" id="cssrs-r2">
+        <div class="cssrs-num">2</div>
+        <div class="cssrs-text">Have you actually had any thoughts of killing yourself?</div>
+        <div class="cssrs-btns">
+          <button class="cssrs-btn" data-action="cssrs" data-q="2" data-val="no">No</button>
+          <button class="cssrs-btn" data-action="cssrs" data-q="2" data-val="yes">Yes</button>
+        </div>
+      </div>
+
+      <!-- CSSRS Q3 -->
+      <div class="cssrs-row" id="cssrs-r3">
+        <div class="cssrs-num">3</div>
+        <div class="cssrs-text">Have you been thinking about how you might do this?</div>
+        <div class="cssrs-btns">
+          <button class="cssrs-btn" data-action="cssrs" data-q="3" data-val="no">No</button>
+          <button class="cssrs-btn" data-action="cssrs" data-q="3" data-val="yes">Yes</button>
+        </div>
+      </div>
+
+      <!-- CSSRS Q4 -->
+      <div class="cssrs-row" id="cssrs-r4">
+        <div class="cssrs-num">4</div>
+        <div class="cssrs-text">Have you had some intention of acting on these thoughts?</div>
+        <div class="cssrs-btns">
+          <button class="cssrs-btn" data-action="cssrs" data-q="4" data-val="no">No</button>
+          <button class="cssrs-btn" data-action="cssrs" data-q="4" data-val="yes">Yes</button>
+        </div>
+      </div>
+
+      <!-- CSSRS Q5 -->
+      <div class="cssrs-row" id="cssrs-r5">
+        <div class="cssrs-num">5</div>
+        <div class="cssrs-text">Have you started to work out or worked out the details of how to do this? Do you intend to carry out this plan?</div>
+        <div class="cssrs-btns">
+          <button class="cssrs-btn" data-action="cssrs" data-q="5" data-val="no">No</button>
+          <button class="cssrs-btn" data-action="cssrs" data-q="5" data-val="yes">Yes</button>
+        </div>
+      </div>
+
+      <!-- CSSRS Q6 -->
+      <div class="cssrs-row" id="cssrs-r6">
+        <div class="cssrs-num">6</div>
+        <div class="cssrs-text">Have you done anything, started to do anything, or prepared to do anything to end your life?</div>
+        <div class="cssrs-btns">
+          <button class="cssrs-btn" data-action="cssrs" data-q="6" data-val="no">No</button>
+          <button class="cssrs-btn" data-action="cssrs" data-q="6" data-val="yes">Yes</button>
+        </div>
+      </div>
+
+      <!-- Crisis escalation banner — shown if Q3–Q6 = Yes -->
+      <div class="checkin-crisis-banner" id="ci-crisis-banner">
+        <div class="checkin-crisis-title">⚠️ Your answers need immediate attention</div>
+        <div class="checkin-crisis-body">Based on what you shared, please reach out to your care team or a crisis line right now. You don't have to handle this alone.</div>
+        <button class="btn-primary danger" style="margin-top:4px;" data-action="callEmergency">Contact crisis line →</button>
+      </div>
+    </div>
+
+    <!-- Sticky footer -->
+    <div class="checkin-footer">
+      <button class="btn-full ghost" id="ci-back-btn" data-action="ciNav" data-val="back" style="display:none;">← Back</button>
+      <button class="btn-full primary" id="ci-next-btn" data-action="ciNav" data-val="next">Next →</button>
     </div>
   </div>
 
@@ -1465,21 +2590,21 @@
         <div class="home-greeting">Good morning, <strong>Chad</strong></div>
         <div class="home-anchor">You showed up<em> again.</em><br>That's everything.</div>
 
-        <!-- Day counter -->
-        <div class="home-counter">
-          <div class="home-counter-num" id="home-day-num">7</div>
+        <!-- Day counter — tappable, opens sobriety screen -->
+        <button class="home-counter" data-action="screen" data-val="screen-sobriety" style="width:100%;text-align:left;cursor:pointer;border:none;">
+          <div class="home-counter-num" id="home-day-num">–</div>
           <div class="home-counter-label">
-            <span>days in recovery</span>
-            <span>Keep showing up — you're building something real</span>
+            <span id="home-day-label">days in recovery</span>
+            <span id="home-day-sub">Tap to set your sobriety date</span>
           </div>
-          <div class="home-counter-dots">
-            <div class="home-counter-dot lit"></div>
-            <div class="home-counter-dot lit"></div>
-            <div class="home-counter-dot lit"></div>
-            <div class="home-counter-dot"></div>
-            <div class="home-counter-dot"></div>
+          <div class="home-counter-dots" id="home-counter-dots">
+            <div class="home-counter-dot" id="hd0"></div>
+            <div class="home-counter-dot" id="hd1"></div>
+            <div class="home-counter-dot" id="hd2"></div>
+            <div class="home-counter-dot" id="hd3"></div>
+            <div class="home-counter-dot" id="hd4"></div>
           </div>
-        </div>
+        </button>
       </div>
 
       <!-- MOOD CHECK-IN: low-friction micro-commitment -->
@@ -1532,10 +2657,25 @@
 
       <!-- SECONDARY TILE GRID -->
       <div class="home-secondary-grid">
+        <button class="home-secondary-tile" data-action="screen" data-val="screen-checkin">
+          <span class="home-tile-icon">📋</span>
+          <span class="home-tile-name">Daily Check-In</span>
+          <span class="home-tile-sub">Today's group form</span>
+        </button>
         <button class="home-secondary-tile" data-action="screen" data-val="screen-plan-0">
           <span class="home-tile-icon">🗺️</span>
           <span class="home-tile-name">Recovery Plan</span>
           <span class="home-tile-sub">Build your personal plan</span>
+        </button>
+        <button class="home-secondary-tile" data-action="screen" data-val="screen-progress">
+          <span class="home-tile-icon">📈</span>
+          <span class="home-tile-name">My Progress</span>
+          <span class="home-tile-sub">PHQ-9, AUDIT-C & outcomes</span>
+        </button>
+        <button class="home-secondary-tile" data-action="screen" data-val="screen-aftercare">
+          <span class="home-tile-icon">🌱</span>
+          <span class="home-tile-name">After Care</span>
+          <span class="home-tile-sub">Life after the program</span>
         </button>
         <button class="home-secondary-tile" data-action="screen" data-val="screen-handoff">
           <span class="home-tile-icon">🤝</span>
@@ -1606,7 +2746,7 @@
         <div class="person-card">
           <div class="person-avatar">S</div>
           <div class="person-info">
-            <div class="person-name">Sponsor / AA contact</div>
+            <div class="person-name">Peer support specialist</div>
             <div class="person-role">Tap to add number</div>
           </div>
           <div class="person-call">📞</div>
@@ -1680,7 +2820,7 @@
 
       <div class="tier fade-in-3">
         <div class="tier-label low">Low intensity (1–4)</div>
-        <button class="tier-action selected" data-action="selectAction" data-val="low"><span class="check">✓</span> Call my sponsor</button>
+        <button class="tier-action selected" data-action="selectAction" data-val="low"><span class="check">✓</span> Call my peer support specialist</button>
         <button class="tier-action" data-action="selectAction" data-val="low"><span class="check">✓</span> Go for a walk, change environment</button>
         <button class="tier-action" data-action="selectAction" data-val="low"><span class="check">✓</span> 5-minute grounding (5-4-3-2-1 senses)</button>
         <button class="tier-action" data-action="selectAction" data-val="low"><span class="check">✓</span> Text my accountability partner</button>
@@ -1689,14 +2829,14 @@
       <div class="tier">
         <div class="tier-label mid">Moderate intensity (5–7)</div>
         <button class="tier-action selected" data-action="selectAction" data-val="mid"><span class="check">✓</span> Call support person immediately</button>
-        <button class="tier-action" data-action="selectAction" data-val="mid"><span class="check">✓</span> Go to a meeting (find nearest AA)</button>
+        <button class="tier-action" data-action="selectAction" data-val="mid"><span class="check">✓</span> Call my peer support or text 988</button>
         <button class="tier-action" data-action="selectAction" data-val="mid"><span class="check">✓</span> Box breathing for 5 minutes</button>
         <button class="tier-action" data-action="selectAction" data-val="mid"><span class="check">✓</span> Drive to a public place</button>
       </div>
 
       <div class="tier">
         <div class="tier-label high">High intensity (8–10)</div>
-        <button class="tier-action selected" data-action="selectAction" data-val="high"><span class="check">✓</span> Call sponsor + counselor, don't be alone</button>
+        <button class="tier-action selected" data-action="selectAction" data-val="high"><span class="check">✓</span> Call 988 + peer support, don't be alone</button>
         <button class="tier-action" data-action="selectAction" data-val="high"><span class="check">✓</span> Call 988 crisis line</button>
         <button class="tier-action" data-action="selectAction" data-val="high"><span class="check">✓</span> Go to an ER or urgent care</button>
       </div>
@@ -1835,7 +2975,7 @@
       <div class="help-sub fade-in" style="font-size:12px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);">Your pre-committed action</div>
       <div class="action-reveal fade-in-2" id="action-reveal-card">
         <div class="action-eyebrow" id="action-eyebrow">Step 1 of your plan</div>
-        <div class="action-text" id="action-text">Call your sponsor.</div>
+        <div class="action-text" id="action-text">Call your peer support specialist.</div>
         <div class="action-detail" id="action-detail">You said this is what you'd do. Do it now, before anything else. Even if it goes to voicemail, make the call.</div>
         <div class="action-cta-row">
           <button class="action-cta call" id="action-call-btn" data-action="logAction">📞 Call now</button>
@@ -1920,6 +3060,7 @@
       <div style="display:flex;flex-direction:column;gap:10px;width:100%;">
         <button class="btn-full primary" data-action="screen" data-val="screen-home">I'm good. Back to home →</button>
         <button class="btn-full ghost" data-action="screen" data-val="screen-help-1">I need help again</button>
+        <button id="outcome-flag-btn" onclick="window.triggerDistressCareAlert()" style="display:none;width:100%;padding:13px;background:transparent;color:var(--text-muted);border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font-ui);">🫂 Flag my care team about this</button>
       </div>
     </div>
     <div style="padding:12px 20px 24px;">
@@ -2495,7 +3636,7 @@
         </div>
         <div class="field-group">
           <div class="field-label">Support person 1 — name + role</div>
-          <input class="field-input" type="text" placeholder="e.g. James (AA sponsor)" id="hf-person1">
+          <input class="field-input" type="text" placeholder="e.g. James (peer support specialist, family member)" id="hf-person1">
         </div>
         <div class="field-group">
           <div class="field-label">Support person 2 — name + role</div>
@@ -2507,11 +3648,11 @@
         </div>
         <div class="field-group">
           <div class="field-label">Low craving action (1–4)</div>
-          <input class="field-input" type="text" placeholder="e.g. Call sponsor, go for a walk" id="hf-low">
+          <input class="field-input" type="text" placeholder="e.g. Call peer support, use a grounding technique, go for a walk" id="hf-low">
         </div>
         <div class="field-group">
           <div class="field-label">Moderate craving action (5–7)</div>
-          <input class="field-input" type="text" placeholder="e.g. Call sponsor immediately, go to a meeting" id="hf-mid">
+          <input class="field-input" type="text" placeholder="e.g. Text 988, call peer support specialist, don't be alone" id="hf-mid">
         </div>
         <div class="field-group">
           <div class="field-label">High craving / crisis action (8–10)</div>
@@ -2523,6 +3664,57 @@
         </div>
         <button class="btn-full primary" data-action="generateHandoff">Generate patient setup →</button>
       </div>
+    </div>
+  </div>
+
+  <!-- PROVIDER DASHBOARD -->
+  <div id="screen-provider" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-home">← Back</button>
+      <span style="font-size:11px;color:var(--accent);font-weight:600;padding:4px 10px;background:var(--accent-glow);border-radius:6px;border:1px solid rgba(124,158,135,0.3);">Provider View</span>
+      <button class="hamburger" data-action="openNav" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+    <div style="flex:1;overflow-y:auto;">
+
+      <!-- PIN GATE -->
+      <div id="provider-gate" style="padding:32px 24px;display:flex;flex-direction:column;align-items:center;gap:20px;">
+        <div style="font-size:36px;">🔒</div>
+        <div style="font-family:var(--font-display);font-size:24px;color:var(--text);text-align:center;">Provider Access</div>
+        <div style="font-size:14px;color:var(--text-muted);text-align:center;line-height:1.6;max-width:300px;">This dashboard shows real-time patient care flags. Enter your provider PIN to continue.</div>
+        <div style="width:100%;max-width:320px;">
+          <input id="provider-pin-input" type="password" placeholder="Enter PIN" style="width:100%;padding:14px 16px;background:var(--bg-card);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:16px;font-family:var(--font-ui);text-align:center;letter-spacing:0.15em;" onkeydown="if(event.key==='Enter')providerUnlock()">
+          <button onclick="providerUnlock()" style="width:100%;margin-top:12px;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:var(--font-ui);">Unlock Dashboard</button>
+          <div id="provider-pin-error" style="display:none;margin-top:10px;text-align:center;font-size:13px;color:var(--danger);">Incorrect PIN. Try again.</div>
+        </div>
+        <div style="font-size:12px;color:var(--text-dim);text-align:center;">Demo PIN: <strong style="color:var(--text-muted);letter-spacing:0.1em;">1234</strong></div>
+      </div>
+
+      <!-- DASHBOARD CONTENT (hidden until unlocked) -->
+      <div id="provider-dash" style="display:none;">
+        <div style="padding:24px 20px 12px;">
+          <div style="font-family:var(--font-display);font-size:22px;color:var(--text);margin-bottom:4px;">Care Flags</div>
+          <div style="font-size:13px;color:var(--text-muted);">Patient-initiated alerts from clinical screens and distress check-ins.</div>
+        </div>
+
+        <div style="padding:0 20px 12px;display:flex;align-items:center;justify-content:space-between;">
+          <div id="provider-last-refresh" style="font-size:12px;color:var(--text-dim);"></div>
+          <button onclick="providerRefresh()" style="font-size:12px;color:var(--accent);background:none;border:none;cursor:pointer;font-family:var(--font-ui);font-weight:500;">↻ Refresh</button>
+        </div>
+
+        <!-- Summary chips -->
+        <div style="padding:0 20px 16px;display:flex;gap:10px;flex-wrap:wrap;" id="provider-summary-chips"></div>
+
+        <!-- Alert list -->
+        <div id="provider-alerts-list" style="padding:0 20px 24px;display:flex;flex-direction:column;gap:12px;">
+          <div style="text-align:center;padding:40px 0;color:var(--text-dim);font-size:14px;" id="provider-loading">Loading alerts…</div>
+        </div>
+
+        <!-- Lock button -->
+        <div style="padding:0 20px 32px;">
+          <button onclick="providerLock()" style="width:100%;padding:12px;background:transparent;color:var(--text-muted);border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font-ui);">🔒 Lock Dashboard</button>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -2585,6 +3777,17 @@
       document.querySelectorAll('.home-mood-btn').forEach(b => b.classList.remove('selected'));
       el.classList.add('selected');
     }
+    else if (a === 'infoToggle') {
+      const isPatient = el.dataset.val === 'patient';
+      document.getElementById('info-patient').style.display = isPatient ? '' : 'none';
+      document.getElementById('info-clinician').style.display = isPatient ? 'none' : '';
+      const tp = document.getElementById('toggle-patient');
+      const tc = document.getElementById('toggle-clinician');
+      tp.style.background = isPatient ? 'var(--bg)' : 'transparent';
+      tp.style.color = isPatient ? 'var(--text)' : 'var(--text-muted)';
+      tc.style.background = isPatient ? 'transparent' : 'var(--bg)';
+      tc.style.color = isPatient ? 'var(--text-muted)' : 'var(--text)';
+    }
     else if (a === 'showComingSoon') showComingSoon(el);
     else if (a === 'startPathway') startPathway();
     else if (a === 'startSD') startSD();
@@ -2603,6 +3806,104 @@
     else if (a === 'showOWOutcome') showOWOutcome();
     else if (a === 'owStepNext') owStepNext();
     else if (a === 'owStepBack') owStepBack();
+    else if (a === 'sobSave') sobSave();
+    else if (a === 'sobReset') sobReset();
+
+    // ---------- DAILY CHECK-IN HANDLERS ----------
+    else if (a === 'sleepAdj') {
+      const el2 = document.getElementById('ci-sleep-val');
+      let val = parseInt(el2.textContent) + parseInt(v);
+      val = Math.max(0, Math.min(24, val));
+      el2.textContent = val;
+    }
+    else if (a === 'ciToggle') {
+      const group = el.dataset.group;
+      const val2 = el.dataset.val;
+      // Deselect all siblings in group
+      document.querySelectorAll('[data-group="' + group + '"]').forEach(function(b) {
+        b.classList.remove('sel-yes', 'sel-no', 'sel-na');
+      });
+      // Apply correct class
+      if (val2 === 'yes') el.classList.add('sel-yes');
+      else if (val2 === 'no') el.classList.add('sel-no');
+      else el.classList.add('sel-na');
+      // Conditional reveals
+      if (group === 'sobriety') {
+        document.getElementById('ci-use-detail').style.display = val2 === 'no' ? 'block' : 'none';
+      }
+      if (group === 'sideeffects') {
+        document.getElementById('ci-sideeffect-detail').style.display = val2 === 'yes' ? 'block' : 'none';
+      }
+      if (group === 'nursedoc') {
+        document.getElementById('ci-nursedoc-concern').style.display = val2 === 'yes' ? 'block' : 'none';
+      }
+    }
+    else if (a === 'cssrs') {
+      const q = el.dataset.q;
+      const val3 = el.dataset.val;
+      const row = document.getElementById('cssrs-r' + q);
+      // Deselect sibling buttons in this row
+      row.querySelectorAll('.cssrs-btn').forEach(function(b) {
+        b.classList.remove('sel-yes', 'sel-no');
+      });
+      el.classList.add(val3 === 'yes' ? 'sel-yes' : 'sel-no');
+      // Flag row if yes
+      if (val3 === 'yes') row.classList.add('flagged');
+      else row.classList.remove('flagged');
+      // Crisis escalation: if Q3–Q6 any = yes, show banner
+      const criticalQs = ['3','4','5','6'];
+      const hasCrisis = criticalQs.some(function(n) {
+        const r = document.getElementById('cssrs-r' + n);
+        return r && r.classList.contains('flagged');
+      });
+      const banner = document.getElementById('ci-crisis-banner');
+      if (banner) banner.classList.toggle('visible', hasCrisis);
+    }
+    else if (a === 'ciNav') {
+      const sections = document.querySelectorAll('.checkin-section');
+      const bars = document.querySelectorAll('.checkin-progress-bar');
+      let current = 0;
+      sections.forEach(function(s, i) { if (s.classList.contains('active')) current = i; });
+
+      let next = v === 'next' ? current + 1 : current - 1;
+      if (next < 0 || next > sections.length - 1) return;
+
+      // Transition sections
+      sections[current].classList.remove('active');
+      sections[next].classList.add('active');
+      // Scroll new section to top
+      sections[next].scrollTop = 0;
+
+      // Update progress bars
+      bars.forEach(function(b, i) {
+        b.classList.remove('done', 'active');
+        if (i < next) b.classList.add('done');
+        else if (i === next) b.classList.add('active');
+      });
+
+      // Show/hide back button
+      const backBtn = document.getElementById('ci-back-btn');
+      const nextBtn = document.getElementById('ci-next-btn');
+      if (backBtn) backBtn.style.display = next === 0 ? 'none' : '';
+      // Last section: change next to Submit
+      if (nextBtn) {
+        if (next === sections.length - 1) {
+          nextBtn.textContent = 'Submit check-in ✓';
+          nextBtn.dataset.val = 'submit';
+        } else if (v === 'submit') {
+          // Increment check-in counter
+          try {
+            var cnt = parseInt(localStorage.getItem('equa_checkin_count') || '0');
+            localStorage.setItem('equa_checkin_count', String(cnt + 1));
+          } catch(e) {}
+          // Submitted — return home with a confirmation
+          showScreen('screen-home');
+        } else {
+          nextBtn.textContent = 'Next →';
+          nextBtn.dataset.val = 'next';
+        }
+      }
+    }
   });
 
   // ---------- NAVIGATION ----------
@@ -2614,6 +3915,32 @@
     // scroll to top
     const s = document.getElementById(id);
     if (s) s.scrollTop = 0;
+    // Refresh progress screen when navigated to
+    if (id === 'screen-dast10' && typeof window.initDast10 === 'function') {
+      window.initDast10();
+    }
+    if (id === 'screen-aftercare' && typeof window.renderAfterCare === 'function') {
+      window.renderAfterCare();
+    }
+    if (id === 'screen-progress' && typeof window.renderProgressScreen === 'function') {
+      window.renderProgressScreen();
+    }
+    // Reset flag button on outcome screen each visit
+    if (id === 'screen-help-6') {
+      var flagBtn = document.getElementById('outcome-flag-btn');
+      if (flagBtn) flagBtn.style.display = 'none';
+    }
+    // Provider dashboard — refresh when navigated to if unlocked
+    if (id === 'screen-provider') {
+      try {
+        if (sessionStorage.getItem('equa_provider_unlocked') === '1') {
+          var gate = document.getElementById('provider-gate');
+          var dash = document.getElementById('provider-dash');
+          if (gate) gate.style.display = 'none';
+          if (dash) { dash.style.display = 'block'; if (typeof window.providerRefresh === 'function') window.providerRefresh(); }
+        }
+      } catch(e) {}
+    }
   }
 
   function showHome() {
@@ -2779,7 +4106,7 @@
       } else {
         icon = '🚨'; title = 'This one needs a person.';
         sub = 'Not a screen. A voice.';
-        detail = `Still at ${after}. When the freeze is this deep, it needs another human — not an app. Call your counselor, sponsor, or 988. You don't have to explain everything. Just say you need someone.`;
+        detail = `Still at ${after}. When the freeze is this deep, it needs another human — not an app. Call 988 (call or text), your peer support specialist, or someone you trust. You don't have to explain everything. Just say you need someone.`;
       }
       document.getElementById('outcome-icon').textContent = icon;
       document.getElementById('outcome-title').textContent = title;
@@ -2791,6 +4118,10 @@
       } else {
         document.getElementById('outcome-card').style.background = '';
         document.getElementById('outcome-card').style.borderColor = '';
+      }
+      // Care alert context
+      if (typeof window.setDistressCareAlertContext === 'function') {
+        window.setDistressCareAlertContext('shutdown', before, after);
       }
       showScreen('screen-help-6');
     } catch(err) { alert('EQUA error: ' + err.message); }
@@ -2908,7 +4239,7 @@
       } else {
         icon = '🚨'; title = 'This one needs a person.';
         sub = 'Not a screen. A voice.';
-        detail = `Still at ${after}. That's okay — some moments need more than an app. Call your sponsor, counselor, or 988. Say: "I need help right now." That's enough.`;
+        detail = `Still at ${after}. That's okay — some moments need more than an app. Call 988 (call or text), your peer support specialist, or someone who can be with you. Say: "I need help right now." That's enough.`;
       }
       document.getElementById('outcome-icon').textContent = icon;
       document.getElementById('outcome-title').textContent = title;
@@ -2920,6 +4251,10 @@
       } else {
         document.getElementById('outcome-card').style.background = '';
         document.getElementById('outcome-card').style.borderColor = '';
+      }
+      // Care alert context
+      if (typeof window.setDistressCareAlertContext === 'function') {
+        window.setDistressCareAlertContext('escalation', before, after);
       }
       showScreen('screen-help-6');
     } catch(err) { alert('EQUA error: ' + err.message); }
@@ -3037,7 +4372,7 @@
       } else {
         icon = '🚨'; title = 'This one needs a person.';
         sub = 'Not a screen. A voice.';
-        detail = `Still at ${after}. Some overwhelm is too heavy to carry alone. Call your counselor or someone you trust and say: "I'm overwhelmed and I need help thinking." That's enough.`;
+        detail = `Still at ${after}. Some overwhelm is too heavy to carry alone. Text 988, call your peer support specialist, or reach out to someone you trust. Say: "I'm overwhelmed and I need help thinking." That's enough.`;
       }
       document.getElementById('outcome-icon').textContent = icon;
       document.getElementById('outcome-title').textContent = title;
@@ -3049,6 +4384,10 @@
       } else {
         document.getElementById('outcome-card').style.background = '';
         document.getElementById('outcome-card').style.borderColor = '';
+      }
+      // Care alert context
+      if (typeof window.setDistressCareAlertContext === 'function') {
+        window.setDistressCareAlertContext('overwhelmed', before, after);
       }
       showScreen('screen-help-6');
     } catch(err) { alert('EQUA error: ' + err.message); }
@@ -3083,23 +4422,23 @@
     let eyebrow, actionText, detail, callLabel;
     if (currentIntensity <= 4) {
       eyebrow = 'Low intensity · Pre-committed action';
-      actionText = isAlone ? 'Call your sponsor.' : 'Tell someone near you what\'s happening.';
+      actionText = isAlone ? 'Call your peer support specialist.' : 'Tell someone near you what\'s happening.';
       detail = isAlone
         ? 'You said this is what you\'d do at this level. Make the call now, even if it goes to voicemail.'
         : 'You\'re not alone. Let someone around you know what\'s happening. You don\'t have to explain everything.';
-      callLabel = '📞 Call sponsor';
+      callLabel = '📞 Call peer support';
     } else if (currentIntensity <= 7) {
       eyebrow = 'Moderate intensity · Pre-committed action';
-      actionText = isAlone ? 'Call your sponsor immediately.' : 'Find a meeting in the next hour.';
+      actionText = isAlone ? 'Call 988 or your peer support specialist now.' : 'Reach out to your support person — don\'t sit with this alone.';
       detail = isAlone
-        ? 'Intensity at ' + currentIntensity + '/10 — don\'t wait. This is the level you planned for. Your sponsor expects this call.'
-        : 'You built this plan knowing this moment would come. A meeting creates structure and human presence. Find the nearest one now.';
-      callLabel = isAlone ? '📞 Call now' : '📍 Find a meeting';
+        ? 'Intensity at ' + currentIntensity + '/10 — don\'t wait. This is the level you planned for. Your counselor is the right call right now.'
+        : 'You built this plan knowing this moment would come. Human connection is the intervention. Reach your support person now.';
+      callLabel = '📞 Call 988';
     } else {
       eyebrow = 'High intensity · Crisis protocol';
       actionText = 'Do not be alone. Call now.';
-      detail = 'Intensity at ' + currentIntensity + '/10. Your plan for this level: call your sponsor and counselor, don\'t be alone. If you can\'t reach them, call 988 or go to an ER.';
-      callLabel = '📞 Call sponsor';
+      detail = 'Intensity at ' + currentIntensity + '/10. Your plan for this level: call your counselor and peer support specialist, don\'t be alone. If you can\'t reach them, call 988 or go to an ER.';
+      callLabel = '📞 Call now';
     }
     document.getElementById('action-eyebrow').textContent = eyebrow;
     document.getElementById('action-text').textContent = actionText;
@@ -3177,7 +4516,7 @@
     } else {
       icon = '🚨'; title = 'This one needs a person.';
       sub = 'Not a screen. A voice.';
-      detail = `Still at ${after}. Call your sponsor or 988. You don't have to explain everything — just say "I need someone right now." That's enough.`;
+      detail = `Still at ${after}. Call 988, your peer support specialist, or someone who can physically be with you. You don't have to explain everything — just say "I need someone right now." That's enough.`;
     }
 
     document.getElementById('outcome-icon').textContent = icon;
@@ -3190,6 +4529,10 @@
       document.getElementById('outcome-card').style.borderColor = 'rgba(192,57,43,0.3)';
     }
 
+    // Care alert context
+    if (typeof window.setDistressCareAlertContext === 'function') {
+      window.setDistressCareAlertContext('craving', before, after);
+    }
     showScreen('screen-help-6');
     } catch(err) {
       alert('EQUA error: ' + err.message);
@@ -3265,10 +4608,962 @@
     document.getElementById('ow-delta-after').textContent = this.value;
   });
 
+  // ---------- SOBRIETY COUNTER ----------
+  (function() {
+    var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+    // Populate day select (1–31)
+    var dayEl = document.getElementById('sob-day');
+    for (var d = 1; d <= 31; d++) {
+      var o = document.createElement('option');
+      o.value = d; o.textContent = d < 10 ? '0'+d : d;
+      dayEl.appendChild(o);
+    }
+    // Populate year select (current year down to 1990)
+    var yearEl = document.getElementById('sob-year');
+    var thisYear = new Date().getFullYear();
+    for (var y = thisYear; y >= 1990; y--) {
+      var oy = document.createElement('option');
+      oy.value = y; oy.textContent = y;
+      yearEl.appendChild(oy);
+    }
+
+    function computeDays(dateStr) {
+      // dateStr: "YYYY-MM-DD"
+      var parts = dateStr.split('-');
+      var soberDate = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+      var today = new Date();
+      today.setHours(0,0,0,0);
+      soberDate.setHours(0,0,0,0);
+      return Math.max(0, Math.floor((today - soberDate) / 86400000));
+    }
+
+    function formatDateLabel(dateStr) {
+      var parts = dateStr.split('-');
+      var m = parseInt(parts[1]) - 1;
+      var d = parseInt(parts[2]);
+      var y = parts[0];
+      return 'Since ' + MONTHS[m] + ' ' + d + ', ' + y;
+    }
+
+    function dayWord(n) {
+      return n === 1 ? 'day sober' : 'days sober';
+    }
+
+    function updateMilestones(days) {
+      var ms = {1:'sob-m1',7:'sob-m7',30:'sob-m30',60:'sob-m60',90:'sob-m90',180:'sob-m180',365:'sob-m365'};
+      Object.keys(ms).forEach(function(threshold) {
+        var el = document.getElementById(ms[threshold]);
+        if (el) el.classList.toggle('reached', days >= parseInt(threshold));
+      });
+    }
+
+    function renderSobrietyScreen(days, dateStr) {
+      document.getElementById('sob-day-count').textContent = days;
+      document.getElementById('sob-day-unit').textContent = dayWord(days);
+      document.getElementById('sob-since-label').textContent = formatDateLabel(dateStr);
+      updateMilestones(days);
+    }
+
+    function renderHomeCounter(days) {
+      var numEl = document.getElementById('home-day-num');
+      var labelEl = document.getElementById('home-day-label');
+      var subEl = document.getElementById('home-day-sub');
+      if (numEl) numEl.textContent = days;
+      if (labelEl) labelEl.textContent = dayWord(days);
+      if (subEl) subEl.textContent = days >= 90 ? '🏆 90 days — you earned this.' : 'Tap to view milestones';
+      // Light the dots (1 dot per 7 days, max 5)
+      var lit = Math.min(5, Math.floor(days / 7));
+      for (var i = 0; i < 5; i++) {
+        var dot = document.getElementById('hd' + i);
+        if (dot) dot.classList.toggle('lit', i < lit);
+      }
+    }
+
+    function loadSaved() {
+      try {
+        var saved = localStorage.getItem('equa_sobriety_date');
+        if (saved) {
+          var days = computeDays(saved);
+          renderHomeCounter(days);
+          renderSobrietyScreen(days, saved);
+          // Pre-fill the selects
+          var parts = saved.split('-');
+          document.getElementById('sob-month').value = parseInt(parts[1]);
+          document.getElementById('sob-day').value = parseInt(parts[2]);
+          document.getElementById('sob-year').value = parts[0];
+        }
+      } catch(e) {}
+    }
+
+    window.sobSave = function() {
+      try {
+        var m = document.getElementById('sob-month').value;
+        var d = document.getElementById('sob-day').value;
+        var y = document.getElementById('sob-year').value;
+        if (!m || !d || !y) {
+          // Visual shake — nothing saved
+          document.querySelector('.sobriety-save-btn').style.opacity = '0.4';
+          setTimeout(function() { document.querySelector('.sobriety-save-btn').style.opacity = ''; }, 400);
+          return;
+        }
+        var dateStr = y + '-' + String(m).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+        localStorage.setItem('equa_sobriety_date', dateStr);
+        var days = computeDays(dateStr);
+        renderHomeCounter(days);
+        renderSobrietyScreen(days, dateStr);
+        showScreen('screen-home');
+      } catch(e) { showScreen('screen-home'); }
+    };
+
+    window.sobReset = function() {
+      try { localStorage.removeItem('equa_sobriety_date'); } catch(e) {}
+      document.getElementById('sob-day-count').textContent = '–';
+      document.getElementById('sob-day-unit').textContent = 'days sober';
+      document.getElementById('sob-since-label').textContent = 'Set your sobriety date below';
+      document.getElementById('sob-month').value = '';
+      document.getElementById('sob-day').value = '';
+      document.getElementById('sob-year').value = '';
+      // Reset home counter
+      var numEl = document.getElementById('home-day-num');
+      if (numEl) numEl.textContent = '–';
+      var subEl = document.getElementById('home-day-sub');
+      if (subEl) subEl.textContent = 'Tap to set your sobriety date';
+      for (var i = 0; i < 5; i++) {
+        var dot = document.getElementById('hd' + i);
+        if (dot) dot.classList.remove('lit');
+      }
+      updateMilestones(0);
+    };
+
+    loadSaved();
+  })();
+
   try {
     if (localStorage.getItem('equa_plan_active') === '1') {
       planActive = true;
       document.getElementById('plan-status-banner').style.display = 'flex';
     }
   } catch(e) {}
+
+  // ============ PHQ-9 ============
+  (function() {
+    var PHQ9_Q = [
+      'Little interest or pleasure in doing things',
+      'Feeling down, depressed, or hopeless',
+      'Trouble falling or staying asleep, or sleeping too much',
+      'Feeling tired or having little energy',
+      'Poor appetite or overeating',
+      'Feeling bad about yourself — or that you are a failure or have let yourself or your family down',
+      'Trouble concentrating on things, such as reading the newspaper or watching television',
+      'Moving or speaking so slowly that other people could have noticed. Or the opposite — being so fidgety or restless',
+      'Thoughts that you would be better off dead, or of hurting yourself in some way'
+    ];
+    var PHQ9_LABELS = ['Not at all', 'Several days', 'More than half', 'Nearly every day'];
+
+    // Build question UI
+    var container = document.getElementById('phq9-questions');
+    if (container) {
+      PHQ9_Q.forEach(function(q, i) {
+        var row = document.createElement('div');
+        row.className = 'phq9-row';
+        var qnum = i + 1;
+        var eyebrow = '<div style="font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-dim);margin-bottom:4px;">Question ' + qnum + ' of 9</div>';
+        var qtext = '<div class="phq9-row-q">' + q + '</div>';
+        var opts = '<div class="phq9-row-opts" id="phq9-r' + i + '">';
+        for (var s = 0; s <= 3; s++) {
+          opts += '<button class="phq9-opt" data-q="' + i + '" data-val="' + s + '" onclick="phq9Pick(this)">'
+            + '<span class="phq9-opt-num">' + s + '</span>'
+            + '<span>' + PHQ9_LABELS[s] + '</span>'
+            + '</button>';
+        }
+        opts += '</div>';
+        row.innerHTML = eyebrow + qtext + opts;
+        container.appendChild(row);
+      });
+    }
+
+    window.phq9Pick = function(el) {
+      var q = el.dataset.q;
+      var row = document.getElementById('phq9-r' + q);
+      row.querySelectorAll('.phq9-opt').forEach(function(b) { b.classList.remove('selected'); });
+      el.classList.add('selected');
+    };
+
+    function phq9Severity(score) {
+      if (score <= 4) return { label: 'Minimal / None', color: '#27AE60' };
+      if (score <= 9) return { label: 'Mild Depression', color: '#F39C12' };
+      if (score <= 14) return { label: 'Moderate Depression', color: '#E67E22' };
+      if (score <= 19) return { label: 'Moderately Severe', color: '#E74C3C' };
+      return { label: 'Severe Depression', color: '#C0392B' };
+    }
+
+    window.phq9Submit = function() {
+      var total = 0;
+      var allAnswered = true;
+      for (var i = 0; i < 9; i++) {
+        var row = document.getElementById('phq9-r' + i);
+        var sel = row ? row.querySelector('.phq9-opt.selected') : null;
+        if (!sel) { allAnswered = false; break; }
+        total += parseInt(sel.dataset.val);
+      }
+      if (!allAnswered) {
+        var btn = document.getElementById('phq9-submit-btn');
+        if (btn) { btn.style.opacity = '0.4'; setTimeout(function() { btn.style.opacity = ''; }, 500); }
+        return;
+      }
+      var sev = phq9Severity(total);
+      document.getElementById('phq9-score-num').textContent = total;
+      document.getElementById('phq9-score-label').textContent = sev.label;
+      document.getElementById('phq9-score-label').style.color = sev.color;
+      document.getElementById('phq9-score-display').style.display = 'block';
+      // Save to history
+      try {
+        var history = JSON.parse(localStorage.getItem('equa_phq9_history') || '[]');
+        history.push({ date: new Date().toISOString().slice(0,10), score: total });
+        // Keep last 12 entries
+        if (history.length > 12) history = history.slice(-12);
+        localStorage.setItem('equa_phq9_history', JSON.stringify(history));
+      } catch(e) {}
+      // Care alert
+      if (typeof window.checkCareAlertThreshold === 'function') {
+        window.checkCareAlertThreshold('phq9', total, sev.label);
+      }
+    };
+
+    window.getPhq9History = function() {
+      try { return JSON.parse(localStorage.getItem('equa_phq9_history') || '[]'); } catch(e) { return []; }
+    };
+  })();
+
+  // ============ AUDIT-C ============
+  (function() {
+    window.acSelect = function(el) {
+      var q = el.dataset.q;
+      var container = document.getElementById('ac-q' + q + '-opts');
+      if (container) container.querySelectorAll('.ac-opt').forEach(function(b) { b.classList.remove('selected'); });
+      el.classList.add('selected');
+    };
+
+    function auditcSeverity(score) {
+      // Men: ≥4 positive; Women: ≥3 positive — using ≥3 as universal
+      if (score < 3) return { label: 'Low risk', color: '#27AE60' };
+      if (score <= 5) return { label: 'Hazardous use — discuss with care team', color: '#E67E22' };
+      return { label: 'Likely alcohol use disorder', color: '#C0392B' };
+    }
+
+    window.auditcSubmit = function() {
+      var total = 0;
+      var allAnswered = true;
+      for (var q = 1; q <= 3; q++) {
+        var container = document.getElementById('ac-q' + q + '-opts');
+        var sel = container ? container.querySelector('.ac-opt.selected') : null;
+        if (!sel) { allAnswered = false; break; }
+        total += parseInt(sel.dataset.val);
+      }
+      if (!allAnswered) {
+        var btn = document.getElementById('auditc-submit-btn');
+        if (btn) { btn.style.opacity = '0.4'; setTimeout(function() { btn.style.opacity = ''; }, 500); }
+        return;
+      }
+      var sev = auditcSeverity(total);
+      document.getElementById('auditc-score-num').textContent = total;
+      document.getElementById('auditc-score-label').textContent = sev.label;
+      document.getElementById('auditc-score-label').style.color = sev.color;
+      document.getElementById('auditc-score-display').style.display = 'block';
+      try {
+        var history = JSON.parse(localStorage.getItem('equa_auditc_history') || '[]');
+        history.push({ date: new Date().toISOString().slice(0,10), score: total });
+        if (history.length > 12) history = history.slice(-12);
+        localStorage.setItem('equa_auditc_history', JSON.stringify(history));
+      } catch(e) {}
+      // Care alert
+      if (typeof window.checkCareAlertThreshold === 'function') {
+        window.checkCareAlertThreshold('auditc', total, sev.label);
+      }
+    };
+
+    window.getAuditcHistory = function() {
+      try { return JSON.parse(localStorage.getItem('equa_auditc_history') || '[]'); } catch(e) { return []; }
+    };
+  })();
+
+  // ============ PROGRESS SCREEN ============
+  (function() {
+    function drawSparkline(canvasId, data, maxY, accentColor) {
+      var canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      var ctx = canvas.getContext('2d');
+      var W = canvas.offsetWidth || 300;
+      var H = canvas.height;
+      canvas.width = W * window.devicePixelRatio;
+      canvas.height = H * window.devicePixelRatio;
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      ctx.clearRect(0, 0, W, H);
+
+      if (!data || data.length === 0) return;
+
+      var pad = { t: 10, b: 20, l: 28, r: 10 };
+      var chartW = W - pad.l - pad.r;
+      var chartH = H - pad.t - pad.b;
+
+      // Determine colors from CSS vars (approximate)
+      var isDark = document.documentElement.dataset.theme === 'dark'
+        || (!document.documentElement.dataset.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      var gridColor = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.07)';
+      var labelColor = isDark ? 'rgba(255,255,255,0.35)' : 'rgba(0,0,0,0.35)';
+
+      // Grid lines at 0, maxY/2, maxY
+      [0, maxY / 2, maxY].forEach(function(v) {
+        var y = pad.t + chartH - (v / maxY) * chartH;
+        ctx.strokeStyle = gridColor;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(pad.l, y);
+        ctx.lineTo(pad.l + chartW, y);
+        ctx.stroke();
+        ctx.fillStyle = labelColor;
+        ctx.font = '9px system-ui, sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText(v, pad.l - 4, y + 3);
+      });
+
+      // Line
+      ctx.beginPath();
+      data.forEach(function(pt, i) {
+        var x = pad.l + (i / Math.max(data.length - 1, 1)) * chartW;
+        var y = pad.t + chartH - (pt.score / maxY) * chartH;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.strokeStyle = accentColor || '#7C9E87';
+      ctx.lineWidth = 2;
+      ctx.lineJoin = 'round';
+      ctx.stroke();
+
+      // Dots + date labels
+      data.forEach(function(pt, i) {
+        var x = pad.l + (i / Math.max(data.length - 1, 1)) * chartW;
+        var y = pad.t + chartH - (pt.score / maxY) * chartH;
+        ctx.beginPath();
+        ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = accentColor || '#7C9E87';
+        ctx.fill();
+        // Date label: show month/day for first, last, and every 3rd
+        if (i === 0 || i === data.length - 1 || i % 3 === 0) {
+          var d = pt.date.slice(5); // MM-DD
+          ctx.fillStyle = labelColor;
+          ctx.font = '9px system-ui, sans-serif';
+          ctx.textAlign = i === 0 ? 'left' : (i === data.length - 1 ? 'right' : 'center');
+          ctx.fillText(d, x, H - 4);
+        }
+      });
+    }
+
+    window.renderProgressScreen = function() {
+      // Days sober
+      try {
+        var sd = localStorage.getItem('equa_sobriety_date');
+        if (sd) {
+          var parts = sd.split('-');
+          var soberDate = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+          var today = new Date(); today.setHours(0,0,0,0);
+          soberDate.setHours(0,0,0,0);
+          var days = Math.max(0, Math.floor((today - soberDate) / 86400000));
+          var el = document.getElementById('prog-days-sober');
+          if (el) el.textContent = days;
+        }
+      } catch(e) {}
+
+      // PHQ-9
+      var phq9h = window.getPhq9History ? window.getPhq9History() : [];
+      var phq9NoData = document.getElementById('phq9-no-data');
+      var phq9Canvas = document.getElementById('phq9-canvas');
+      if (phq9h.length > 0) {
+        var lastPhq = phq9h[phq9h.length - 1].score;
+        var lp = document.getElementById('prog-last-phq9');
+        if (lp) lp.textContent = lastPhq;
+        if (phq9NoData) phq9NoData.style.display = 'none';
+        if (phq9Canvas) phq9Canvas.style.display = 'block';
+        setTimeout(function() { drawSparkline('phq9-canvas', phq9h, 27, '#7C9E87'); }, 50);
+      } else {
+        if (phq9NoData) phq9NoData.style.display = 'block';
+        if (phq9Canvas) phq9Canvas.style.display = 'none';
+      }
+
+      // AUDIT-C
+      var ach = window.getAuditcHistory ? window.getAuditcHistory() : [];
+      var acNoData = document.getElementById('auditc-no-data');
+      var acCanvas = document.getElementById('auditc-canvas');
+      if (ach.length > 0) {
+        var lastAc = ach[ach.length - 1].score;
+        var la = document.getElementById('prog-last-auditc');
+        if (la) la.textContent = lastAc;
+        if (acNoData) acNoData.style.display = 'none';
+        if (acCanvas) acCanvas.style.display = 'block';
+        setTimeout(function() { drawSparkline('auditc-canvas', ach, 12, '#7C9E87'); }, 50);
+      } else {
+        if (acNoData) acNoData.style.display = 'block';
+        if (acCanvas) acCanvas.style.display = 'none';
+      }
+
+      // Check-in count (stored in phq9 history as proxy for now)
+      try {
+        var ciCount = parseInt(localStorage.getItem('equa_checkin_count') || '0');
+        var cc = document.getElementById('prog-checkins');
+        if (cc) cc.textContent = ciCount;
+      } catch(e) {}
+
+      // DAST-10
+      var dh = window.getDast10History ? window.getDast10History() : [];
+      var d10NoData = document.getElementById('dast10-no-data');
+      var d10Canvas = document.getElementById('dast10-canvas');
+      if (dh.length > 0) {
+        var lastD10 = dh[dh.length - 1].score;
+        var ld = document.getElementById('prog-last-dast10');
+        if (ld) ld.textContent = lastD10;
+        if (d10NoData) d10NoData.style.display = 'none';
+        if (d10Canvas) d10Canvas.style.display = 'block';
+        setTimeout(function() { drawSparkline('dast10-canvas', dh, 10, '#7C9E87'); }, 50);
+      } else {
+        if (d10NoData) d10NoData.style.display = 'block';
+        if (d10Canvas) d10Canvas.style.display = 'none';
+      }
+    };
+  })();
+
+  /* ── After Care Screen ── */
+  (function() {
+    function daysBetween(dateStr) {
+      if (!dateStr) return null;
+      var start = new Date(dateStr);
+      var now = new Date();
+      var diff = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+      return diff >= 0 ? diff : null;
+    }
+
+    function phq9Severity(score) {
+      if (score <= 4)  return { label: 'Minimal', color: 'var(--safe)' };
+      if (score <= 9)  return { label: 'Mild', color: 'var(--safe)' };
+      if (score <= 14) return { label: 'Moderate', color: 'var(--warn)' };
+      if (score <= 19) return { label: 'Moderately Severe', color: 'var(--warn)' };
+      return { label: 'Severe', color: 'var(--danger)' };
+    }
+
+    function auditcSeverity(score) {
+      if (score < 3)  return { label: 'Low risk', color: 'var(--safe)' };
+      if (score <= 5) return { label: 'Hazardous use', color: 'var(--warn)' };
+      return { label: 'Likely AUD', color: 'var(--danger)' };
+    }
+
+    function dast10Severity(score) {
+      if (score === 0) return { label: 'No problems', color: 'var(--safe)' };
+      if (score <= 2)  return { label: 'Low risk', color: 'var(--safe)' };
+      if (score <= 5)  return { label: 'Moderate risk', color: 'var(--warn)' };
+      if (score <= 8)  return { label: 'Substantial risk', color: 'var(--danger)' };
+      return { label: 'Severe risk', color: 'var(--danger)' };
+    }
+
+    function trendText(history) {
+      if (history.length < 2) return 'First score recorded';
+      var prev = history[history.length - 2].score;
+      var curr = history[history.length - 1].score;
+      var diff = curr - prev;
+      if (diff < 0) return '↓ ' + Math.abs(diff) + ' pts from last time — improving';
+      if (diff > 0) return '↑ ' + diff + ' pts from last time';
+      return '→ Same as last time';
+    }
+
+    function nextCheckDate(history, daysBetweenChecks) {
+      if (!history || history.length === 0) return null;
+      // Try to parse last date — stored as e.g. "Sep 22"
+      var lastEntry = history[history.length - 1];
+      // We store date as toLocaleDateString — estimate next as +7 days from now
+      // Since we don't store full timestamps, we estimate from today
+      var next = new Date();
+      next.setDate(next.getDate() + daysBetweenChecks);
+      return next.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    }
+
+    window.renderAfterCare = function() {
+      // Days sober
+      try {
+        var sd = localStorage.getItem('equa_sobriety_date');
+        var days = daysBetween(sd);
+        var dayEl = document.getElementById('ac-days-sober');
+        var lblEl = document.getElementById('ac-sober-label');
+        var streakRow = document.getElementById('ac-streak-row');
+        if (days !== null && dayEl) {
+          dayEl.textContent = days;
+          if (lblEl) lblEl.textContent = days === 1 ? 'day in recovery' : 'days in recovery';
+          if (streakRow) streakRow.style.display = 'flex';
+        } else {
+          if (dayEl) dayEl.textContent = '–';
+          if (lblEl) lblEl.textContent = 'Set your sobriety date to start tracking';
+        }
+        // Streak (check-in count)
+        var ciCount = parseInt(localStorage.getItem('equa_checkin_count') || '0');
+        var streakEl = document.getElementById('ac-streak-num');
+        var ciTotalEl = document.getElementById('ac-checkin-total');
+        if (streakEl) streakEl.textContent = ciCount;
+        if (ciTotalEl) ciTotalEl.textContent = ciCount;
+      } catch(e) {}
+
+      // PHQ-9
+      try {
+        var phist = window.getPhq9History ? window.getPhq9History() : [];
+        var phq9Empty = document.getElementById('ac-phq9-empty');
+        var phq9Data = document.getElementById('ac-phq9-data');
+        if (phist.length > 0) {
+          var last = phist[phist.length - 1];
+          var sev = phq9Severity(last.score);
+          if (phq9Empty) phq9Empty.style.display = 'none';
+          if (phq9Data) phq9Data.style.display = 'block';
+          var scoreEl = document.getElementById('ac-phq9-score');
+          var labelEl = document.getElementById('ac-phq9-label');
+          var trendEl = document.getElementById('ac-phq9-trend');
+          var nextEl = document.getElementById('ac-phq9-next');
+          if (scoreEl) { scoreEl.textContent = last.score; scoreEl.style.color = sev.color; }
+          if (labelEl) { labelEl.textContent = sev.label; labelEl.style.color = sev.color; }
+          if (trendEl) trendEl.textContent = trendText(phist);
+          var nextDate = nextCheckDate(phist, 7);
+          if (nextEl && nextDate) nextEl.textContent = '📅 Next PHQ-9 due ' + nextDate;
+        } else {
+          if (phq9Empty) phq9Empty.style.display = 'block';
+          if (phq9Data) phq9Data.style.display = 'none';
+        }
+      } catch(e) {}
+
+      // AUDIT-C
+      try {
+        var ahist = window.getAuditcHistory ? window.getAuditcHistory() : [];
+        var acEmpty = document.getElementById('ac-auditc-empty');
+        var acData = document.getElementById('ac-auditc-data');
+        if (ahist.length > 0) {
+          var alast = ahist[ahist.length - 1];
+          var asev = auditcSeverity(alast.score);
+          if (acEmpty) acEmpty.style.display = 'none';
+          if (acData) acData.style.display = 'block';
+          var aScore = document.getElementById('ac-auditc-score');
+          var aLabel = document.getElementById('ac-auditc-label');
+          var aTrend = document.getElementById('ac-auditc-trend');
+          if (aScore) { aScore.textContent = alast.score; aScore.style.color = asev.color; }
+          if (aLabel) { aLabel.textContent = asev.label; aLabel.style.color = asev.color; }
+          if (aTrend) aTrend.textContent = trendText(ahist);
+        } else {
+          if (acEmpty) acEmpty.style.display = 'block';
+          if (acData) acData.style.display = 'none';
+        }
+      } catch(e) {}
+
+      // DAST-10
+      try {
+        var dhist = window.getDast10History ? window.getDast10History() : [];
+        var dEmpty = document.getElementById('ac-dast10-empty');
+        var dData = document.getElementById('ac-dast10-data');
+        if (dhist.length > 0) {
+          var dlast = dhist[dhist.length - 1];
+          var dsev = dast10Severity(dlast.score);
+          if (dEmpty) dEmpty.style.display = 'none';
+          if (dData) dData.style.display = 'block';
+          var dScore = document.getElementById('ac-dast10-score');
+          var dLabel = document.getElementById('ac-dast10-label');
+          var dTrend = document.getElementById('ac-dast10-trend');
+          if (dScore) { dScore.textContent = dlast.score; dScore.style.color = dsev.color; }
+          if (dLabel) { dLabel.textContent = dsev.label; dLabel.style.color = dsev.color; }
+          if (dTrend) dTrend.textContent = trendText(dhist);
+        } else {
+          if (dEmpty) dEmpty.style.display = 'block';
+          if (dData) dData.style.display = 'none';
+        }
+      } catch(e) {}
+    };
+  })();
+
+  /* ── DAST-10 Drug Abuse Screening Test ── */
+  (function() {
+    var DAST10_Q = [
+      'Have you used drugs other than those required for medical reasons?',
+      'Do you abuse more than one drug at a time?',
+      'Are you always able to stop using drugs when you want to?',
+      'Have you had "blackouts" or "flashbacks" as a result of drug use?',
+      'Do you ever feel bad or guilty about your drug use?',
+      'Does your spouse (or parents) ever complain about your involvement with drugs?',
+      'Have you neglected your family because of your use of drugs?',
+      'Have you engaged in illegal activities in order to obtain drugs?',
+      'Have you ever experienced withdrawal symptoms (felt sick) when you stopped taking drugs?',
+      'Have you had medical problems as a result of your drug use (e.g., memory loss, hepatitis, convulsions, bleeding)?'
+    ];
+    // Q3 is reverse-scored: YES = 0, NO = 1
+    var REVERSE_Q = [2]; // index 2 = Question 3
+
+    var answers = {};
+
+    function dast10Severity(score) {
+      if (score === 0) return { label: 'No problems', color: '#27AE60', desc: 'No drug-related issues indicated.' };
+      if (score <= 2) return { label: 'Low risk', color: '#27AE60', desc: 'Low-level drug use. Monitor and revisit.' };
+      if (score <= 5) return { label: 'Moderate risk', color: '#E67E22', desc: 'Moderate level of drug-related problems. Recommend further assessment.' };
+      if (score <= 8) return { label: 'Substantial risk', color: '#C0392B', desc: 'Substantial level of drug-related problems. Strongly recommend treatment.' };
+      return { label: 'Severe risk', color: '#C0392B', desc: 'Severe level of drug-related problems. Immediate treatment is recommended.' };
+    }
+
+    window.initDast10 = function() {
+      answers = {};
+      var container = document.getElementById('dast10-questions');
+      if (!container || container.children.length > 0) return;
+      var html = '';
+      DAST10_Q.forEach(function(q, i) {
+        html += '<div class="dast10-row" id="dast10-row-' + i + '">' +
+          '<div class="dast10-row-q"><span class="dast10-q-num">' + (i+1) + '.</span> ' + q + '</div>' +
+          '<div class="dast10-row-opts">' +
+            '<button class="dast10-opt" data-qidx="' + i + '" data-ans="yes" onclick="dast10Pick(this)">Yes</button>' +
+            '<button class="dast10-opt" data-qidx="' + i + '" data-ans="no" onclick="dast10Pick(this)">No</button>' +
+          '</div>' +
+        '</div>';
+      });
+      container.innerHTML = html;
+      var result = document.getElementById('dast10-result');
+      if (result) result.style.display = 'none';
+    };
+
+    window.dast10Pick = function(el) {
+      var qidx = parseInt(el.getAttribute('data-qidx'));
+      var ans = el.getAttribute('data-ans');
+      // Deselect siblings
+      var row = document.getElementById('dast10-row-' + qidx);
+      if (row) row.querySelectorAll('.dast10-opt').forEach(function(b) { b.classList.remove('selected'); });
+      el.classList.add('selected');
+      answers[qidx] = ans;
+    };
+
+    window.dast10Submit = function() {
+      // Validate all 10 answered
+      for (var i = 0; i < 10; i++) {
+        if (answers[i] === undefined) {
+          alert('Please answer all 10 questions.');
+          return;
+        }
+      }
+      var score = 0;
+      for (var i = 0; i < 10; i++) {
+        var isYes = answers[i] === 'yes';
+        var isReverse = REVERSE_Q.indexOf(i) !== -1;
+        if (isReverse) {
+          // YES = 0, NO = 1
+          if (!isYes) score += 1;
+        } else {
+          if (isYes) score += 1;
+        }
+      }
+      var sev = dast10Severity(score);
+      var numEl = document.getElementById('dast10-score-num');
+      var lblEl = document.getElementById('dast10-score-label');
+      var descEl = document.getElementById('dast10-score-desc');
+      var resultEl = document.getElementById('dast10-result');
+      if (numEl) { numEl.textContent = score + '/10'; numEl.style.color = sev.color; }
+      if (lblEl) { lblEl.textContent = sev.label; lblEl.style.color = sev.color; }
+      if (descEl) descEl.textContent = sev.desc;
+      if (resultEl) resultEl.style.display = 'block';
+      resultEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Save to history
+      try {
+        var hist = JSON.parse(localStorage.getItem('equa_dast10_history') || '[]');
+        hist.push({ date: new Date().toLocaleDateString('en-US', {month:'short', day:'numeric'}), score: score });
+        if (hist.length > 12) hist = hist.slice(hist.length - 12);
+        localStorage.setItem('equa_dast10_history', JSON.stringify(hist));
+      } catch(e) {}
+      // Care alert
+      if (typeof window.checkCareAlertThreshold === 'function') {
+        window.checkCareAlertThreshold('dast10', score, sev.label);
+      }
+    };
+
+    window.getDast10History = function() {
+      try {
+        return JSON.parse(localStorage.getItem('equa_dast10_history') || '[]');
+      } catch(e) { return []; }
+    };
+  })();
+
+  // ============ CARE ALERT SYSTEM ============
+  (function() {
+    // Thresholds that trigger the consent card
+    var THRESHOLDS = {
+      phq9:   10,  // Moderate depression and above
+      auditc:  3,  // Hazardous use and above
+      dast10:  3   // Moderate and above
+    };
+
+    var INSTRUMENT_LABELS = {
+      phq9:   'PHQ-9 (Depression)',
+      auditc: 'AUDIT-C (Alcohol Use)',
+      dast10: 'DAST-10 (Drug Use)'
+    };
+
+    // ── Supabase config ──────────────────────────────────────────────
+    var SUPABASE_URL = 'https://ysqlrjmvcnpmgfblpszq.supabase.co';
+    var SUPABASE_KEY = 'sb_publishable_OiHaAm40L0IV7jxKSEnDRA_a4yrgkcw';
+    var TABLE = 'care_alerts';
+
+    function sbInsert(row) {
+      return fetch(SUPABASE_URL + '/rest/v1/' + TABLE, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_KEY,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify(row)
+      });
+    }
+
+    function getPatientName() {
+      try {
+        var p = JSON.parse(localStorage.getItem('equa_profile') || '{}');
+        return p.name || 'Patient (name not set)';
+      } catch(e) { return 'Patient'; }
+    }
+
+    function showCareAlertModal(instrument, score, label) {
+      var modal = document.getElementById('care-alert-modal');
+      var instrumentEl = document.getElementById('cam-instrument');
+      var scoreEl = document.getElementById('cam-score');
+      var labelEl = document.getElementById('cam-label');
+      if (!modal) return;
+      if (instrumentEl) instrumentEl.textContent = INSTRUMENT_LABELS[instrument] || instrument;
+      if (scoreEl) scoreEl.textContent = score;
+      if (labelEl) labelEl.textContent = label;
+      modal.dataset.instrument = instrument;
+      modal.dataset.score = score;
+      modal.dataset.label = label;
+      modal.classList.remove('hidden');
+      modal.style.display = 'flex';
+    }
+
+    window.careAlertDismiss = function() {
+      var modal = document.getElementById('care-alert-modal');
+      if (modal) { modal.classList.add('hidden'); modal.style.display = 'none'; }
+    };
+
+    window.careAlertConfirm = function() {
+      var modal = document.getElementById('care-alert-modal');
+      if (!modal) return;
+      var instrument = modal.dataset.instrument;
+      var score = parseInt(modal.dataset.score, 10);
+      var label = modal.dataset.label;
+      var name = getPatientName();
+      var now = new Date();
+      var statusEl = document.getElementById('cam-status');
+
+      if (statusEl) { statusEl.style.display = 'block'; statusEl.style.color = 'var(--text-muted)'; statusEl.textContent = 'Sending…'; }
+
+      sbInsert({
+        patient_name: name,
+        instrument: instrument,
+        score: score,
+        severity: label,
+        flagged_at: now.toISOString()
+      }).then(function(res) {
+        if (res.ok || res.status === 201) {
+          if (statusEl) { statusEl.style.color = 'var(--accent)'; statusEl.textContent = '✓ Your care team has been flagged for follow-up.'; }
+          try {
+            var log = JSON.parse(localStorage.getItem('equa_care_alerts') || '[]');
+            log.push({ date: now.toISOString().slice(0,10), instrument: instrument, score: score, label: label });
+            localStorage.setItem('equa_care_alerts', JSON.stringify(log));
+          } catch(e) {}
+          setTimeout(function() { window.careAlertDismiss(); }, 2500);
+        } else {
+          if (statusEl) { statusEl.style.color = 'var(--danger)'; statusEl.textContent = 'Could not send — try again or call 988.'; }
+        }
+      }).catch(function() {
+        if (statusEl) { statusEl.style.color = 'var(--danger)'; statusEl.textContent = 'No connection. If in crisis, call 988.'; }
+      });
+    };
+
+    window.checkCareAlertThreshold = function(instrument, score, label) {
+      var threshold = THRESHOLDS[instrument];
+      if (threshold !== undefined && score >= threshold) {
+        setTimeout(function() { showCareAlertModal(instrument, score, label); }, 600);
+      }
+    };
+
+    var pendingDistressContext = null;
+
+    window.setDistressCareAlertContext = function(pathway, beforeScore, afterScore) {
+      pendingDistressContext = { pathway: pathway, before: beforeScore, after: afterScore };
+      var flagBtn = document.getElementById('outcome-flag-btn');
+      if (flagBtn) flagBtn.style.display = '';
+    };
+
+    window.triggerDistressCareAlert = function() {
+      if (!pendingDistressContext) return;
+      var ctx = pendingDistressContext;
+      var pathwayNames = {
+        craving: 'Craving episode',
+        escalation: 'Escalation episode',
+        shutdown: 'Shutting down episode',
+        overwhelmed: 'Overwhelmed episode'
+      };
+      var label = (pathwayNames[ctx.pathway] || 'Distress episode') + ' — before: ' + ctx.before + '/10, after: ' + ctx.after + '/10';
+      var modal = document.getElementById('care-alert-modal');
+      var instrumentEl = document.getElementById('cam-instrument');
+      var scoreEl = document.getElementById('cam-score');
+      var labelEl = document.getElementById('cam-label');
+      if (!modal) return;
+      if (instrumentEl) instrumentEl.textContent = pathwayNames[ctx.pathway] || 'Distress episode';
+      if (scoreEl) scoreEl.textContent = ctx.after + '/10';
+      if (labelEl) labelEl.textContent = ctx.after >= 7 ? 'Still elevated — support recommended' : (ctx.after >= 4 ? 'Partially resolved' : 'Resolved after intervention');
+      modal.dataset.instrument = 'distress';
+      modal.dataset.score = ctx.after;
+      modal.dataset.label = label;
+      modal.classList.remove('hidden');
+      modal.style.display = 'flex';
+    };
+  })();
+
+  // ── PROVIDER DASHBOARD ───────────────────────────────────────────────
+  (function() {
+    var SUPABASE_URL = 'https://ysqlrjmvcnpmgfblpszq.supabase.co';
+    var SUPABASE_KEY = 'sb_publishable_OiHaAm40L0IV7jxKSEnDRA_a4yrgkcw';
+    var TABLE = 'care_alerts';
+    var PROVIDER_PIN = '1234'; // Change this for production
+    var SESSION_KEY = 'equa_provider_unlocked';
+
+    function sbSelect() {
+      return fetch(SUPABASE_URL + '/rest/v1/' + TABLE + '?order=flagged_at.desc&limit=50', {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_KEY,
+          'Accept': 'application/json'
+        }
+      });
+    }
+
+    function severityColor(instrument, score) {
+      if (instrument === 'distress') {
+        return score >= 7 ? 'var(--danger)' : score >= 4 ? 'var(--warn)' : 'var(--safe)';
+      }
+      if (instrument === 'phq9') return score >= 20 ? 'var(--danger)' : score >= 15 ? 'var(--warn)' : 'var(--accent)';
+      if (instrument === 'auditc') return score >= 6 ? 'var(--danger)' : 'var(--warn)';
+      if (instrument === 'dast10') return score >= 6 ? 'var(--danger)' : 'var(--warn)';
+      return 'var(--accent)';
+    }
+
+    var INSTRUMENT_DISPLAY = {
+      phq9: 'PHQ-9', auditc: 'AUDIT-C', dast10: 'DAST-10', distress: 'Distress'
+    };
+
+    function timeAgo(isoStr) {
+      var diff = (Date.now() - new Date(isoStr).getTime()) / 1000;
+      if (diff < 60) return Math.round(diff) + 's ago';
+      if (diff < 3600) return Math.round(diff/60) + 'm ago';
+      if (diff < 86400) return Math.round(diff/3600) + 'h ago';
+      return Math.round(diff/86400) + 'd ago';
+    }
+
+    function renderAlerts(alerts) {
+      var list = document.getElementById('provider-alerts-list');
+      var chips = document.getElementById('provider-summary-chips');
+      var refresh = document.getElementById('provider-last-refresh');
+      if (!list) return;
+
+      if (refresh) refresh.textContent = 'Updated ' + new Date().toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit'});
+
+      // Summary chips
+      if (chips) {
+        var total = alerts.length;
+        var today = alerts.filter(function(a) {
+          return new Date(a.flagged_at).toDateString() === new Date().toDateString();
+        }).length;
+        var high = alerts.filter(function(a) {
+          return (a.instrument === 'distress' && a.score >= 7) ||
+                 (a.instrument === 'phq9' && a.score >= 20) ||
+                 (a.instrument === 'auditc' && a.score >= 6) ||
+                 (a.instrument === 'dast10' && a.score >= 6);
+        }).length;
+        chips.innerHTML =
+          '<div style="padding:6px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:20px;font-size:12px;color:var(--text-muted);">' + total + ' total flags</div>' +
+          '<div style="padding:6px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:20px;font-size:12px;color:var(--accent);">' + today + ' today</div>' +
+          (high > 0 ? '<div style="padding:6px 12px;background:var(--danger-glow);border:1px solid var(--danger);border-radius:20px;font-size:12px;color:var(--danger);">⚠ ' + high + ' high severity</div>' : '');
+      }
+
+      if (!alerts.length) {
+        list.innerHTML = '<div style="text-align:center;padding:48px 0;color:var(--text-dim);font-size:14px;">No care flags yet.<br><span style="font-size:12px;margin-top:6px;display:block;">Flags appear here when patients choose to share their scores.</span></div>';
+        return;
+      }
+
+      list.innerHTML = alerts.map(function(a) {
+        var color = severityColor(a.instrument, a.score);
+        var instrLabel = INSTRUMENT_DISPLAY[a.instrument] || a.instrument;
+        var t = timeAgo(a.flagged_at);
+        var dateStr = new Date(a.flagged_at).toLocaleDateString('en-US', {month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+        return '<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:16px;">' +
+          '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">' +
+            '<div style="font-weight:600;color:var(--text);font-size:15px;">' + (a.patient_name || 'Unknown') + '</div>' +
+            '<div style="font-size:11px;color:var(--text-dim);">' + t + '</div>' +
+          '</div>' +
+          '<div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">' +
+            '<div style="padding:4px 10px;border-radius:6px;font-size:12px;font-weight:600;background:' + color + '22;color:' + color + ';border:1px solid ' + color + '44;">' + instrLabel + '</div>' +
+            '<div style="font-size:13px;color:var(--text-muted);">Score: <strong style="color:' + color + ';">' + a.score + '</strong></div>' +
+          '</div>' +
+          '<div style="font-size:12px;color:var(--text-dim);">' + dateStr + '</div>' +
+          (a.severity ? '<div style="font-size:12px;color:var(--text-muted);margin-top:6px;line-height:1.4;">' + a.severity + '</div>' : '') +
+        '</div>';
+      }).join('');
+    }
+
+    function providerRefresh() {
+      var list = document.getElementById('provider-alerts-list');
+      if (list) list.innerHTML = '<div style="text-align:center;padding:40px 0;color:var(--text-dim);font-size:14px;">Loading…</div>';
+      sbSelect().then(function(res) {
+        if (res.ok) {
+          res.json().then(function(data) { renderAlerts(data || []); });
+        } else {
+          if (list) list.innerHTML = '<div style="text-align:center;padding:40px 0;color:var(--danger);font-size:14px;">Could not load alerts. Check connection.</div>';
+        }
+      }).catch(function() {
+        if (list) list.innerHTML = '<div style="text-align:center;padding:40px 0;color:var(--danger);font-size:14px;">No connection.</div>';
+      });
+    }
+    window.providerRefresh = providerRefresh;
+
+    window.providerUnlock = function() {
+      var input = document.getElementById('provider-pin-input');
+      var err = document.getElementById('provider-pin-error');
+      if (!input) return;
+      if (input.value === PROVIDER_PIN) {
+        try { sessionStorage.setItem(SESSION_KEY, '1'); } catch(e) {}
+        document.getElementById('provider-gate').style.display = 'none';
+        document.getElementById('provider-dash').style.display = 'block';
+        providerRefresh();
+        if (err) err.style.display = 'none';
+      } else {
+        if (err) err.style.display = 'block';
+        if (input) { input.value = ''; input.focus(); }
+      }
+    };
+
+    window.providerLock = function() {
+      try { sessionStorage.removeItem(SESSION_KEY); } catch(e) {}
+      document.getElementById('provider-gate').style.display = 'flex';
+      document.getElementById('provider-dash').style.display = 'none';
+      var input = document.getElementById('provider-pin-input');
+      if (input) input.value = '';
+    };
+
+    // Auto-unlock if session was active
+    document.addEventListener('DOMContentLoaded', function() {
+      try {
+        if (sessionStorage.getItem(SESSION_KEY) === '1') {
+          var gate = document.getElementById('provider-gate');
+          var dash = document.getElementById('provider-dash');
+          if (gate) gate.style.display = 'none';
+          if (dash) dash.style.display = 'block';
+        }
+      } catch(e) {}
+    });
+
+  })();
+
 </script>
