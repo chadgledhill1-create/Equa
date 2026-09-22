@@ -773,7 +773,7 @@
     color: var(--text);
     width: 100%;
     outline: none;
-    transition: border-color 0.15px;
+    transition: border-color 0.15s;
   }
   .field-input:focus { border-color: var(--accent); }
   .field-input::placeholder { color: var(--text-dim); }
@@ -1013,32 +1013,31 @@
     <div class="help-step">
       <div class="help-q fade-in">What's happening right now?</div>
       <div class="type-grid fade-in-2">
-        <div class="type-card selected" data-action="selectType">
+        <div class="type-card selected" data-action="selectType" data-val="craving">
           <div class="type-card-icon">🔥</div>
           <div class="type-card-label">Craving</div>
           <div class="type-card-label2">Urge to use</div>
         </div>
-        <div class="type-card inactive" data-action="showComingSoon">
+        <div class="type-card" data-action="selectType" data-val="shutdown">
           <div class="type-card-icon">😶‍🌫️</div>
           <div class="type-card-label">Shutting down</div>
           <div class="type-card-label2">Isolation / numb</div>
         </div>
-        <div class="type-card inactive" data-action="showComingSoon">
+        <div class="type-card" data-action="selectType" data-val="escalating">
           <div class="type-card-icon">⚡</div>
           <div class="type-card-label">Escalating</div>
           <div class="type-card-label2">Anger / panic</div>
         </div>
-        <div class="type-card inactive" data-action="showComingSoon">
+        <div class="type-card" data-action="selectType" data-val="overwhelmed">
           <div class="type-card-icon">🌀</div>
           <div class="type-card-label">Overwhelmed</div>
           <div class="type-card-label2">Too much at once</div>
         </div>
       </div>
-      <div style="font-size:12px;color:var(--text-dim);text-align:center;" class="fade-in-3">Other pathways coming soon. Craving is fully built.</div>
     </div>
     <div class="sticky-footer">
       <button class="btn-full ghost" data-action="screen" data-val="screen-home">Cancel</button>
-      <button class="btn-full primary" data-action="screen" data-val="screen-help-2">This is what's happening →</button>
+      <button class="btn-full primary" data-action="startPathway">This is what's happening →</button>
     </div>
   </div>
 
@@ -1158,7 +1157,8 @@
     </div>
     <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;gap:20px;text-align:center;">
       <div class="outcome-card" id="outcome-card" style="width:100%;">
-<div class="outcome-icon" id="outcome-icon">🌿</div>        <div class="outcome-title" id="outcome-title">Navigation recorded.</div>
+        <div class="outcome-icon" id="outcome-icon">🌿</div>
+        <div class="outcome-title" id="outcome-title">Navigation recorded.</div>
         <div class="outcome-sub" id="outcome-sub">You executed your plan. That's the work.</div>
       </div>
       <div style="font-size:13px;color:var(--text-muted);line-height:1.7;max-width:280px;" id="outcome-detail">
@@ -1172,6 +1172,287 @@
         <div><div class="emergency-text">Still not safe?</div><div class="emergency-sub">988 · 911 · Crisis Line</div></div>
         <span style="color:var(--danger);">→</span>
       </div>
+    </div>
+  </div>
+
+  <!-- ============ SHUTTING DOWN PATHWAY ============ -->
+
+  <!-- SD-1: Intensity -->
+  <div id="screen-sd-1" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-help-1">← Back</button>
+      <div style="font-size:11px;color:var(--text-dim);letter-spacing:0.06em;text-transform:uppercase;">Shutting Down</div>
+    </div>
+    <div class="help-step">
+      <div class="help-q fade-in">How shut down do you feel?</div>
+      <div class="intensity-display fade-in-2">
+        <div class="intensity-num" id="sd-intensity-num">5</div>
+        <div class="intensity-label" id="sd-intensity-label">Noticeably withdrawn</div>
+      </div>
+      <input type="range" class="slider fade-in-3" min="1" max="10" value="5" id="sd-intensity-slider">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim);margin-top:-12px;">
+        <span>Slightly numb</span><span>Completely gone</span>
+      </div>
+      <div style="margin-top:20px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px;font-size:13px;color:var(--text-muted);line-height:1.6;" class="fade-in-3">
+        Shutting down is your nervous system going into freeze mode. The interventions below are specifically designed to bring you back online — gently and quickly.
+      </div>
+    </div>
+    <div class="sticky-footer">
+      <button class="btn-full ghost" data-action="screen" data-val="screen-help-1">← Back</button>
+      <button class="btn-full primary" data-action="startSD">Show me what to do →</button>
+    </div>
+  </div>
+
+  <!-- SD-2: Step-by-step intervention -->
+  <div id="screen-sd-2" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="sdStepBack">← Back</button>
+      <div style="font-size:11px;color:var(--text-dim);letter-spacing:0.06em;text-transform:uppercase;" id="sd-step-header">Shutting Down · Step 1 of 3</div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;padding:24px;gap:20px;overflow-y:auto;">
+      <!-- Step progress dots -->
+      <div style="display:flex;gap:6px;justify-content:center;">
+        <div class="sd-dot" id="sd-dot-0" style="width:8px;height:8px;border-radius:50%;background:var(--accent);transition:background 0.3s;"></div>
+        <div class="sd-dot" id="sd-dot-1" style="width:8px;height:8px;border-radius:50%;background:var(--border);transition:background 0.3s;"></div>
+        <div class="sd-dot" id="sd-dot-2" style="width:8px;height:8px;border-radius:50%;background:var(--border);transition:background 0.3s;"></div>
+      </div>
+
+      <div class="action-reveal" id="sd-step-card">
+        <div class="action-eyebrow" id="sd-step-eyebrow">Step 1 of 3 · 30 seconds</div>
+        <div class="action-text" id="sd-step-title">Cold water on your face or wrists.</div>
+        <div class="action-detail" id="sd-step-detail">The freeze response is physiological. Cold water activates the dive reflex and directly interrupts the shutdown. Do this first, before anything else.</div>
+      </div>
+
+      <div id="sd-timer-wrap">
+        <div class="timer-display">
+          <div class="timer-num" id="sd-timer-display">0:30</div>
+          <div class="timer-sub" id="sd-timer-sub">Cold water. Stay with it.</div>
+        </div>
+        <button class="timer-btn" id="sd-timer-btn" data-action="toggleSDTimer">Start timer</button>
+      </div>
+
+      <div class="emergency-btn" data-action="callEmergency" style="margin-top:auto;">
+        <div><div class="emergency-text">This is a crisis</div><div class="emergency-sub">988 · 911 · Emergency line</div></div>
+        <span style="color:var(--danger);">→</span>
+      </div>
+    </div>
+    <div class="sticky-footer">
+      <button class="btn-full primary" id="sd-next-btn" data-action="sdStepNext">Done · Next step →</button>
+    </div>
+  </div>
+
+  <!-- SD-3: Reassess -->
+  <div id="screen-sd-3" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-sd-2">← Back</button>
+      <div style="font-size:11px;color:var(--text-dim);letter-spacing:0.06em;text-transform:uppercase;">Reassess</div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:32px 24px;gap:28px;">
+      <div class="help-q fade-in">Where is the shutdown now?</div>
+      <div class="reassess-delta fade-in-2">
+        <div class="delta-box">
+          <div class="delta-num" id="sd-delta-before">5</div>
+          <div class="delta-label">Before</div>
+        </div>
+        <div class="delta-arrow">→</div>
+        <div class="delta-box">
+          <div class="delta-num" id="sd-delta-after" style="color:var(--accent);">3</div>
+          <div class="delta-label">Now</div>
+        </div>
+      </div>
+      <div>
+        <input type="range" class="slider fade-in-3" min="1" max="10" value="3" id="sd-reassess-slider">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim);margin-top:-12px;"><span>Back online</span><span>Still frozen</span></div>
+      </div>
+      <button data-action="showSDOutcome" style="width:100%;padding:18px;background:var(--accent);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:600;font-family:var(--font-ui);cursor:pointer;-webkit-appearance:none;touch-action:manipulation;">Record this →</button>
+    </div>
+  </div>
+
+  <!-- ============ ESCALATING PATHWAY ============ -->
+
+  <!-- ES-1: Intensity -->
+  <div id="screen-es-1" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-help-1">← Back</button>
+      <div style="font-size:11px;color:var(--text-dim);letter-spacing:0.06em;text-transform:uppercase;">Escalating</div>
+    </div>
+    <div class="help-step">
+      <div class="help-q fade-in">How escalated are you right now?</div>
+      <div class="intensity-display fade-in-2">
+        <div class="intensity-num" id="es-intensity-num" style="color:var(--warn);">5</div>
+        <div class="intensity-label" id="es-intensity-label">Agitated and climbing</div>
+      </div>
+      <input type="range" class="slider fade-in-3" min="1" max="10" value="5" id="es-intensity-slider">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim);margin-top:-12px;">
+        <span>Irritated</span><span>Explosive / crisis</span>
+      </div>
+      <div style="margin-top:20px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px;font-size:13px;color:var(--text-muted);line-height:1.6;" class="fade-in-3">
+        You cannot think your way out of escalation. Your body has to de-escalate first. These steps work at the physiological level — before cognitive strategies can reach you.
+      </div>
+    </div>
+    <div class="sticky-footer">
+      <button class="btn-full ghost" data-action="screen" data-val="screen-help-1">← Back</button>
+      <button class="btn-full primary" data-action="startES">Show me what to do →</button>
+    </div>
+  </div>
+
+  <!-- ES-2: Step-by-step intervention -->
+  <div id="screen-es-2" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="esStepBack">← Back</button>
+      <div style="font-size:11px;color:var(--text-dim);letter-spacing:0.06em;text-transform:uppercase;" id="es-step-header">Escalating · Step 1 of 4</div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;padding:24px;gap:20px;overflow-y:auto;">
+      <!-- Step progress dots -->
+      <div style="display:flex;gap:6px;justify-content:center;">
+        <div class="es-dot" id="es-dot-0" style="width:8px;height:8px;border-radius:50%;background:var(--accent);transition:background 0.3s;"></div>
+        <div class="es-dot" id="es-dot-1" style="width:8px;height:8px;border-radius:50%;background:var(--border);transition:background 0.3s;"></div>
+        <div class="es-dot" id="es-dot-2" style="width:8px;height:8px;border-radius:50%;background:var(--border);transition:background 0.3s;"></div>
+        <div class="es-dot" id="es-dot-3" style="width:8px;height:8px;border-radius:50%;background:var(--border);transition:background 0.3s;"></div>
+      </div>
+
+      <div class="action-reveal" id="es-step-card">
+        <div class="action-eyebrow" id="es-step-eyebrow">Step 1 of 4 · No timer needed</div>
+        <div class="action-text" id="es-step-title">Do not act. Not yet.</div>
+        <div class="action-detail" id="es-step-detail">Stop what you're doing. Take one step back physically — stand up, sit down, move. Observe: name what you feel without judging it. Proceed only after the next steps.</div>
+      </div>
+
+      <div id="es-timer-wrap">
+        <div class="timer-display">
+          <div class="timer-num" id="es-timer-display">—</div>
+          <div class="timer-sub" id="es-timer-sub">No timer for this step.</div>
+        </div>
+        <button class="timer-btn" id="es-timer-btn" data-action="toggleESTimer" style="display:none;">Start timer</button>
+      </div>
+
+      <div class="emergency-btn" data-action="callEmergency" style="margin-top:auto;">
+        <div><div class="emergency-text">This is a crisis</div><div class="emergency-sub">988 · 911 · Emergency line</div></div>
+        <span style="color:var(--danger);">→</span>
+      </div>
+    </div>
+    <div class="sticky-footer">
+      <button class="btn-full primary" id="es-next-btn" data-action="esStepNext">Done · Next step →</button>
+    </div>
+  </div>
+
+  <!-- ES-3: Reassess -->
+  <div id="screen-es-3" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-es-2">← Back</button>
+      <div style="font-size:11px;color:var(--text-dim);letter-spacing:0.06em;text-transform:uppercase;">Reassess</div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:32px 24px;gap:28px;">
+      <div class="help-q fade-in">Where is the escalation now?</div>
+      <div class="reassess-delta fade-in-2">
+        <div class="delta-box">
+          <div class="delta-num" id="es-delta-before">5</div>
+          <div class="delta-label">Before</div>
+        </div>
+        <div class="delta-arrow">→</div>
+        <div class="delta-box">
+          <div class="delta-num" id="es-delta-after" style="color:var(--accent);">3</div>
+          <div class="delta-label">Now</div>
+        </div>
+      </div>
+      <div>
+        <input type="range" class="slider fade-in-3" min="1" max="10" value="3" id="es-reassess-slider">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim);margin-top:-12px;"><span>Regulated</span><span>Still escalating</span></div>
+      </div>
+      <button data-action="showESOutcome" style="width:100%;padding:18px;background:var(--accent);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:600;font-family:var(--font-ui);cursor:pointer;-webkit-appearance:none;touch-action:manipulation;">Record this →</button>
+    </div>
+  </div>
+
+  <!-- ============ OVERWHELMED PATHWAY ============ -->
+
+  <!-- OW-1: Intensity -->
+  <div id="screen-ow-1" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-help-1">← Back</button>
+      <div style="font-size:11px;color:var(--text-dim);letter-spacing:0.06em;text-transform:uppercase;">Overwhelmed</div>
+    </div>
+    <div class="help-step">
+      <div class="help-q fade-in">How overwhelmed do you feel?</div>
+      <div class="intensity-display fade-in-2">
+        <div class="intensity-num" id="ow-intensity-num" style="color:#6B5CE7;">5</div>
+        <div class="intensity-label" id="ow-intensity-label">Hard to think clearly</div>
+      </div>
+      <input type="range" class="slider fade-in-3" min="1" max="10" value="5" id="ow-intensity-slider">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim);margin-top:-12px;">
+        <span>A lot on my mind</span><span>Cannot function</span>
+      </div>
+      <div style="margin-top:20px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px;font-size:13px;color:var(--text-muted);line-height:1.6;" class="fade-in-3">
+        Overwhelm is your brain processing too many inputs at once. The goal is not to solve everything — it's to reduce the load so you can act on one thing.
+      </div>
+    </div>
+    <div class="sticky-footer">
+      <button class="btn-full ghost" data-action="screen" data-val="screen-help-1">← Back</button>
+      <button class="btn-full primary" data-action="startOW">Show me what to do →</button>
+    </div>
+  </div>
+
+  <!-- OW-2: Step-by-step intervention -->
+  <div id="screen-ow-2" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="owStepBack">← Back</button>
+      <div style="font-size:11px;color:var(--text-dim);letter-spacing:0.06em;text-transform:uppercase;" id="ow-step-header">Overwhelmed · Step 1 of 4</div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;padding:24px;gap:20px;overflow-y:auto;">
+      <!-- Step progress dots -->
+      <div style="display:flex;gap:6px;justify-content:center;">
+        <div class="ow-dot" id="ow-dot-0" style="width:8px;height:8px;border-radius:50%;background:var(--accent);transition:background 0.3s;"></div>
+        <div class="ow-dot" id="ow-dot-1" style="width:8px;height:8px;border-radius:50%;background:var(--border);transition:background 0.3s;"></div>
+        <div class="ow-dot" id="ow-dot-2" style="width:8px;height:8px;border-radius:50%;background:var(--border);transition:background 0.3s;"></div>
+        <div class="ow-dot" id="ow-dot-3" style="width:8px;height:8px;border-radius:50%;background:var(--border);transition:background 0.3s;"></div>
+      </div>
+
+      <div class="action-reveal" id="ow-step-card">
+        <div class="action-eyebrow" id="ow-step-eyebrow">Step 1 of 4 · 2 minutes</div>
+        <div class="action-text" id="ow-step-title">Name what you can sense. Right now.</div>
+        <div class="action-detail" id="ow-step-detail">Say out loud: 5 things you see, 4 you can touch, 3 you hear, 2 you smell, 1 you taste. This interrupts the cognitive spiral by anchoring your nervous system to the present moment.</div>
+      </div>
+
+      <div id="ow-timer-wrap">
+        <div class="timer-display">
+          <div class="timer-num" id="ow-timer-display">2:00</div>
+          <div class="timer-sub" id="ow-timer-sub">5 things you see, 4 you touch…</div>
+        </div>
+        <button class="timer-btn" id="ow-timer-btn" data-action="toggleOWTimer">Start timer</button>
+      </div>
+
+      <div class="emergency-btn" data-action="callEmergency" style="margin-top:auto;">
+        <div><div class="emergency-text">This is a crisis</div><div class="emergency-sub">988 · 911 · Emergency line</div></div>
+        <span style="color:var(--danger);">→</span>
+      </div>
+    </div>
+    <div class="sticky-footer">
+      <button class="btn-full primary" id="ow-next-btn" data-action="owStepNext">Done · Next step →</button>
+    </div>
+  </div>
+
+  <!-- OW-3: Reassess -->
+  <div id="screen-ow-3" class="screen hidden">
+    <div class="header">
+      <button class="btn-secondary" style="padding:8px 14px;font-size:13px;" data-action="screen" data-val="screen-ow-2">← Back</button>
+      <div style="font-size:11px;color:var(--text-dim);letter-spacing:0.06em;text-transform:uppercase;">Reassess</div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:32px 24px;gap:28px;">
+      <div class="help-q fade-in">Where is the overwhelm now?</div>
+      <div class="reassess-delta fade-in-2">
+        <div class="delta-box">
+          <div class="delta-num" id="ow-delta-before">5</div>
+          <div class="delta-label">Before</div>
+        </div>
+        <div class="delta-arrow">→</div>
+        <div class="delta-box">
+          <div class="delta-num" id="ow-delta-after" style="color:var(--accent);">3</div>
+          <div class="delta-label">Now</div>
+        </div>
+      </div>
+      <div>
+        <input type="range" class="slider fade-in-3" min="1" max="10" value="3" id="ow-reassess-slider">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim);margin-top:-12px;"><span>Clearer</span><span>Still overwhelmed</span></div>
+      </div>
+      <button data-action="showOWOutcome" style="width:100%;padding:18px;background:var(--accent);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:600;font-family:var(--font-ui);cursor:pointer;-webkit-appearance:none;touch-action:manipulation;">Record this →</button>
     </div>
   </div>
 
@@ -1315,8 +1596,25 @@
   let timerRunning = false;
   let followUpChecked = true;
   let planActive = false;
+  let selectedPathway = 'craving';
+  // SD state
+  let sdIntensity = 5;
+  let sdTimerInterval = null;
+  let sdTimerSeconds = 30;
+  let sdTimerRunning = false;
+  // ES state
+  let esIntensity = 5;
+  let esTimerInterval = null;
+  let esTimerSeconds = 240;
+  let esTimerRunning = false;
+  // OW state
+  let owIntensity = 5;
+  let owTimerInterval = null;
+  let owTimerSeconds = 300;
+  let owTimerRunning = false;
 
   // ---------- EVENT DELEGATION ----------
+  // CSP blocks inline onclick; all clicks handled here via data-action
   document.addEventListener('click', function(e) {
     const el = e.target.closest('[data-action]');
     if (!el) return;
@@ -1340,6 +1638,23 @@
     else if (a === 'generateHandoff') generateHandoff(el);
     else if (a === 'callEmergency') callEmergency();
     else if (a === 'showComingSoon') showComingSoon(el);
+    else if (a === 'startPathway') startPathway();
+    else if (a === 'startSD') startSD();
+    else if (a === 'startSDTimer') startSDTimerFlow();
+    else if (a === 'toggleSDTimer') toggleSDTimer();
+    else if (a === 'showSDOutcome') showSDOutcome();
+    else if (a === 'sdStepNext') sdStepNext();
+    else if (a === 'sdStepBack') sdStepBack();
+    else if (a === 'startES') startES();
+    else if (a === 'toggleESTimer') toggleESTimer();
+    else if (a === 'showESOutcome') showESOutcome();
+    else if (a === 'esStepNext') esStepNext();
+    else if (a === 'esStepBack') esStepBack();
+    else if (a === 'startOW') startOW();
+    else if (a === 'toggleOWTimer') toggleOWTimer();
+    else if (a === 'showOWOutcome') showOWOutcome();
+    else if (a === 'owStepNext') owStepNext();
+    else if (a === 'owStepBack') owStepBack();
   });
 
   // ---------- NAVIGATION ----------
@@ -1348,6 +1663,7 @@
       s.classList.remove('hidden', 'hidden-left');
       if (s.id !== id) s.classList.add('hidden');
     });
+    // scroll to top
     const s = document.getElementById(id);
     if (s) s.scrollTop = 0;
   }
@@ -1380,10 +1696,21 @@
   function selectType(el) {
     document.querySelectorAll('.type-card').forEach(c => {
       c.classList.remove('selected');
-      c.classList.add('inactive');
     });
-    el.classList.remove('inactive');
     el.classList.add('selected');
+    selectedPathway = el.dataset.val || 'craving';
+  }
+
+  function startPathway() {
+    if (selectedPathway === 'shutdown') {
+      showScreen('screen-sd-1');
+    } else if (selectedPathway === 'escalating') {
+      showScreen('screen-es-1');
+    } else if (selectedPathway === 'overwhelmed') {
+      showScreen('screen-ow-1');
+    } else {
+      showScreen('screen-help-2'); // craving
+    }
   }
 
   function showComingSoon(el) {
@@ -1391,6 +1718,395 @@
     el.style.opacity = '0.6';
     setTimeout(() => el.style.opacity = '', 300);
   }
+
+  // ============ SHUTTING DOWN PATHWAY ============
+  const sdLabels = {1:'Very slightly withdrawn',2:'A little numb',3:'Pulled inward',4:'Noticeably distant',5:'Noticeably withdrawn',6:'Hard to engage',7:'Disconnected',8:'Largely absent',9:'Completely shut down',10:'Gone'};
+  const esLabels = {1:'Slightly irritated',2:'Annoyed',3:'Frustrated',4:'Agitated',5:'Agitated and climbing',6:'Hard to contain',7:'Very activated',8:'Explosive feeling',9:'Out of control',10:'Crisis level'};
+  const owLabels = {1:'A lot on my mind',2:'Hard to prioritize',3:'Scattered',4:'Spinning',5:'Hard to think clearly',6:'Cannot focus',7:'Paralyzed',8:'System overload',9:'Cannot function',10:'Complete shutdown'};
+
+  const sdStepsData = [
+    { eyebrow: 'Step 1 of 3 · 30 seconds', title: 'Cold water on your face or wrists.', detail: 'The freeze response is physiological. Cold water activates the dive reflex and directly interrupts the shutdown. Do this first, before anything else.', seconds: 30, timerLabel: 'Cold water. Stay with it.' },
+    { eyebrow: 'Step 2 of 3 · 2 minutes', title: 'Send one text to one person.', detail: 'Isolation deepens the freeze. You don\'t have to explain — just reach out. "Hey" is enough. Opposite Action (DBT): act opposite to the urge to withdraw.', seconds: 120, timerLabel: 'Text sent. Now wait for a reply.' },
+    { eyebrow: 'Step 3 of 3 · 1 minute', title: 'Move your body. Any movement.', detail: 'Walk to another room. Do 5 jumping jacks. Stretch your arms. Physical movement directly activates the sympathetic system and begins bringing you back online.', seconds: 60, timerLabel: 'Keep moving.' }
+  ];
+  let sdCurrentStep = 0;
+
+  function startSD() {
+    sdIntensity = parseInt(document.getElementById('sd-intensity-slider').value);
+    document.getElementById('sd-delta-before').textContent = sdIntensity;
+    const after = Math.max(1, Math.round(sdIntensity * 0.6));
+    document.getElementById('sd-delta-after').textContent = after;
+    document.getElementById('sd-reassess-slider').value = after;
+    sdCurrentStep = 0;
+    renderSDStep();
+    showScreen('screen-sd-2');
+  }
+
+  function startSDTimerFlow() {
+    document.getElementById('sd-timer-block').style.display = 'block';
+  }
+
+  function renderSDStep() {
+    clearInterval(sdTimerInterval);
+    sdTimerRunning = false;
+    const step = sdStepsData[sdCurrentStep];
+    const total = sdStepsData.length;
+    document.getElementById('sd-step-header').textContent = 'Shutting Down · Step ' + (sdCurrentStep + 1) + ' of ' + total;
+    document.getElementById('sd-step-eyebrow').textContent = step.eyebrow;
+    document.getElementById('sd-step-title').textContent = step.title;
+    document.getElementById('sd-step-detail').textContent = step.detail;
+    // dots
+    document.querySelectorAll('.sd-dot').forEach((d, i) => {
+      d.style.background = i === sdCurrentStep ? 'var(--accent)' : (i < sdCurrentStep ? 'var(--accent-glow)' : 'var(--border)');
+      d.style.opacity = i <= sdCurrentStep ? '1' : '0.4';
+    });
+    // timer
+    sdTimerSeconds = step.seconds;
+    const m = Math.floor(step.seconds / 60);
+    const s = step.seconds % 60;
+    document.getElementById('sd-timer-display').textContent = m + ':' + String(s).padStart(2, '0');
+    document.getElementById('sd-timer-sub').textContent = step.timerLabel;
+    document.getElementById('sd-timer-btn').textContent = 'Start timer';
+    // next button
+    const isLast = sdCurrentStep === total - 1;
+    document.getElementById('sd-next-btn').textContent = isLast ? 'Done · Reassess →' : 'Done · Next step →';
+  }
+
+  function toggleSDTimer() {
+    if (sdTimerRunning) {
+      clearInterval(sdTimerInterval);
+      sdTimerRunning = false;
+      document.getElementById('sd-timer-btn').textContent = 'Resume timer';
+    } else {
+      sdTimerRunning = true;
+      document.getElementById('sd-timer-btn').textContent = 'Pause';
+      sdTimerInterval = setInterval(() => {
+        sdTimerSeconds--;
+        if (sdTimerSeconds <= 0) {
+          clearInterval(sdTimerInterval);
+          sdTimerRunning = false;
+          document.getElementById('sd-timer-display').textContent = 'Done ✓';
+          document.getElementById('sd-timer-btn').textContent = 'Timer complete';
+          return;
+        }
+        const m = Math.floor(sdTimerSeconds / 60);
+        const s = sdTimerSeconds % 60;
+        document.getElementById('sd-timer-display').textContent = m + ':' + String(s).padStart(2, '0');
+      }, 1000);
+    }
+  }
+
+  function sdStepNext() {
+    if (sdCurrentStep < sdStepsData.length - 1) {
+      sdCurrentStep++;
+      renderSDStep();
+    } else {
+      showScreen('screen-sd-3');
+    }
+  }
+
+  function sdStepBack() {
+    if (sdCurrentStep > 0) {
+      sdCurrentStep--;
+      renderSDStep();
+    } else {
+      showScreen('screen-sd-1');
+    }
+  }
+
+  function showSDOutcome() {
+    try {
+      const before = parseInt(document.getElementById('sd-delta-before').textContent) || sdIntensity;
+      const after = parseInt(document.getElementById('sd-reassess-slider').value) || 3;
+      const diff = before - after;
+      let icon, title, sub, detail;
+      if (diff >= 3) {
+        icon = '🌿'; title = 'You came back online.';
+        sub = 'The intervention worked. That\'s the data.';
+        detail = `Shutdown dropped from ${before} to ${after}. Cold water, one text, movement — you executed the steps. That\'s what breaking the freeze looks like.`;
+      } else if (diff > 0) {
+        icon = '📍'; title = 'A small shift.';
+        sub = 'Movement in the right direction.';
+        detail = `It moved from ${before} to ${after}. Keep going — call one person or step outside. The freeze lifts with small, consistent actions.`;
+      } else {
+        icon = '🚨'; title = 'Still disconnected.';
+        sub = 'Escalate. Don\'t stay alone with this.';
+        detail = `Still at ${after}. Call your counselor, sponsor, or 988. Shutdown at this level needs another person involved.`;
+      }
+      document.getElementById('outcome-icon').textContent = icon;
+      document.getElementById('outcome-title').textContent = title;
+      document.getElementById('outcome-sub').textContent = sub;
+      document.getElementById('outcome-detail').textContent = detail;
+      if (diff < 1) {
+        document.getElementById('outcome-card').style.background = 'var(--danger-glow)';
+        document.getElementById('outcome-card').style.borderColor = 'rgba(192,57,43,0.3)';
+      } else {
+        document.getElementById('outcome-card').style.background = '';
+        document.getElementById('outcome-card').style.borderColor = '';
+      }
+      showScreen('screen-help-6');
+    } catch(err) { alert('EQUA error: ' + err.message); }
+  }
+
+  // ============ ESCALATING PATHWAY ============
+  const esStepsData = [
+    { eyebrow: 'Step 1 of 4 · No timer needed', title: 'Do not act. Not yet.', detail: 'Stop what you\'re doing. Take one physical step back — stand up, sit down, move. Observe: name what you feel without judging it. Proceed only after completing the next steps.', seconds: 0, timerLabel: 'No timer for this step.' },
+    { eyebrow: 'Step 2 of 4 · 2 minutes', title: 'Box breathing. Inhale 4, hold 4, exhale 4, hold 4.', detail: 'Repeat 6 cycles. This directly activates your parasympathetic nervous system and interrupts the escalation at the physiological level. You cannot logic your way out — your body has to go first.', seconds: 120, timerLabel: 'In 4 · Hold 4 · Out 4 · Hold 4. Repeat.' },
+    { eyebrow: 'Step 3 of 4 · 1 minute', title: 'Physical discharge. Move hard for 60 seconds.', detail: '10 jumping jacks, run in place, or do wall push-ups. This metabolizes the cortisol driving the escalation. The urge to fight or flee is physiological — you have to burn it off.', seconds: 60, timerLabel: 'Move hard. Burn it off.' },
+    { eyebrow: 'Step 4 of 4 · 30 seconds', title: 'Leave the space.', detail: 'Step outside, move to another room, or take a short walk. Even 30 seconds of environmental change interrupts the cue → escalation loop. The trigger is often in the room.', seconds: 30, timerLabel: 'Different room. Different air.' }
+  ];
+  let esCurrentStep = 0;
+
+  function startES() {
+    esIntensity = parseInt(document.getElementById('es-intensity-slider').value);
+    document.getElementById('es-delta-before').textContent = esIntensity;
+    const after = Math.max(1, Math.round(esIntensity * 0.55));
+    document.getElementById('es-delta-after').textContent = after;
+    document.getElementById('es-reassess-slider').value = after;
+    esCurrentStep = 0;
+    renderESStep();
+    showScreen('screen-es-2');
+  }
+
+  function renderESStep() {
+    clearInterval(esTimerInterval);
+    esTimerRunning = false;
+    const step = esStepsData[esCurrentStep];
+    const total = esStepsData.length;
+    document.getElementById('es-step-header').textContent = 'Escalating · Step ' + (esCurrentStep + 1) + ' of ' + total;
+    document.getElementById('es-step-eyebrow').textContent = step.eyebrow;
+    document.getElementById('es-step-title').textContent = step.title;
+    document.getElementById('es-step-detail').textContent = step.detail;
+    // dots
+    document.querySelectorAll('.es-dot').forEach((d, i) => {
+      d.style.background = i === esCurrentStep ? 'var(--accent)' : (i < esCurrentStep ? 'var(--accent-glow)' : 'var(--border)');
+      d.style.opacity = i <= esCurrentStep ? '1' : '0.4';
+    });
+    // timer
+    const hasTimer = step.seconds > 0;
+    esTimerSeconds = step.seconds;
+    if (hasTimer) {
+      const m = Math.floor(step.seconds / 60);
+      const s = step.seconds % 60;
+      document.getElementById('es-timer-display').textContent = m + ':' + String(s).padStart(2, '0');
+      document.getElementById('es-timer-btn').style.display = '';
+    } else {
+      document.getElementById('es-timer-display').textContent = '—';
+      document.getElementById('es-timer-btn').style.display = 'none';
+    }
+    document.getElementById('es-timer-sub').textContent = step.timerLabel;
+    document.getElementById('es-timer-btn').textContent = 'Start timer';
+    // next button
+    const isLast = esCurrentStep === total - 1;
+    document.getElementById('es-next-btn').textContent = isLast ? 'Done · Reassess →' : 'Done · Next step →';
+  }
+
+  function toggleESTimer() {
+    if (esTimerRunning) {
+      clearInterval(esTimerInterval);
+      esTimerRunning = false;
+      document.getElementById('es-timer-btn').textContent = 'Resume timer';
+    } else {
+      esTimerRunning = true;
+      document.getElementById('es-timer-btn').textContent = 'Pause';
+      esTimerInterval = setInterval(() => {
+        esTimerSeconds--;
+        if (esTimerSeconds <= 0) {
+          clearInterval(esTimerInterval);
+          esTimerRunning = false;
+          document.getElementById('es-timer-display').textContent = 'Done ✓';
+          document.getElementById('es-timer-btn').textContent = 'Timer complete';
+          return;
+        }
+        const m = Math.floor(esTimerSeconds / 60);
+        const s = esTimerSeconds % 60;
+        document.getElementById('es-timer-display').textContent = m + ':' + String(s).padStart(2, '0');
+      }, 1000);
+    }
+  }
+
+  function esStepNext() {
+    if (esCurrentStep < esStepsData.length - 1) {
+      esCurrentStep++;
+      renderESStep();
+    } else {
+      showScreen('screen-es-3');
+    }
+  }
+
+  function esStepBack() {
+    if (esCurrentStep > 0) {
+      esCurrentStep--;
+      renderESStep();
+    } else {
+      showScreen('screen-es-1');
+    }
+  }
+
+  function showESOutcome() {
+    try {
+      const before = parseInt(document.getElementById('es-delta-before').textContent) || esIntensity;
+      const after = parseInt(document.getElementById('es-reassess-slider').value) || 3;
+      const diff = before - after;
+      let icon, title, sub, detail;
+      if (diff >= 3) {
+        icon = '🌿'; title = 'De-escalated.';
+        sub = 'Your nervous system responded. That\'s the work.';
+        detail = `Escalation dropped from ${before} to ${after}. Box breathing activated your parasympathetic nervous system. The movement discharged the cortisol. You executed the protocol.`;
+      } else if (diff > 0) {
+        icon = '📍'; title = 'Partially regulated.';
+        sub = 'You\'re moving in the right direction.';
+        detail = `Down from ${before} to ${after}. Stay with the breathing. Repeat the cycle — it compounds. If it climbs back up, call someone.`;
+      } else {
+        icon = '🚨'; title = 'Still escalated.';
+        sub = 'Call someone now. Don\'t be alone.';
+        detail = `Still at ${after}. This level needs another person. Call your sponsor, counselor, or 988. Leave the environment if you haven\'t.`;
+      }
+      document.getElementById('outcome-icon').textContent = icon;
+      document.getElementById('outcome-title').textContent = title;
+      document.getElementById('outcome-sub').textContent = sub;
+      document.getElementById('outcome-detail').textContent = detail;
+      if (diff < 1) {
+        document.getElementById('outcome-card').style.background = 'var(--danger-glow)';
+        document.getElementById('outcome-card').style.borderColor = 'rgba(192,57,43,0.3)';
+      } else {
+        document.getElementById('outcome-card').style.background = '';
+        document.getElementById('outcome-card').style.borderColor = '';
+      }
+      showScreen('screen-help-6');
+    } catch(err) { alert('EQUA error: ' + err.message); }
+  }
+
+  // ============ OVERWHELMED PATHWAY ============
+  const owStepsData = [
+    { eyebrow: 'Step 1 of 4 · 2 minutes', title: 'Name what you can sense. Right now.', detail: 'Say out loud: 5 things you see, 4 you can touch, 3 you hear, 2 you smell, 1 you taste. This interrupts the cognitive spiral by anchoring your nervous system to the present moment.', seconds: 120, timerLabel: '5 things you see, 4 you touch…' },
+    { eyebrow: 'Step 2 of 4 · 2 minutes', title: 'Write every "must do" out of your head.', detail: 'Grab paper or your phone notes. Write every single thing you\'re trying to hold in your mind. Don\'t organize — just dump. The list existing outside your head immediately reduces working memory load.', seconds: 120, timerLabel: 'Write it all down. Don\'t filter.' },
+    { eyebrow: 'Step 3 of 4 · No timer needed', title: 'Circle one thing. Just one.', detail: 'Look at your list. Pick exactly one item to act on in the next 10 minutes. Everything else is officially paused — it will exist on the list. You\'re not ignoring it, you\'re containing it.', seconds: 0, timerLabel: 'No timer. Just choose one.' },
+    { eyebrow: 'Step 4 of 4 · 30 seconds', title: 'Physiological sigh. Exhale the overwhelm.', detail: 'Double inhale through your nose (sniff, then another sniff to top it off), then one long exhale through your mouth. Repeat 3 times. Stanford research: this is the fastest single nervous system reset that exists.', seconds: 30, timerLabel: 'Double inhale · Long exhale. Repeat 3×.' }
+  ];
+  let owCurrentStep = 0;
+
+  function startOW() {
+    owIntensity = parseInt(document.getElementById('ow-intensity-slider').value);
+    document.getElementById('ow-delta-before').textContent = owIntensity;
+    const after = Math.max(1, Math.round(owIntensity * 0.55));
+    document.getElementById('ow-delta-after').textContent = after;
+    document.getElementById('ow-reassess-slider').value = after;
+    owCurrentStep = 0;
+    renderOWStep();
+    showScreen('screen-ow-2');
+  }
+
+  function renderOWStep() {
+    clearInterval(owTimerInterval);
+    owTimerRunning = false;
+    const step = owStepsData[owCurrentStep];
+    const total = owStepsData.length;
+    document.getElementById('ow-step-header').textContent = 'Overwhelmed · Step ' + (owCurrentStep + 1) + ' of ' + total;
+    document.getElementById('ow-step-eyebrow').textContent = step.eyebrow;
+    document.getElementById('ow-step-title').textContent = step.title;
+    document.getElementById('ow-step-detail').textContent = step.detail;
+    // dots
+    document.querySelectorAll('.ow-dot').forEach((d, i) => {
+      d.style.background = i === owCurrentStep ? 'var(--accent)' : (i < owCurrentStep ? 'var(--accent-glow)' : 'var(--border)');
+      d.style.opacity = i <= owCurrentStep ? '1' : '0.4';
+    });
+    // timer
+    const hasTimer = step.seconds > 0;
+    owTimerSeconds = step.seconds;
+    if (hasTimer) {
+      const m = Math.floor(step.seconds / 60);
+      const s = step.seconds % 60;
+      document.getElementById('ow-timer-display').textContent = m + ':' + String(s).padStart(2, '0');
+      document.getElementById('ow-timer-btn').style.display = '';
+    } else {
+      document.getElementById('ow-timer-display').textContent = '—';
+      document.getElementById('ow-timer-btn').style.display = 'none';
+    }
+    document.getElementById('ow-timer-sub').textContent = step.timerLabel;
+    document.getElementById('ow-timer-btn').textContent = 'Start timer';
+    // next button
+    const isLast = owCurrentStep === total - 1;
+    document.getElementById('ow-next-btn').textContent = isLast ? 'Done · Reassess →' : 'Done · Next step →';
+  }
+
+  function toggleOWTimer() {
+    if (owTimerRunning) {
+      clearInterval(owTimerInterval);
+      owTimerRunning = false;
+      document.getElementById('ow-timer-btn').textContent = 'Resume timer';
+    } else {
+      owTimerRunning = true;
+      document.getElementById('ow-timer-btn').textContent = 'Pause';
+      owTimerInterval = setInterval(() => {
+        owTimerSeconds--;
+        if (owTimerSeconds <= 0) {
+          clearInterval(owTimerInterval);
+          owTimerRunning = false;
+          document.getElementById('ow-timer-display').textContent = 'Done ✓';
+          document.getElementById('ow-timer-btn').textContent = 'Timer complete';
+          return;
+        }
+        const m = Math.floor(owTimerSeconds / 60);
+        const s = owTimerSeconds % 60;
+        document.getElementById('ow-timer-display').textContent = m + ':' + String(s).padStart(2, '0');
+      }, 1000);
+    }
+  }
+
+  function owStepNext() {
+    if (owCurrentStep < owStepsData.length - 1) {
+      owCurrentStep++;
+      renderOWStep();
+    } else {
+      showScreen('screen-ow-3');
+    }
+  }
+
+  function owStepBack() {
+    if (owCurrentStep > 0) {
+      owCurrentStep--;
+      renderOWStep();
+    } else {
+      showScreen('screen-ow-1');
+    }
+  }
+
+  function showOWOutcome() {
+    try {
+      const before = parseInt(document.getElementById('ow-delta-before').textContent) || owIntensity;
+      const after = parseInt(document.getElementById('ow-reassess-slider').value) || 3;
+      const diff = before - after;
+      let icon, title, sub, detail;
+      if (diff >= 3) {
+        icon = '🌿'; title = 'Load reduced.';
+        sub = 'You narrowed the focus. That\'s the skill.';
+        detail = `Overwhelm dropped from ${before} to ${after}. Grounding anchored you to the present. Writing the list offloaded working memory. Now execute the one thing you circled.`;
+      } else if (diff > 0) {
+        icon = '📍'; title = 'A little clearer.';
+        sub = 'The list is the tool. Keep using it.';
+        detail = `Down from ${before} to ${after}. You\'re not supposed to solve everything — just the next one thing. What\'s the one thing?`;
+      } else {
+        icon = '🚨'; title = 'Still overwhelmed.';
+        sub = 'Call someone. Don\'t carry this alone.';
+        detail = `Still at ${after}. This level of overwhelm needs a voice, not a screen. Call your counselor or a trusted person and say: "I\'m overwhelmed and I need help thinking."`;
+      }
+      document.getElementById('outcome-icon').textContent = icon;
+      document.getElementById('outcome-title').textContent = title;
+      document.getElementById('outcome-sub').textContent = sub;
+      document.getElementById('outcome-detail').textContent = detail;
+      if (diff < 1) {
+        document.getElementById('outcome-card').style.background = 'var(--danger-glow)';
+        document.getElementById('outcome-card').style.borderColor = 'rgba(192,57,43,0.3)';
+      } else {
+        document.getElementById('outcome-card').style.background = '';
+        document.getElementById('outcome-card').style.borderColor = '';
+      }
+      showScreen('screen-help-6');
+    } catch(err) { alert('EQUA error: ' + err.message); }
+  }
+
+  // ============ SLIDER WIRING FOR NEW PATHWAYS ============
 
   const intensityLabels = {
     1: 'Barely there', 2: 'Very mild', 3: 'Mild', 4: 'Noticeable',
@@ -1402,6 +2118,7 @@
     currentIntensity = parseInt(v);
     document.getElementById('intensity-num').textContent = v;
     document.getElementById('intensity-label').textContent = intensityLabels[v] || '';
+    // color shift
     const colors = { low: '#7C9E87', mid: '#E67E22', high: '#C0392B' };
     const col = v <= 4 ? colors.low : v <= 7 ? colors.mid : colors.high;
     document.getElementById('intensity-num').style.color = col;
@@ -1414,6 +2131,7 @@
   }
 
   function showAction() {
+    // determine action from plan + context
     let eyebrow, actionText, detail, callLabel;
     if (currentIntensity <= 4) {
       eyebrow = 'Low intensity · Pre-committed action';
@@ -1440,6 +2158,7 @@
     document.getElementById('action-detail').textContent = detail;
     document.getElementById('action-call-btn').textContent = callLabel;
 
+    // set before value for reassess
     document.getElementById('delta-before').textContent = currentIntensity;
     const newVal = Math.max(1, Math.round(currentIntensity * 0.6));
     document.getElementById('delta-after').textContent = newVal;
@@ -1480,6 +2199,7 @@
   }
 
   function logAction() {
+    // just visual feedback
     const btn = document.getElementById('action-call-btn');
     btn.textContent = '✓ Logged';
     btn.style.background = 'var(--safe)';
@@ -1561,8 +2281,41 @@
   }
 
   // ---------- INIT ----------
+  // Wire sliders (CSP blocks oninput="")
   document.getElementById('intensity-slider').addEventListener('input', function() { updateIntensity(this.value); });
   document.getElementById('reassess-slider').addEventListener('input', function() { updateReassess(this.value); });
+
+  // SD sliders
+  document.getElementById('sd-intensity-slider').addEventListener('input', function() {
+    sdIntensity = parseInt(this.value);
+    document.getElementById('sd-intensity-num').textContent = this.value;
+    document.getElementById('sd-intensity-label').textContent = sdLabels[this.value] || '';
+  });
+  document.getElementById('sd-reassess-slider').addEventListener('input', function() {
+    document.getElementById('sd-delta-after').textContent = this.value;
+  });
+
+  // ES sliders
+  document.getElementById('es-intensity-slider').addEventListener('input', function() {
+    esIntensity = parseInt(this.value);
+    document.getElementById('es-intensity-num').textContent = this.value;
+    document.getElementById('es-intensity-label').textContent = esLabels[this.value] || '';
+    const col = this.value <= 4 ? 'var(--accent)' : this.value <= 7 ? 'var(--warn)' : 'var(--danger)';
+    document.getElementById('es-intensity-num').style.color = col;
+  });
+  document.getElementById('es-reassess-slider').addEventListener('input', function() {
+    document.getElementById('es-delta-after').textContent = this.value;
+  });
+
+  // OW sliders
+  document.getElementById('ow-intensity-slider').addEventListener('input', function() {
+    owIntensity = parseInt(this.value);
+    document.getElementById('ow-intensity-num').textContent = this.value;
+    document.getElementById('ow-intensity-label').textContent = owLabels[this.value] || '';
+  });
+  document.getElementById('ow-reassess-slider').addEventListener('input', function() {
+    document.getElementById('ow-delta-after').textContent = this.value;
+  });
 
   try {
     if (localStorage.getItem('equa_plan_active') === '1') {
