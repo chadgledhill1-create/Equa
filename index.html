@@ -604,6 +604,26 @@ input[type=range]::-moz-range-thumb {
 }
 .coping-card:active { border-color: var(--accent); }
 
+/* DISTRESS STEP GAMIFIED */
+@keyframes pulse-cta {
+  0%   { transform: scale(1);    box-shadow: 0 0 0 0 rgba(39,174,96,0.5); }
+  50%  { transform: scale(1.03); box-shadow: 0 0 0 10px rgba(39,174,96,0); }
+  100% { transform: scale(1);    box-shadow: 0 0 0 0 rgba(39,174,96,0); }
+}
+@keyframes step-done-flash {
+  0%   { background: var(--safe); }
+  40%  { background: #1a8a48; }
+  100% { background: var(--safe); }
+}
+.d4-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--border);
+  transition: width 0.3s, border-radius 0.3s, background 0.3s;
+  flex-shrink: 0;
+}
+.d4-dot.active { width: 24px; border-radius: 4px; background: var(--accent); }
+.d4-dot.done   { background: var(--safe); }
+
 /* DISTRESS TYPE CARDS */
 .distress-type-card {
   background: var(--bg-card);
@@ -766,6 +786,16 @@ input[type=range]::-moz-range-thumb {
         </div>
       </div>
 
+      <!-- Weekly Assessment banner -->
+      <div onclick="showScreen('screen-weekly')" style="background:linear-gradient(135deg,var(--accent) 0%,#3a6647 100%);border-radius:16px;padding:18px 20px;cursor:pointer;display:flex;align-items:center;gap:14px;">
+        <div style="font-size:28px;flex-shrink:0;">📊</div>
+        <div style="flex:1;">
+          <div style="font-size:14px;font-weight:700;color:#fff;">Weekly Assessment</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:2px;">PHQ-9 + GAD-7 · Takes ~3 min</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.2);border-radius:20px;padding:4px 10px;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;">Due today</div>
+      </div>
+
       <!-- Next appointment -->
       <div class="card">
         <div class="section-label" style="margin-bottom:12px;">Upcoming</div>
@@ -817,108 +847,61 @@ input[type=range]::-moz-range-thumb {
 </div>
 
 <!-- ===================== SCREEN 3: DAILY CHECK-IN ===================== -->
+<!-- Full-bleed one-question-per-screen flow -->
 <div class="screen" id="screen-checkin">
-  <div style="display:flex; flex-direction:column; height:100%;">
-    <div class="screen-header">
-      <button class="back-btn" data-action="navTo" data-val="screen-home">
-        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-        Back
-      </button>
-      <span class="header-title">Daily Check-In</span>
-      <span style="width:60px;"></span>
+  <div style="display:flex;flex-direction:column;height:100%;background:var(--bg);">
+
+    <!-- Minimal header with progress bar only -->
+    <div style="position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);padding:14px 20px 0;">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
+        <button id="ci-back-btn" onclick="ciGoBack()" style="background:none;border:none;cursor:pointer;color:var(--accent);font-size:14px;font-weight:500;font-family:var(--font-ui);padding:4px 0;white-space:nowrap;">← Back</button>
+        <div style="flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden;">
+          <div id="ci-progress-fill" style="height:100%;background:var(--accent);border-radius:2px;transition:width 0.4s ease;width:0%;"></div>
+        </div>
+        <span id="ci-step-label" style="font-size:12px;color:var(--text-muted);white-space:nowrap;">1 of 4</span>
+      </div>
     </div>
 
-    <div style="flex:1; overflow-y:auto; padding:24px 20px;">
-      <!-- Step indicator -->
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:28px;">
-        <div class="step-dots" id="checkin-dots">
-          <div class="step-dot active"></div>
-          <div class="step-dot"></div>
-          <div class="step-dot"></div>
-          <div class="step-dot"></div>
-          <div class="step-dot"></div>
+    <!-- Question area — full bleed, centered vertically -->
+    <div id="ci-question-area" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;justify-content:flex-start;padding:32px 24px 120px;"></div>
+
+    <!-- Fixed bottom CTA -->
+    <div id="ci-cta-area" style="position:absolute;bottom:0;left:0;right:0;background:var(--bg);border-top:1px solid var(--border);padding:16px 20px max(16px,env(safe-area-inset-bottom,16px));"></div>
+  </div>
+</div>
+
+<!-- ===================== SCREEN: C-SSRS SAFETY CHECK ===================== -->
+<!-- Triggered inline after mood=rough + craving -->
+<div class="screen" id="screen-cssrs">
+  <div style="display:flex;flex-direction:column;height:100%;background:var(--bg);">
+    <div style="position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);padding:14px 20px 0;">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
+        <button onclick="showScreen('screen-checkin')" style="background:none;border:none;cursor:pointer;color:var(--accent);font-size:14px;font-weight:500;font-family:var(--font-ui);padding:4px 0;">← Back</button>
+        <div style="flex:1;height:4px;background:var(--danger-glow);border-radius:2px;overflow:hidden;">
+          <div id="cssrs-progress" style="height:100%;background:var(--danger);border-radius:2px;transition:width 0.4s ease;width:0%;"></div>
         </div>
-        <span id="checkin-step-label" style="font-size:12px; color:var(--text-muted);">Step 1 of 5</span>
-      </div>
-
-      <!-- Step 1: Mood -->
-      <div class="checkin-step active" id="ci-step-1">
-        <div class="font-display" style="font-size:22px; margin-bottom:6px;">How are you feeling right now?</div>
-        <p style="color:var(--text-muted); font-size:14px; margin-bottom:24px;">Select the option that best matches your current mood.</p>
-        <div class="mood-grid">
-          <button class="mood-btn" data-mood="rough"><div class="emoji">😔</div>Rough</button>
-          <button class="mood-btn" data-mood="low"><div class="emoji">😕</div>Low</button>
-          <button class="mood-btn" data-mood="okay"><div class="emoji">😐</div>Okay</button>
-          <button class="mood-btn" data-mood="good"><div class="emoji">🙂</div>Good</button>
-          <button class="mood-btn" data-mood="great"><div class="emoji">😊</div>Great</button>
-        </div>
-      </div>
-
-      <!-- Step 2: Sleep -->
-      <div class="checkin-step" id="ci-step-2">
-        <div class="font-display" style="font-size:22px; margin-bottom:6px;">How did you sleep?</div>
-        <p style="color:var(--text-muted); font-size:14px; margin-bottom:32px;">Tap + or − to set your hours of sleep last night.</p>
-        <div class="card" style="text-align:center; padding:32px 20px;">
-          <div class="stepper" style="justify-content:center;">
-            <button class="stepper-btn" id="sleep-minus">−</button>
-            <div class="stepper-val" id="sleep-val">7</div>
-            <button class="stepper-btn" id="sleep-plus">+</button>
-          </div>
-          <div style="font-size:14px; color:var(--text-muted); margin-top:12px;">hours</div>
-        </div>
-      </div>
-
-      <!-- Step 3: Urges -->
-      <div class="checkin-step" id="ci-step-3">
-        <div class="font-display" style="font-size:22px; margin-bottom:6px;">Any cravings or urges today?</div>
-        <p style="color:var(--text-muted); font-size:14px; margin-bottom:28px;">Your honesty helps your care team support you better.</p>
-        <div class="toggle-group">
-          <button class="toggle-opt" data-urge="yes">Yes</button>
-          <button class="toggle-opt" data-urge="mild">Mild</button>
-          <button class="toggle-opt selected" data-urge="no">No</button>
-        </div>
-      </div>
-
-      <!-- Step 4: Note -->
-      <div class="checkin-step" id="ci-step-4">
-        <div class="font-display" style="font-size:22px; margin-bottom:6px;">Anything to share?</div>
-        <p style="color:var(--text-muted); font-size:14px; margin-bottom:24px;">Optional — anything you'd like your care team to know.</p>
-        <textarea id="ci-note" placeholder="Type a note... (optional)" style="min-height:120px;"></textarea>
-      </div>
-
-      <!-- Step 5: Submit -->
-      <div class="checkin-step" id="ci-step-5">
-        <div class="font-display" style="font-size:22px; margin-bottom:6px;">Ready to submit?</div>
-        <p style="color:var(--text-muted); font-size:14px; margin-bottom:24px;">Your check-in will be visible to your care team.</p>
-        <div class="card" style="margin-bottom:20px;">
-          <div style="display:flex; flex-direction:column; gap:10px;">
-            <div style="display:flex; justify-content:space-between;"><span style="color:var(--text-muted); font-size:14px;">Mood</span><span id="ci-summary-mood" style="font-size:14px; font-weight:600;">—</span></div>
-            <div class="divider"></div>
-            <div style="display:flex; justify-content:space-between;"><span style="color:var(--text-muted); font-size:14px;">Sleep</span><span id="ci-summary-sleep" style="font-size:14px; font-weight:600;">—</span></div>
-            <div class="divider"></div>
-            <div style="display:flex; justify-content:space-between;"><span style="color:var(--text-muted); font-size:14px;">Urges</span><span id="ci-summary-urge" style="font-size:14px; font-weight:600;">—</span></div>
-          </div>
-        </div>
-        <button class="btn btn-primary" id="ci-submit-btn">Share with care team</button>
-        <button style="background:none;border:none;cursor:pointer;display:block;width:100%;text-align:center;margin-top:14px;font-size:14px;color:var(--text-muted);font-family:var(--font-ui);" id="ci-private-btn">Keep private</button>
-      </div>
-
-      <!-- Confirmation -->
-      <div class="checkin-step" id="ci-confirm">
-        <div class="confirm-card">
-          <div style="font-size:40px; margin-bottom:12px;">✅</div>
-          <div class="font-display" style="font-size:22px; margin-bottom:8px;">Check-in logged.</div>
-          <p style="font-size:14px; color:var(--text-muted);">Your care team can see this entry. Thank you for checking in today, Marcus.</p>
-        </div>
-        <button class="btn btn-secondary" style="margin-top:20px;" data-action="navTo" data-val="screen-home">Back to Home</button>
-      </div>
-
-      <!-- Nav buttons -->
-      <div id="ci-nav-btns" style="margin-top:28px;">
-        <button class="btn btn-primary" id="ci-next-btn">Continue</button>
-        <button id="ci-back-btn" style="background:none;border:none;cursor:pointer;display:block;width:100%;text-align:center;margin-top:12px;font-size:14px;color:var(--text-muted);font-family:var(--font-ui);">Back</button>
+        <span id="cssrs-step-label" style="font-size:12px;color:var(--text-muted);white-space:nowrap;">Safety check</span>
       </div>
     </div>
+    <div id="cssrs-question-area" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;justify-content:flex-start;padding:32px 24px 120px;"></div>
+    <div id="cssrs-cta-area" style="position:absolute;bottom:0;left:0;right:0;background:var(--bg);border-top:1px solid var(--border);padding:16px 20px max(16px,env(safe-area-inset-bottom,16px));"></div>
+  </div>
+</div>
+
+<!-- ===================== SCREEN: WEEKLY ASSESSMENT ===================== -->
+<div class="screen" id="screen-weekly">
+  <div style="display:flex;flex-direction:column;height:100%;background:var(--bg);">
+    <div style="position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);padding:14px 20px 0;">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
+        <button onclick="showScreen('screen-home')" style="background:none;border:none;cursor:pointer;color:var(--accent);font-size:14px;font-weight:500;font-family:var(--font-ui);padding:4px 0;">← Back</button>
+        <div style="flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden;">
+          <div id="weekly-progress-fill" style="height:100%;background:var(--accent);border-radius:2px;transition:width 0.4s ease;width:0%;"></div>
+        </div>
+        <span id="weekly-step-label" style="font-size:12px;color:var(--text-muted);white-space:nowrap;">1 of 16</span>
+      </div>
+    </div>
+    <div id="weekly-question-area" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;justify-content:flex-start;padding:32px 24px 120px;"></div>
+    <div id="weekly-cta-area" style="position:absolute;bottom:0;left:0;right:0;background:var(--bg);border-top:1px solid var(--border);padding:16px 20px max(16px,env(safe-area-inset-bottom,16px));"></div>
   </div>
 </div>
 
@@ -1067,22 +1050,22 @@ input[type=range]::-moz-range-thumb {
     <div class="content" style="flex:1; overflow-y:auto; padding:32px 24px 120px; display:flex; flex-direction:column; gap:24px;">
       <div style="font-family:var(--font-display);font-size:26px;line-height:1.2;color:var(--text);">What's happening right now?</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        <button class="distress-type-card" data-type="craving" onclick="selectDistressType(this)">
+        <button class="distress-type-card" data-type="craving" onclick="selectDistressTypeAndAdvance(this)">
           <div style="font-size:28px;margin-bottom:8px;">🔥</div>
           <div style="font-size:14px;font-weight:600;color:var(--text);">Craving</div>
           <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Urge to use</div>
         </button>
-        <button class="distress-type-card" data-type="shutdown" onclick="selectDistressType(this)">
+        <button class="distress-type-card" data-type="shutdown" onclick="selectDistressTypeAndAdvance(this)">
           <div style="font-size:28px;margin-bottom:8px;">😶‍🌫️</div>
           <div style="font-size:14px;font-weight:600;color:var(--text);">Shutting down</div>
           <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Isolation / numb</div>
         </button>
-        <button class="distress-type-card" data-type="escalating" onclick="selectDistressType(this)">
+        <button class="distress-type-card" data-type="escalating" onclick="selectDistressTypeAndAdvance(this)">
           <div style="font-size:28px;margin-bottom:8px;">⚡</div>
           <div style="font-size:14px;font-weight:600;color:var(--text);">Escalating</div>
           <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Anger / panic</div>
         </button>
-        <button class="distress-type-card" data-type="overwhelmed" onclick="selectDistressType(this)">
+        <button class="distress-type-card" data-type="overwhelmed" onclick="selectDistressTypeAndAdvance(this)">
           <div style="font-size:28px;margin-bottom:8px;">🌀</div>
           <div style="font-size:14px;font-weight:600;color:var(--text);">Overwhelmed</div>
           <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Too much at once</div>
@@ -1090,105 +1073,89 @@ input[type=range]::-moz-range-thumb {
       </div>
     </div>
     <div style="position:absolute;bottom:0;left:0;right:0;padding:16px 20px max(20px,env(safe-area-inset-bottom,20px));background:var(--bg);border-top:1px solid var(--border);display:flex;gap:10px;">
-      <button class="btn btn-ghost" style="flex:1;" data-action="navTo" data-val="screen-home">Cancel</button>
-      <button class="btn btn-primary" style="flex:2;" onclick="showScreen('screen-distress-2')">This is what's happening →</button>
+      <button class="btn btn-ghost" style="flex:1;" onclick="showScreen('screen-home')">Cancel</button>
+      <button class="btn btn-primary" style="flex:2;" onclick="showScreen('screen-distress-rate')">Rate intensity →</button>
     </div>
   </div>
 </div>
 
-<!-- DISTRESS STEP 2 — Intensity -->
-<div class="screen hidden" id="screen-distress-2">
-  <div style="display:flex; flex-direction:column; height:100%;">
+<!-- DISTRESS RATE + PERSONAL PLAN REVEAL -->
+<div class="screen hidden" id="screen-distress-rate">
+  <div style="display:flex;flex-direction:column;height:100%;">
     <div class="screen-header">
-      <button class="back-btn" onclick="showScreen('screen-distress')">
-        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-        Back
-      </button>
-      <span class="header-title" style="font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-dim);">Help Now</span>
+      <button class="back-btn" onclick="showScreen('screen-distress')">← Back</button>
+      <span style="font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-dim);">Your Plan</span>
       <span style="width:60px;"></span>
     </div>
-    <div style="flex:1;display:flex;flex-direction:column;padding:32px 24px;gap:24px;overflow-y:auto;">
-      <div style="font-family:var(--font-display);font-size:26px;line-height:1.2;color:var(--text);">How strong is it?</div>
-      <div style="text-align:center;padding:24px 0;">
-        <div id="distress-intensity-num" style="font-family:var(--font-display);font-size:80px;line-height:1;color:var(--accent);font-variant-numeric:tabular-nums;">5</div>
-        <div id="distress-intensity-label" style="font-size:15px;color:var(--text-muted);margin-top:8px;">Noticeable but manageable</div>
+    <div style="flex:1;overflow-y:auto;padding:28px 24px 120px;display:flex;flex-direction:column;gap:24px;">
+
+      <!-- Rating -->
+      <div>
+        <div style="font-family:var(--font-display);font-size:26px;line-height:1.2;margin-bottom:6px;">Rate your distress<br>right now.</div>
+        <p style="font-size:14px;color:var(--text-muted);">1 = barely there &nbsp;·&nbsp; 10 = can't handle it</p>
       </div>
-      <input type="range" id="distress-intensity-slider" min="1" max="10" value="5" style="width:100%;accent-color:var(--accent);"
-        oninput="updateDistressIntensity(this.value)">
-      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim);margin-top:-16px;">
-        <span>Mild</span><span>Extreme</span>
+      <div style="text-align:center;padding:8px 0 4px;">
+        <div id="drate-num" style="font-family:var(--font-display);font-size:80px;font-weight:700;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums;">6</div>
+        <div style="font-size:13px;color:var(--text-muted);margin-top:4px;" id="drate-label">Moderate</div>
       </div>
+      <input type="range" id="drate-slider" min="1" max="10" value="6"
+        style="width:100%;accent-color:var(--accent);"
+        oninput="drateUpdate(this.value)">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim);margin-top:-18px;"><span>Uncomfortable</span><span>Crisis</span></div>
+
+      <!-- Personal plan reveal — updates live as slider moves -->
+      <div id="drate-plan-card" style="background:var(--bg-card);border:2px solid var(--warn);border-radius:18px;overflow:hidden;transition:border-color 0.3s;">
+        <!-- Set-by header -->
+        <div id="drate-plan-tier-header" style="background:rgba(230,126,34,0.12);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div id="drate-plan-tier-label" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:var(--warn);">Your Tier 4–7 Plan</div>
+            <div id="drate-plan-tier-range" style="font-size:13px;font-weight:600;color:var(--text);margin-top:2px;">Moderate Distress</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:10px;color:var(--text-dim);">Set by</div>
+            <div style="font-size:12px;font-weight:600;color:var(--text-muted);">Dr. Rivera</div>
+            <div style="font-size:10px;color:var(--text-dim);">Sep 5, 2026</div>
+          </div>
+        </div>
+        <div style="padding:16px 18px;display:flex;flex-direction:column;gap:0;">
+          <div id="drate-plan-description" style="font-size:13px;color:var(--text-muted);margin-bottom:14px;line-height:1.55;font-style:italic;">"Don't white-knuckle it alone."</div>
+          <div id="drate-plan-steps" style="display:flex;flex-direction:column;gap:10px;"></div>
+        </div>
+        <div style="padding:0 18px 16px;">
+          <div style="font-size:11px;color:var(--text-dim);border-top:1px solid var(--border);padding-top:12px;">You agreed to this plan on Sep 5 with Dr. Rivera. <span style="color:var(--accent);cursor:pointer;" onclick="showScreen('screen-aftercare')">View full plan →</span></div>
+        </div>
+      </div>
+
     </div>
-    <div style="position:absolute;bottom:0;left:0;right:0;padding:16px 20px max(20px,env(safe-area-inset-bottom,20px));background:var(--bg);border-top:1px solid var(--border);display:flex;gap:10px;">
-      <button class="btn btn-ghost" style="flex:1;" onclick="showScreen('screen-distress')">← Back</button>
-      <button class="btn btn-primary" style="flex:2;" onclick="showScreen('screen-distress-3')">Continue →</button>
+    <div style="position:absolute;bottom:0;left:0;right:0;background:var(--bg);border-top:1px solid var(--border);padding:14px 20px max(14px,env(safe-area-inset-bottom,14px));display:flex;flex-direction:column;gap:10px;">
+      <button class="btn btn-primary" onclick="showScreen('screen-distress-4')" style="font-size:15px;">Follow my plan →</button>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <button onclick="showScreen('screen-distress-5')" style="background:none;border:none;cursor:pointer;font-size:12px;color:var(--text-muted);font-family:var(--font-ui);">Skip — I'm okay now</button>
+        <a href="tel:988" style="font-size:12px;color:var(--danger);font-weight:600;text-decoration:none;">Crisis: 988</a>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- DISTRESS STEP 3 — Alone? -->
-<div class="screen hidden" id="screen-distress-3">
-  <div style="display:flex; flex-direction:column; height:100%;">
-    <div class="screen-header">
-      <button class="back-btn" onclick="showScreen('screen-distress-2')">
-        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-        Back
-      </button>
-      <span class="header-title" style="font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-dim);">Help Now</span>
-      <span style="width:60px;"></span>
-    </div>
-    <div style="flex:1;display:flex;flex-direction:column;padding:32px 24px;gap:24px;">
-      <div style="font-family:var(--font-display);font-size:26px;line-height:1.2;color:var(--text);">Are you alone right now?</div>
-      <div style="font-size:14px;color:var(--text-muted);">This changes what we recommend first.</div>
-      <div style="display:flex;gap:12px;">
-        <button id="btn-alone-yes" onclick="selectAlone('yes')" style="flex:1;padding:18px;background:var(--bg-card);border:2px solid var(--border);border-radius:14px;font-family:var(--font-ui);font-size:15px;font-weight:600;color:var(--text);cursor:pointer;">Yes, alone</button>
-        <button id="btn-alone-no" onclick="selectAlone('no')" style="flex:1;padding:18px;background:var(--bg-card);border:2px solid var(--border);border-radius:14px;font-family:var(--font-ui);font-size:15px;font-weight:600;color:var(--text);cursor:pointer;">No, with people</button>
-      </div>
-    </div>
-    <div style="position:absolute;bottom:0;left:0;right:0;padding:16px 20px max(20px,env(safe-area-inset-bottom,20px));background:var(--bg);border-top:1px solid var(--border);display:flex;gap:10px;">
-      <button class="btn btn-ghost" style="flex:1;" onclick="showScreen('screen-distress-2')">← Back</button>
-      <button class="btn btn-primary" style="flex:2;" onclick="showScreen('screen-distress-4')">Show me what to do →</button>
-    </div>
-  </div>
-</div>
-
-<!-- DISTRESS STEP 4 — Action -->
+<!-- DISTRESS STEP 4 — One step at a time gamified -->
 <div class="screen hidden" id="screen-distress-4">
-  <div style="display:flex; flex-direction:column; height:100%;">
-    <div class="screen-header">
-      <button class="back-btn" onclick="showScreen('screen-distress-3')">
-        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-        Back
-      </button>
-      <span class="header-title" style="font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-dim);">Your Plan</span>
-      <span style="width:60px;"></span>
+  <div style="display:flex;flex-direction:column;height:100%;position:relative;">
+    <div class="screen-header" style="flex-shrink:0;">
+      <button class="back-btn" onclick="handleDistressBack4()">← Back</button>
+      <span id="distress-plan-header-title" style="font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-dim);">Your Plan</span>
+      <span id="d4-step-counter" style="font-size:12px;color:var(--text-muted);min-width:50px;text-align:right;"></span>
     </div>
-    <div style="flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:16px;">
-      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);">Your pre-committed action</div>
-      <div style="background:var(--bg-card);border:1px solid var(--accent);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:12px;">
-        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent);">Step 1 of your plan</div>
-        <div style="font-size:19px;font-weight:600;color:var(--text);line-height:1.3;">Call your peer support specialist.</div>
-        <div style="font-size:13px;color:var(--text-muted);line-height:1.6;">You said this is what you'd do. Do it now, before anything else. Even if it goes to voicemail, make the call.</div>
-        <div style="display:flex;gap:10px;">
-          <button class="btn btn-primary" style="flex:1;">📞 Call now</button>
-          <button class="btn btn-ghost" style="flex:1;" onclick="showDistressTimer()">Set 5-min timer</button>
-        </div>
-      </div>
-      <div id="distress-timer-block" style="display:none;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center;">
-        <div id="distress-timer-display" style="font-family:var(--font-display);font-size:52px;color:var(--accent);font-variant-numeric:tabular-nums;">5:00</div>
-        <div style="font-size:13px;color:var(--text-muted);margin-top:6px;">Stay with it. Just the next 5 minutes.</div>
-        <button id="distress-timer-btn" onclick="toggleDistressTimer()" class="btn btn-ghost" style="margin-top:14px;width:100%;">Start timer</button>
-      </div>
-      <div style="background:var(--danger-glow);border:1px solid var(--danger);border-radius:14px;padding:16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;" data-action="navTo" data-val="screen-home">
-        <div>
-          <div style="font-size:14px;font-weight:600;color:var(--danger);">This is a crisis</div>
-          <div style="font-size:12px;color:var(--text-muted);">988 · 911 · Emergency line</div>
-        </div>
-        <span style="color:var(--danger);">→</span>
-      </div>
+    <div style="height:3px;background:var(--border);flex-shrink:0;">
+      <div id="d4-progress-bar" style="height:100%;background:var(--accent);transition:width 0.5s ease;width:0%;"></div>
     </div>
-    <div style="position:absolute;bottom:0;left:0;right:0;padding:16px 20px max(20px,env(safe-area-inset-bottom,20px));background:var(--bg);border-top:1px solid var(--border);">
-      <button class="btn btn-primary" style="width:100%;" onclick="showScreen('screen-distress-5')">I did it. Reassess →</button>
+    <div style="display:flex;justify-content:center;gap:8px;padding:12px 0 8px;flex-shrink:0;" id="d4-step-dots"></div>
+    <div id="d4-step-content" style="flex:1;overflow-y:auto;padding:16px 20px 140px;"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;background:var(--bg);border-top:1px solid var(--border);padding:14px 20px max(14px,env(safe-area-inset-bottom,14px));display:flex;flex-direction:column;gap:10px;">
+      <button id="d4-next-btn" onclick="advanceDistressStep()" class="btn btn-primary" style="width:100%;font-size:16px;">Next Step →</button>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <button onclick="showScreen('screen-distress-5')" style="background:none;border:none;cursor:pointer;font-size:12px;color:var(--text-muted);font-family:var(--font-ui);">Skip — I'm okay</button>
+        <a href="tel:988" style="font-size:12px;color:var(--danger);font-weight:600;text-decoration:none;">Crisis: 988</a>
+      </div>
     </div>
   </div>
 </div>
@@ -1205,7 +1172,7 @@ input[type=range]::-moz-range-thumb {
       <span style="width:60px;"></span>
     </div>
     <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:32px 24px;gap:28px;">
-      <div style="font-family:var(--font-display);font-size:26px;line-height:1.2;color:var(--text);">Where is the craving now?</div>
+      <div id="distress-reassess-label" style="font-family:var(--font-display);font-size:26px;line-height:1.2;color:var(--text);">Where is the intensity now?</div>
       <div style="display:flex;align-items:center;justify-content:center;gap:24px;">
         <div style="text-align:center;">
           <div id="distress-before-num" style="font-family:var(--font-display);font-size:52px;color:var(--text-muted);font-variant-numeric:tabular-nums;">5</div>
@@ -1233,29 +1200,230 @@ input[type=range]::-moz-range-thumb {
       <span class="logo" style="font-family:var(--font-display);font-size:20px;">EQU<span style="color:var(--accent);">A</span></span>
       <span style="width:60px;"></span>
     </div>
-    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;gap:20px;text-align:center;">
-      <div style="font-size:52px;">🌿</div>
-      <div style="font-family:var(--font-display);font-size:30px;color:var(--text);">You did it.</div>
-      <div style="font-size:15px;color:var(--text-muted);line-height:1.6;max-width:260px;">Your nervous system just did exactly what it's supposed to do.</div>
-      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;width:100%;text-align:left;">
-        <div style="font-size:11px;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;">What just happened</div>
-        <div style="font-size:13px;color:var(--text-muted);line-height:1.7;">Your biology responded. That's not willpower — that's your nervous system doing its job. This moment gets logged and shared with your care team.</div>
+    <div style="flex:1;overflow-y:auto;padding:32px 24px 40px;display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center;">
+      <!-- Win badge -->
+      <div style="width:80px;height:80px;border-radius:50%;background:var(--accent-glow);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:36px;">🌿</div>
+      <div>
+        <div style="font-family:var(--font-display);font-size:32px;color:var(--text);margin-bottom:6px;">You made it through.</div>
+        <div style="font-size:15px;color:var(--text-muted);line-height:1.6;max-width:260px;">That wasn't willpower — that was your nervous system learning. Every time you do this, the urge gets a little shorter.</div>
       </div>
-      <button class="btn btn-primary" style="width:100%;" data-action="navTo" data-val="screen-home">I'm good. Back to home →</button>
-      <button class="btn btn-ghost" style="width:100%;" onclick="showScreen('screen-distress')">I need help again</button>
-      <div style="background:var(--danger-glow);border:1px solid var(--danger);border-radius:14px;padding:16px;width:100%;display:flex;align-items:center;justify-content:space-between;">
-        <div><div style="font-size:14px;font-weight:600;color:var(--danger);">Still not safe?</div><div style="font-size:12px;color:var(--text-muted);">988 · 911 · Crisis Line</div></div>
-        <span style="color:var(--danger);">→</span>
+
+      <!-- Sobriety counter -->
+      <div style="background:var(--accent-glow);border:1px solid var(--accent);border-radius:18px;padding:20px 24px;width:100%;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin-bottom:8px;">Streak Protected</div>
+        <div style="display:flex;align-items:baseline;justify-content:center;gap:8px;">
+          <div style="font-family:var(--font-display);font-size:64px;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums;">47</div>
+          <div style="font-size:16px;color:var(--accent);font-weight:600;">days sober</div>
+        </div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">You just defended every single one of them.</div>
+      </div>
+
+      <!-- Care team notification -->
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;width:100%;text-align:left;display:flex;align-items:center;gap:14px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:var(--accent-glow);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">📋</div>
+        <div>
+          <div style="font-size:13px;font-weight:600;color:var(--text);">Your care team was notified</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Dr. Rivera can see this moment. You didn't go through it alone.</div>
+        </div>
+      </div>
+
+      <!-- Skill unlocked -->
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;width:100%;text-align:left;display:flex;align-items:center;gap:14px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:rgba(230,126,34,0.1);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">⚡</div>
+        <div>
+          <div style="font-size:13px;font-weight:600;color:var(--text);">Coping skill practiced</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Box breathing + urge surfing logged. Your brain got a little stronger today.</div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" style="width:100%;margin-top:4px;" data-action="navTo" data-val="screen-home">Back to home →</button>
+      <button style="background:none;border:none;cursor:pointer;font-size:13px;color:var(--text-muted);font-family:var(--font-ui);" onclick="showScreen('screen-distress')">I still need help</button>
+      <div style="background:var(--danger-glow);border:1px solid var(--danger);border-radius:14px;padding:14px 16px;width:100%;display:flex;align-items:center;justify-content:space-between;">
+        <div><div style="font-size:13px;font-weight:600;color:var(--danger);">Still not safe?</div><div style="font-size:12px;color:var(--text-muted);">Call 988 · Text HOME to 741741</div></div>
+        <a href="tel:988" style="color:var(--danger);font-weight:700;font-size:14px;text-decoration:none;">Call →</a>
       </div>
     </div>
   </div>
 </div>
 
-<!-- OLD distress screen removed — replaced by 6-screen guided flow above -->
-<div class="screen hidden" id="screen-distress-OLD-REMOVED" style="display:none!important;">
-  <div style="display:flex; flex-direction:column; height:100%;">
-    <div class="screen-header">
-      <span class="header-title">Removed</span>
+<!-- ===================== SCREEN: WHAT IS EQUA ===================== -->
+<div class="screen" id="screen-about">
+  <div style="display:flex;flex-direction:column;height:100%;">
+    <div class="screen-header" style="display:flex;align-items:center;justify-content:space-between;">
+      <button class="back-btn" onclick="showScreen('screen-home')">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        Back
+      </button>
+      <span class="header-title">What is EQUA?</span>
+      <span style="width:60px;"></span>
+    </div>
+    <div class="content" style="flex:1;overflow-y:auto;padding:32px 24px 48px;display:flex;flex-direction:column;gap:28px;">
+
+      <div style="text-align:center;padding:8px 0 4px;">
+        <div class="logo" style="font-size:36px;margin-bottom:6px;">EQ<span>UA</span></div>
+        <p style="font-size:14px;color:var(--text-muted);font-style:italic;">Recovery, supported in real time.</p>
+      </div>
+
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:18px;padding:24px 22px;display:flex;flex-direction:column;gap:8px;">
+        <div style="font-size:13px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--accent);">The Problem</div>
+        <p style="font-size:15px;color:var(--text);line-height:1.65;">Patients spend 3–4 hours a week in IOP or PHP — and 165 hours on their own. Critical moments happen between sessions, invisible to care teams until it's too late.</p>
+      </div>
+
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:18px;padding:24px 22px;display:flex;flex-direction:column;gap:16px;">
+        <div style="font-size:13px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--accent);">What EQUA Does</div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;gap:14px;align-items:flex-start;">
+            <div style="font-size:22px;flex-shrink:0;">✅</div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--text);">Daily Check-In</div>
+              <div style="font-size:13px;color:var(--text-muted);margin-top:2px;line-height:1.5;">Mood, sleep, cravings — validated scales (PHQ-9, AUDIT-C, GAD-7) surfaced to your team in real time.</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start;">
+            <div style="font-size:22px;flex-shrink:0;">🆘</div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--text);">Distress Check</div>
+              <div style="font-size:13px;color:var(--text-muted);margin-top:2px;line-height:1.5;">Patient flags a craving or crisis in 3 taps. Clinician sees a timestamped alert before the next session.</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start;">
+            <div style="font-size:22px;flex-shrink:0;">📈</div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--text);">Progress Tracking</div>
+              <div style="font-size:13px;color:var(--text-muted);margin-top:2px;line-height:1.5;">Days sober, session attendance, outcome scores — one view for both patient and provider.</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start;">
+            <div style="font-size:22px;flex-shrink:0;">📋</div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--text);">Aftercare Plan</div>
+              <div style="font-size:13px;color:var(--text-muted);margin-top:2px;line-height:1.5;">Goals, appointments, and medications — always in the patient's pocket, never lost in a binder.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--accent-glow);border:1px solid var(--accent);border-radius:18px;padding:22px;">
+        <div style="font-size:13px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;">Built From the Inside</div>
+        <p style="font-size:14px;color:var(--text);line-height:1.65;">EQUA was designed by a patient in IOP at Old Vineyard Behavioral Health — built on what was actually missing between sessions, not what looked good on a slide deck.</p>
+      </div>
+
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:6px;">
+        <div style="font-size:13px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--text-dim);margin-bottom:4px;">Currently a prototype</div>
+        <p style="font-size:13px;color:var(--text-muted);line-height:1.6;">This demo is the beginning of a conversation about what recovery support could look like. Your clinical input shapes what gets built next.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SCREEN: SETTINGS ===================== -->
+<div class="screen" id="screen-settings">
+  <div style="display:flex;flex-direction:column;height:100%;">
+    <div class="screen-header" style="display:flex;align-items:center;justify-content:space-between;">
+      <button class="back-btn" onclick="showScreen('screen-home')">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        Back
+      </button>
+      <span class="header-title">Settings</span>
+      <span style="width:60px;"></span>
+    </div>
+    <div class="content" style="flex:1;overflow-y:auto;padding:24px 20px 48px;display:flex;flex-direction:column;gap:8px;">
+
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);padding:8px 4px 4px;">Account</div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--border);">
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--text);">Name</div>
+            <div style="font-size:13px;color:var(--text-muted);margin-top:1px;">Patient</div>
+          </div>
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="var(--text-dim)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--border);">
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--text);">Program</div>
+            <div style="font-size:13px;color:var(--text-muted);margin-top:1px;">Old Vineyard IOP</div>
+          </div>
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="var(--text-dim)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;">
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--text);">Care Team</div>
+            <div style="font-size:13px;color:var(--text-muted);margin-top:1px;">Old Vineyard BH</div>
+          </div>
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="var(--text-dim)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+      </div>
+
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);padding:16px 4px 4px;">Notifications</div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--border);">
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--text);">Daily Check-In Reminder</div>
+            <div style="font-size:13px;color:var(--text-muted);margin-top:1px;">9:00 AM every day</div>
+          </div>
+          <div style="width:44px;height:26px;background:var(--accent);border-radius:13px;position:relative;">
+            <div style="width:20px;height:20px;background:#fff;border-radius:50%;position:absolute;top:3px;right:3px;"></div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;">
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--text);">Session Reminders</div>
+            <div style="font-size:13px;color:var(--text-muted);margin-top:1px;">1 hour before</div>
+          </div>
+          <div style="width:44px;height:26px;background:var(--accent);border-radius:13px;position:relative;">
+            <div style="width:20px;height:20px;background:#fff;border-radius:50%;position:absolute;top:3px;right:3px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);padding:16px 4px 4px;">Privacy</div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--border);">
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--text);">Share check-ins with care team</div>
+            <div style="font-size:13px;color:var(--text-muted);margin-top:1px;">Recommended — helps your team help you</div>
+          </div>
+          <div style="width:44px;height:26px;background:var(--accent);border-radius:13px;position:relative;">
+            <div style="width:20px;height:20px;background:#fff;border-radius:50%;position:absolute;top:3px;right:3px;"></div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;">
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--text);">Private journal mode</div>
+            <div style="font-size:13px;color:var(--text-muted);margin-top:1px;">Keep notes just for you</div>
+          </div>
+          <div style="width:44px;height:26px;background:var(--border);border-radius:13px;position:relative;">
+            <div style="width:20px;height:20px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);padding:16px 4px 4px;">About</div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--border);">
+          <div style="font-size:14px;font-weight:600;color:var(--text);">Version</div>
+          <div style="font-size:13px;color:var(--text-muted);">0.9 (Demo)</div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;" onclick="showScreen('screen-about')">
+          <div style="font-size:14px;font-weight:600;color:var(--text);">What is EQUA?</div>
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="var(--text-dim)" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+      </div>
+
+      <div style="margin-top:12px;">
+        <button class="btn" style="width:100%;background:var(--danger-glow);border:1px solid var(--danger);color:var(--danger);border-radius:14px;padding:15px;" data-action="navTo" data-val="screen-role">Sign Out</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- OLD distress screen fully removed -->
+<div id="screen-distress-OLD-REMOVED" style="display:none!important;">
+  <div>
+    <div>
+      <span>
     </div>
     <div class="content" style="flex:1; overflow-y:auto;">
 
@@ -1340,8 +1508,8 @@ input[type=range]::-moz-range-thumb {
               <div style="display:flex; align-items:center; gap:12px;">
                 <div style="font-size:24px;">📞</div>
                 <div>
-                  <div style="font-size:14px; font-weight:600;">Call Your Sponsor</div>
-                  <div style="font-size:12px; color:var(--text-muted);">David K. — your assigned sponsor</div>
+                  <div style="font-size:14px; font-weight:600;">Call Peer Support</div>
+                  <div style="font-size:12px; color:var(--text-muted);">Your recovery support contact</div>
                 </div>
               </div>
               <div style="background:var(--accent-glow); border:1px solid var(--accent); border-radius:8px; padding:5px 10px; font-size:12px; font-weight:600; color:var(--accent);">Call</div>
@@ -1441,6 +1609,65 @@ input[type=range]::-moz-range-thumb {
         </div>
       </div>
 
+      <!-- MY CRISIS PLAN — Pre-loaded by Dr. Rivera before discharge -->
+      <div style="border-radius:18px;overflow:hidden;border:2px solid var(--accent);background:var(--bg-card);margin-bottom:0;">
+        <!-- Header badge -->
+        <div style="background:linear-gradient(135deg,rgba(88,86,214,0.18) 0%,rgba(88,86,214,0.06) 100%);padding:16px 20px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
+          <div>
+            <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:var(--accent);margin-bottom:4px;">My Distress Plan</div>
+            <div style="font-size:17px;font-weight:700;color:var(--text);line-height:1.2;">Built with Dr. Rivera</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:3px;">Sep 5, 2026 · before discharge</div>
+          </div>
+          <div style="background:var(--accent);color:#fff;border-radius:10px;padding:4px 10px;font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0;">Pre-loaded ✓</div>
+        </div>
+        <div style="padding:14px 20px 4px;font-size:13px;color:var(--text-muted);font-style:italic;line-height:1.55;border-bottom:1px solid var(--border);">"We wrote this together in your last IOP session. These are your words. Read this before things get hard." — Dr. Rivera</div>
+
+        <!-- Tier 1 -->
+        <div style="padding:16px 20px;border-bottom:1px solid var(--border);">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <div style="width:10px;height:10px;border-radius:50%;background:var(--safe);flex-shrink:0;"></div>
+            <div style="font-size:12px;font-weight:700;color:var(--safe);text-transform:uppercase;letter-spacing:0.5px;">1–3 · Low Distress</div>
+          </div>
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">Uncomfortable but manageable. Stay in your routine.</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;"><span>🎧</span><span>Put on music — something that shifts the vibe, not amplifies it</span></div>
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;"><span>🚶</span><span>Walk outside for 10 minutes, no destination</span></div>
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;"><span>📓</span><span>Write 3 sentences in your journal about what's bothering you</span></div>
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;"><span>💊</span><span>Take your Naltrexone if you haven't yet today</span></div>
+          </div>
+        </div>
+
+        <!-- Tier 2 -->
+        <div style="padding:16px 20px;border-bottom:1px solid var(--border);">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <div style="width:10px;height:10px;border-radius:50%;background:var(--warn);flex-shrink:0;"></div>
+            <div style="font-size:12px;font-weight:700;color:var(--warn);text-transform:uppercase;letter-spacing:0.5px;">4–7 · Moderate Distress</div>
+          </div>
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">This is the zone where the plan really matters. Don't white-knuckle it alone.</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;"><span>📞</span><span>Reach out to your peer support contact — even saying "I'm struggling" out loud helps</span></div>
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;"><span>🫁</span><span>Do 4-7-8 breathing for 4 full cycles before anything else</span></div>
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;"><span>❄️</span><span>Hold cold water on your wrists for 60 seconds — Dr. Rivera's #1 for you</span></div>
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;"><span>📱</span><span>Text Dr. Rivera if it doesn't drop below a 4 within 20 minutes</span></div>
+          </div>
+        </div>
+
+        <!-- Tier 3 -->
+        <div style="padding:16px 20px 20px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <div style="width:10px;height:10px;border-radius:50%;background:var(--danger);flex-shrink:0;"></div>
+            <div style="font-size:12px;font-weight:700;color:var(--danger);text-transform:uppercase;letter-spacing:0.5px;">7–10 · High Crisis</div>
+          </div>
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">Do not be alone. This is what the plan is for.</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;"><span>📞</span><span>Call your peer support contact or a trusted person — do not be alone right now</span></div>
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;"><span>🏥</span><span>Call Old Vineyard crisis line: (336) 794-3550</span></div>
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;"><span>🆘</span><span>If you feel unsafe: call 988 or go to the nearest ER</span></div>
+            <div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;"><span>🚗</span><span>Do not drive. Call someone to come be with you.</span></div>
+          </div>
+        </div>
+      </div>
+
       <div class="card">
         <div class="section-label" style="margin-bottom:14px;">Goals This Week</div>
         <div id="goals-list">
@@ -1454,7 +1681,7 @@ input[type=range]::-moz-range-thumb {
             <div class="goal-cb" data-goal="1">
               <svg width="12" height="12" fill="none" viewBox="0 0 12 12" stroke="white" stroke-width="2" style="display:none;"><path d="M2 6l3 3 5-5"/></svg>
             </div>
-            <span style="font-size:14px;">Call sponsor at least twice</span>
+            <span style="font-size:14px;">Connect with peer support at least twice</span>
           </div>
           <div class="goal-item">
             <div class="goal-cb" data-goal="2">
@@ -1512,122 +1739,256 @@ input[type=range]::-moz-range-thumb {
 
 <!-- ===================== SCREEN 8: CLINICIAN HOME ===================== -->
 <div class="screen" id="screen-clinician-home">
-  <div style="display:flex; flex-direction:column; height:100%;">
+  <div style="display:flex;flex-direction:column;height:100%;">
+
     <!-- Header -->
-    <div class="screen-header">
-      <span class="logo">EQ<span style="color:var(--accent)">UA</span></span>
-      <div style="display:flex; align-items:center; gap:8px;">
-        <span class="badge badge-clinical">Clinical View</span>
-        <button style="background:none;border:none;cursor:pointer;color:var(--text-muted);" data-action="navTo" data-val="screen-role" title="Lock & Exit">🔒</button>
+    <div class="screen-header" style="flex-direction:column;align-items:stretch;padding-bottom:0;gap:0;">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px 10px;">
+        <div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:0.6px;color:var(--text-dim);text-transform:uppercase;">Clinical View</div>
+          <div style="font-size:15px;font-weight:700;color:var(--text);">Dr. Rivera, LCSW</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:1px;">Old Vineyard · IOP · Wed Sep 23</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="background:rgba(39,174,96,0.12);border:1px solid var(--safe);border-radius:20px;padding:4px 10px;font-size:11px;font-weight:700;color:var(--safe);">● Live</div>
+          <button style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:18px;line-height:1;" data-action="navTo" data-val="screen-role" title="Lock">🔒</button>
+        </div>
+      </div>
+
+      <!-- Day-at-a-glance stat chips -->
+      <div style="display:flex;gap:8px;padding:0 18px 14px;overflow-x:auto;">
+        <button onclick="clinAccordionOpen('section-attention')" style="flex-shrink:0;display:flex;align-items:center;gap:6px;background:rgba(231,76,60,0.1);border:1.5px solid var(--danger);border-radius:20px;padding:6px 14px;cursor:pointer;font-family:var(--font-ui);">
+          <span style="font-size:11px;font-weight:700;color:var(--danger);">⚡ 2 Need Attention</span>
+        </button>
+        <button onclick="clinAccordionOpen('section-flags')" style="flex-shrink:0;display:flex;align-items:center;gap:6px;background:rgba(230,126,34,0.1);border:1.5px solid var(--warn);border-radius:20px;padding:6px 14px;cursor:pointer;font-family:var(--font-ui);">
+          <span style="font-size:11px;font-weight:700;color:var(--warn);">⚠️ 3 Care Flags</span>
+        </button>
+        <button onclick="clinAccordionOpen('section-roster')" style="flex-shrink:0;display:flex;align-items:center;gap:6px;background:var(--accent-glow);border:1.5px solid var(--accent);border-radius:20px;padding:6px 14px;cursor:pointer;font-family:var(--font-ui);">
+          <span style="font-size:11px;font-weight:700;color:var(--accent);">👥 5 Patients</span>
+        </button>
       </div>
     </div>
 
-    <div class="content" style="flex:1; overflow-y:auto; padding-bottom:32px;">
+    <div style="flex:1;overflow-y:auto;padding:0 0 80px;">
 
-      <!-- Needs Attention -->
-      <div class="card" style="border-color:var(--danger); border-left:3px solid var(--danger);">
-        <div style="display:flex; align-items:center; gap:8px; margin-bottom:14px;">
-          <span style="font-size:16px;">⚡</span>
-          <div>
-            <div style="font-size:14px; font-weight:700; color:var(--danger);">Needs Attention Today</div>
-            <div style="font-size:12px; color:var(--text-muted);">Before your morning group</div>
-          </div>
-        </div>
-        <div style="display:flex; flex-direction:column; gap:10px;">
-          <div style="display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--border);">
-            <div class="avatar" style="background:#C0392B; font-size:13px;">MR</div>
-            <div style="flex:1; min-width:0;">
-              <div style="font-size:14px; font-weight:600;">Marcus R.</div>
-              <div style="font-size:12px; color:var(--text-muted);">Distress 8/10 — Craving episode</div>
+      <!-- ── ACCORDION: Needs Attention ── -->
+      <div id="section-attention" style="border-bottom:1px solid var(--border);">
+        <button onclick="toggleClinSection('section-attention')" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;background:none;border:none;cursor:pointer;font-family:var(--font-ui);text-align:left;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:3px;height:28px;background:var(--danger);border-radius:2px;flex-shrink:0;"></div>
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--danger);">Needs Attention</div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:1px;">Before your morning group session</div>
             </div>
-            <button class="chip chip-danger" data-action="navTo" data-val="screen-patient-detail">Review</button>
           </div>
-          <div style="display:flex; align-items:center; gap:12px; padding-top:2px;">
-            <div class="avatar" style="background:#8B4513; font-size:13px;">JT</div>
-            <div style="flex:1; min-width:0;">
-              <div style="font-size:14px; font-weight:600;">James T.</div>
-              <div style="font-size:12px; color:var(--text-muted);">AUDIT-C ↑ rising — 5h no check-in</div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="background:var(--danger);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;">2</span>
+            <svg id="chev-section-attention" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="var(--text-muted)" stroke-width="2" style="transition:transform 0.25s;transform:rotate(180deg);flex-shrink:0;"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+        </button>
+        <div id="body-section-attention" style="padding:0 18px 16px;display:flex;flex-direction:column;gap:10px;">
+
+          <!-- Marcus attention card -->
+          <div style="background:var(--bg-card);border:1.5px solid var(--danger);border-radius:16px;overflow:hidden;">
+            <div style="background:rgba(231,76,60,0.07);padding:12px 14px;display:flex;align-items:center;gap:12px;">
+              <div class="avatar" style="background:#C0392B;font-size:13px;width:38px;height:38px;flex-shrink:0;">MR</div>
+              <div style="flex:1;min-width:0;">
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <span style="font-size:14px;font-weight:700;color:var(--text);">Marcus R.</span>
+                  <span style="background:var(--danger);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;">High Risk</span>
+                </div>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Distress 8/10 · Craving episode · 20 min ago</div>
+              </div>
             </div>
-            <button class="chip chip-danger" data-action="navTo" data-val="screen-patient-detail">Review</button>
+            <div style="padding:10px 14px;display:flex;gap:8px;">
+              <button onclick="showScreen('screen-patient-detail')" style="flex:1;padding:8px;border-radius:10px;border:none;background:var(--danger);color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-ui);">Review Now</button>
+              <button onclick="showScreen('screen-plan-editor')" style="flex:1;padding:8px;border-radius:10px;border:1.5px solid var(--accent);background:none;color:var(--accent);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-ui);">Crisis Plan</button>
+            </div>
           </div>
+
+          <!-- James attention card -->
+          <div style="background:var(--bg-card);border:1.5px solid var(--warn);border-radius:16px;overflow:hidden;">
+            <div style="background:rgba(230,126,34,0.07);padding:12px 14px;display:flex;align-items:center;gap:12px;">
+              <div class="avatar" style="background:#8B4513;font-size:13px;width:38px;height:38px;flex-shrink:0;">JT</div>
+              <div style="flex:1;min-width:0;">
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <span style="font-size:14px;font-weight:700;color:var(--text);">Jordan T.</span>
+                  <span style="background:var(--warn);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;">Rising Risk</span>
+                </div>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">AUDIT-C rising · 5h since last check-in</div>
+              </div>
+            </div>
+            <div style="padding:10px 14px;display:flex;gap:8px;">
+              <button onclick="showScreen('screen-patient-detail')" style="flex:1;padding:8px;border-radius:10px;border:none;background:var(--warn);color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-ui);">Review Now</button>
+              <button style="flex:1;padding:8px;border-radius:10px;border:1.5px solid var(--border);background:none;color:var(--text-muted);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-ui);">Send Nudge</button>
+            </div>
+          </div>
+
         </div>
       </div>
 
-      <!-- Patient Roster -->
-      <div>
-        <div class="section-label" style="margin-bottom:10px;">Patient Roster</div>
-        <div class="filter-row" style="margin-bottom:12px;">
-          <span class="chip active" data-filter="all">All</span>
-          <span class="chip" data-filter="high">High Risk</span>
-          <span class="chip" data-filter="engaged">Engaged</span>
-          <span class="chip" data-filter="monitor">Monitor</span>
-          <span class="chip" data-filter="disengaged">Disengaged</span>
-        </div>
-        <div id="patient-roster" style="display:flex; flex-direction:column; gap:10px;">
-          <!-- Populated by JS -->
-        </div>
-      </div>
-
-      <!-- Care Flags -->
-      <div>
-        <div class="section-label" style="margin-bottom:10px;">Care Flags</div>
-        <div id="care-flags-list" style="display:flex; flex-direction:column; gap:8px;">
-          <div style="text-align:center; padding:20px; color:var(--text-muted); font-size:14px;">Loading...</div>
-        </div>
-      </div>
-
-      <!-- Outcomes Chart -->
-      <div>
-        <div class="section-label" style="margin-bottom:10px;">PHQ-9 Outcomes — 4-Week View</div>
-        <div class="card" style="padding:16px;">
-          <svg viewBox="0 0 320 160" style="width:100%;display:block;" aria-label="PHQ-9 outcomes for 3 patients">
-            <!-- Grid -->
-            <line x1="45" y1="10" x2="45" y2="120" stroke="var(--border)" stroke-width="1"/>
-            <line x1="45" y1="120" x2="300" y2="120" stroke="var(--border)" stroke-width="1"/>
-            <line x1="45" y1="10" x2="300" y2="10" stroke="var(--border)" stroke-width="0.5" stroke-dasharray="3 3"/>
-            <line x1="45" y1="65" x2="300" y2="65" stroke="var(--border)" stroke-width="0.5" stroke-dasharray="3 3"/>
-            <!-- Y labels: 0-27, chart 10-120 so range=110px, 27 units → 4.07px/unit -->
-            <text x="40" y="14" fill="var(--text-dim)" font-size="8" text-anchor="end" font-family="DM Sans,sans-serif">27</text>
-            <text x="40" y="69" fill="var(--text-dim)" font-size="8" text-anchor="end" font-family="DM Sans,sans-serif">14</text>
-            <text x="40" y="124" fill="var(--text-dim)" font-size="8" text-anchor="end" font-family="DM Sans,sans-serif">0</text>
-            <!-- X labels -->
-            <text x="95" y="134" fill="var(--text-dim)" font-size="8" text-anchor="middle" font-family="DM Sans,sans-serif">Week 1</text>
-            <text x="155" y="134" fill="var(--text-dim)" font-size="8" text-anchor="middle" font-family="DM Sans,sans-serif">Week 2</text>
-            <text x="215" y="134" fill="var(--text-dim)" font-size="8" text-anchor="middle" font-family="DM Sans,sans-serif">Week 3</text>
-            <text x="275" y="134" fill="var(--text-dim)" font-size="8" text-anchor="middle" font-family="DM Sans,sans-serif">Week 4</text>
-            <!-- y = 120 - (score/27)*110 -->
-            <!-- Marcus: 18→46.7, 16→54.8, 14→63, 12→71.1 -->
-            <polyline points="95,46.7 155,54.8 215,63 275,71.1" fill="none" stroke="#E67E22" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="95" cy="46.7" r="3.5" fill="#E67E22"/><circle cx="155" cy="54.8" r="3.5" fill="#E67E22"/>
-            <circle cx="215" cy="63" r="3.5" fill="#E67E22"/><circle cx="275" cy="71.1" r="4" fill="#E67E22" stroke="var(--bg-card)" stroke-width="1.5"/>
-            <!-- Sarah: 18→46.7, 18→46.7, 17→50.7, 16→54.8 -->
-            <polyline points="95,46.7 155,46.7 215,50.7 275,54.8" fill="none" stroke="var(--safe)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="95" cy="46.7" r="3.5" fill="var(--safe)"/><circle cx="155" cy="46.7" r="3.5" fill="var(--safe)"/>
-            <circle cx="215" cy="50.7" r="3.5" fill="var(--safe)"/><circle cx="275" cy="54.8" r="4" fill="var(--safe)" stroke="var(--bg-card)" stroke-width="1.5"/>
-            <!-- James: 8→87.4, 10→79.3, 12→71.1, 14→63 -->
-            <polyline points="95,87.4 155,79.3 215,71.1 275,63" fill="none" stroke="var(--danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 3"/>
-            <circle cx="95" cy="87.4" r="3.5" fill="var(--danger)"/><circle cx="155" cy="79.3" r="3.5" fill="var(--danger)"/>
-            <circle cx="215" cy="71.1" r="3.5" fill="var(--danger)"/><circle cx="275" cy="63" r="4" fill="var(--danger)" stroke="var(--bg-card)" stroke-width="1.5"/>
-          </svg>
-          <!-- Legend -->
-          <div style="display:flex; gap:16px; justify-content:center; margin-top:10px;">
-            <div style="display:flex; align-items:center; gap:5px; font-size:11px; color:var(--text-muted);">
-              <div style="width:14px;height:2px;background:#E67E22;border-radius:1px;"></div>Marcus
+      <!-- ── ACCORDION: Care Flags ── -->
+      <div id="section-flags" style="border-bottom:1px solid var(--border);">
+        <button onclick="toggleClinSection('section-flags')" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;background:none;border:none;cursor:pointer;font-family:var(--font-ui);text-align:left;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:3px;height:28px;background:var(--warn);border-radius:2px;flex-shrink:0;"></div>
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--warn);">Care Flags</div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:1px;">Clinical alerts from assessments &amp; check-ins</div>
             </div>
-            <div style="display:flex; align-items:center; gap:5px; font-size:11px; color:var(--text-muted);">
-              <div style="width:14px;height:2px;background:var(--safe);border-radius:1px;"></div>Sarah
-            </div>
-            <div style="display:flex; align-items:center; gap:5px; font-size:11px; color:var(--text-muted);">
-              <div style="width:14px;height:2px;background:var(--danger);border-radius:1px; border-top:1px dashed var(--danger);"></div>James
-            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="background:var(--warn);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;">5</span>
+            <svg id="chev-section-flags" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="var(--text-muted)" stroke-width="2" style="transition:transform 0.25s;flex-shrink:0;"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+        </button>
+        <div id="body-section-flags" style="padding:0 18px 16px;display:none;flex-direction:column;gap:8px;">
+          <div id="care-flags-list" style="display:flex;flex-direction:column;gap:8px;">
+            <div style="text-align:center;padding:16px;color:var(--text-muted);font-size:13px;">Loading…</div>
           </div>
         </div>
       </div>
 
-      <!-- Lock button -->
-      <button class="btn btn-secondary" data-action="navTo" data-val="screen-role" style="margin-top:4px;">
-        🔒 Lock &amp; Exit
-      </button>
+      <!-- ── ACCORDION: Patient Roster ── -->
+      <div id="section-roster" style="border-bottom:1px solid var(--border);">
+        <button onclick="toggleClinSection('section-roster')" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;background:none;border:none;cursor:pointer;font-family:var(--font-ui);text-align:left;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:3px;height:28px;background:var(--accent);border-radius:2px;flex-shrink:0;"></div>
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--text);">Patient Roster</div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:1px;">5 active · tap any patient to open their chart</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="background:var(--accent);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;">5</span>
+            <svg id="chev-section-roster" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="var(--text-muted)" stroke-width="2" style="transition:transform 0.25s;flex-shrink:0;"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+        </button>
+        <div id="body-section-roster" style="padding:0 18px 16px;display:none;flex-direction:column;gap:8px;">
+          <!-- Filter chips -->
+          <div class="filter-row" style="margin-bottom:4px;">
+            <span class="chip active" data-filter="all">All</span>
+            <span class="chip" data-filter="high">High Risk</span>
+            <span class="chip" data-filter="engaged">Engaged</span>
+            <span class="chip" data-filter="monitor">Monitor</span>
+          </div>
+          <div id="patient-roster" style="display:flex;flex-direction:column;gap:8px;"></div>
+        </div>
+      </div>
+
+      <!-- ── ACCORDION: Outcome Tracking ── -->
+      <div id="section-outcomes" style="border-bottom:1px solid var(--border);">
+        <button onclick="toggleClinSection('section-outcomes')" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;background:none;border:none;cursor:pointer;font-family:var(--font-ui);text-align:left;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:3px;height:28px;background:#8B5CF6;border-radius:2px;flex-shrink:0;"></div>
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--text);">Outcome Tracking</div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:1px;">PHQ-9 trends · 4-week rolling view</div>
+            </div>
+          </div>
+          <svg id="chev-section-outcomes" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="var(--text-muted)" stroke-width="2" style="transition:transform 0.25s;flex-shrink:0;"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div id="body-section-outcomes" style="padding:0 18px 16px;display:none;">
+          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:16px;">
+            <svg viewBox="0 0 320 160" style="width:100%;display:block;" aria-label="PHQ-9 outcomes">
+              <line x1="45" y1="10" x2="45" y2="120" stroke="var(--border)" stroke-width="1"/>
+              <line x1="45" y1="120" x2="300" y2="120" stroke="var(--border)" stroke-width="1"/>
+              <line x1="45" y1="10" x2="300" y2="10" stroke="var(--border)" stroke-width="0.5" stroke-dasharray="3 3"/>
+              <line x1="45" y1="65" x2="300" y2="65" stroke="var(--border)" stroke-width="0.5" stroke-dasharray="3 3"/>
+              <text x="40" y="14" fill="var(--text-dim)" font-size="8" text-anchor="end" font-family="DM Sans,sans-serif">27</text>
+              <text x="40" y="69" fill="var(--text-dim)" font-size="8" text-anchor="end" font-family="DM Sans,sans-serif">14</text>
+              <text x="40" y="124" fill="var(--text-dim)" font-size="8" text-anchor="end" font-family="DM Sans,sans-serif">0</text>
+              <text x="95" y="134" fill="var(--text-dim)" font-size="8" text-anchor="middle" font-family="DM Sans,sans-serif">Wk 1</text>
+              <text x="155" y="134" fill="var(--text-dim)" font-size="8" text-anchor="middle" font-family="DM Sans,sans-serif">Wk 2</text>
+              <text x="215" y="134" fill="var(--text-dim)" font-size="8" text-anchor="middle" font-family="DM Sans,sans-serif">Wk 3</text>
+              <text x="275" y="134" fill="var(--text-dim)" font-size="8" text-anchor="middle" font-family="DM Sans,sans-serif">Wk 4</text>
+              <polyline points="95,46.7 155,54.8 215,63 275,71.1" fill="none" stroke="#E67E22" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="275" cy="71.1" r="4" fill="#E67E22" stroke="var(--bg-card)" stroke-width="2"/>
+              <polyline points="95,46.7 155,46.7 215,50.7 275,54.8" fill="none" stroke="var(--safe)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="275" cy="54.8" r="4" fill="var(--safe)" stroke="var(--bg-card)" stroke-width="2"/>
+              <polyline points="95,87.4 155,79.3 215,71.1 275,63" fill="none" stroke="var(--danger)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 3"/>
+              <circle cx="275" cy="63" r="4" fill="var(--danger)" stroke="var(--bg-card)" stroke-width="2"/>
+            </svg>
+            <div style="display:flex;gap:16px;justify-content:center;margin-top:12px;">
+              <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-muted);"><div style="width:14px;height:3px;background:#E67E22;border-radius:2px;"></div>Marcus R.</div>
+              <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-muted);"><div style="width:14px;height:3px;background:var(--safe);border-radius:2px;"></div>Sarah M.</div>
+              <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-muted);"><div style="width:14px;height:3px;background:var(--danger);border-radius:2px;border-top:1px dashed var(--danger);"></div>Jordan T.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ACCORDION: Care Plans ── -->
+      <div id="section-plans" style="border-bottom:1px solid var(--border);">
+        <button onclick="toggleClinSection('section-plans')" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;background:none;border:none;cursor:pointer;font-family:var(--font-ui);text-align:left;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:3px;height:28px;background:var(--safe);border-radius:2px;flex-shrink:0;"></div>
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--text);">Distress Plans</div>
+              <div style="font-size:11px;color:var(--text-muted);margin-top:1px;">Per-patient crisis plan status</div>
+            </div>
+          </div>
+          <svg id="chev-section-plans" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="var(--text-muted)" stroke-width="2" style="transition:transform 0.25s;flex-shrink:0;"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div id="body-section-plans" style="padding:0 18px 16px;display:none;flex-direction:column;gap:8px;">
+          <div style="background:var(--bg-card);border:1.5px solid var(--safe);border-radius:14px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="avatar" style="background:#C0392B;font-size:12px;width:34px;height:34px;">MR</div>
+              <div>
+                <div style="font-size:13px;font-weight:700;color:var(--text);">Marcus R.</div>
+                <div style="font-size:11px;color:var(--safe);font-weight:600;">✓ Active plan · Sep 5</div>
+              </div>
+            </div>
+            <button onclick="showScreen('screen-plan-editor')" style="padding:6px 12px;border-radius:8px;border:1.5px solid var(--accent);background:none;color:var(--accent);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-ui);">Edit Plan</button>
+          </div>
+          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;opacity:0.7;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="avatar" style="background:#8E44AD;font-size:12px;width:34px;height:34px;">SM</div>
+              <div>
+                <div style="font-size:13px;font-weight:700;color:var(--text);">Sarah M.</div>
+                <div style="font-size:11px;color:var(--text-dim);">No plan set</div>
+              </div>
+            </div>
+            <button style="padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--text-muted);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-ui);">+ Create</button>
+          </div>
+          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;opacity:0.7;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="avatar" style="background:#8B4513;font-size:12px;width:34px;height:34px;">JT</div>
+              <div>
+                <div style="font-size:13px;font-weight:700;color:var(--text);">Jordan T.</div>
+                <div style="font-size:11px;color:var(--text-dim);">No plan set</div>
+              </div>
+            </div>
+            <button style="padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--text-muted);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-ui);">+ Create</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── About This View (info strip) ── -->
+      <div style="padding:16px 18px;">
+        <button onclick="toggleClinInfo()" style="width:100%;display:flex;align-items:center;gap:8px;background:none;border:none;cursor:pointer;font-family:var(--font-ui);text-align:left;padding:0;">
+          <span style="font-size:13px;color:var(--text-dim);">＊</span>
+          <span style="font-size:12px;color:var(--text-dim);font-weight:600;">About this clinical view</span>
+          <svg id="chev-clin-info" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="var(--text-dim)" stroke-width="2" style="transition:transform 0.25s;margin-left:auto;"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div id="clin-info-body" style="display:none;margin-top:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:16px;font-size:13px;color:var(--text-muted);line-height:1.65;">
+          <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px;">What you can do in Equa's Clinical View</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div>📋 <strong style="color:var(--text);">Track outcomes</strong> — PHQ-9, GAD-7, AUDIT-C, and C-SSRS scores populate automatically as patients complete check-ins.</div>
+            <div>⚡ <strong style="color:var(--text);">Real-time alerts</strong> — Care flags surface the moment a patient's distress score or instrument score crosses a clinical threshold.</div>
+            <div>🗂 <strong style="color:var(--text);">Distress plans</strong> — Pre-load a personalized 3-tier crisis plan for any patient. They see it in their app the moment they rate distress.</div>
+            <div>📲 <strong style="color:var(--text);">Push updates</strong> — Edit a patient's plan anytime and push it live to their app without them needing to do anything.</div>
+            <div>👁 <strong style="color:var(--text);">360° patient view</strong> — Tap any patient to see their full chart: check-in history, assessment scores, distress ratings, and plan status.</div>
+          </div>
+          <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:11px;color:var(--text-dim);">All data is HIPAA-compliant. Equa does not store PHI without a signed BAA. · Old Vineyard Behavioral Health · Equa v1.0 Beta</div>
+        </div>
+      </div>
+
+      <!-- Lock -->
+      <div style="padding:0 18px 24px;">
+        <button class="btn btn-secondary" data-action="navTo" data-val="screen-role" style="width:100%;">🔒 Lock &amp; Exit</button>
+      </div>
+
     </div>
   </div>
 </div>
@@ -1723,6 +2084,39 @@ input[type=range]::-moz-range-thumb {
         </div>
       </div>
 
+      <!-- Crisis Plan Status -->
+      <div>
+        <div class="section-label">Distress Plan</div>
+        <div style="background:var(--bg-card);border:1.5px solid var(--safe);border-radius:16px;overflow:hidden;">
+          <div style="background:rgba(39,174,96,0.09);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--safe);margin-bottom:3px;">✓ Plan Pre-loaded</div>
+              <div style="font-size:14px;font-weight:700;color:var(--text);">Personal Crisis Plan</div>
+              <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Set Sep 5, 2026 · Dr. Rivera, LCSW</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:10px;color:var(--text-dim);">Awaiting in app</div>
+              <div style="font-size:12px;color:var(--safe);font-weight:600;">Active ✓</div>
+            </div>
+          </div>
+          <div style="padding:12px 18px;display:flex;flex-direction:column;gap:6px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;">
+              <span style="color:var(--text-muted);">🟢 Tier 1–3 (Low)</span><span style="color:var(--text-dim);">4 steps · music, walk, journal, Naltrexone</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;">
+              <span style="color:var(--text-muted);">🟡 Tier 4–7 (Moderate)</span><span style="color:var(--text-dim);">4 steps · peer support, breathing, cold water</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;">
+              <span style="color:var(--text-muted);">🔴 Tier 7–10 (Crisis)</span><span style="color:var(--text-dim);">4 steps · peer contact, OVBH, 988</span>
+            </div>
+          </div>
+          <div style="padding:0 18px 14px;display:flex;gap:8px;">
+            <button onclick="showScreen('screen-plan-editor')" style="flex:1;padding:8px;border-radius:10px;border:1.5px solid var(--accent);background:none;color:var(--accent);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-ui);">✏️ Edit Plan</button>
+            <button onclick="clinicianPushPlan(this)" style="flex:1;padding:8px;border-radius:10px;border:none;background:var(--accent);color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-ui);">📲 Push to Patient</button>
+          </div>
+        </div>
+      </div>
+
       <!-- Clinical Note -->
       <div>
         <div class="section-label">Clinical Note</div>
@@ -1742,6 +2136,107 @@ input[type=range]::-moz-range-thumb {
   </div>
 </div>
 
+<!-- ===================== SCREEN: PLAN EDITOR ===================== -->
+<div class="screen hidden" id="screen-plan-editor">
+  <div style="display:flex;flex-direction:column;height:100%;">
+    <div class="screen-header">
+      <button class="back-btn" onclick="showScreen('screen-patient-detail')">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        Back
+      </button>
+      <span class="header-title" style="font-size:13px;">Crisis Plan · Marcus R.</span>
+      <button onclick="savePlanChanges(this)" style="background:none;border:none;cursor:pointer;font-size:12px;font-weight:700;color:var(--accent);font-family:var(--font-ui);padding:0 4px;">Save</button>
+    </div>
+
+    <div style="flex:1;overflow-y:auto;padding:16px 18px 120px;display:flex;flex-direction:column;gap:18px;">
+
+      <!-- Plan meta header -->
+      <div style="background:var(--accent-glow);border:1px solid var(--accent);border-radius:14px;padding:14px 16px;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:var(--accent);margin-bottom:4px;">Patient Distress Plan</div>
+        <div style="font-size:14px;font-weight:700;color:var(--text);">Marcus R. · IOP at Old Vineyard</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Authored by Dr. Rivera, LCSW · Sep 5, 2026 · Pre-discharge</div>
+        <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;">
+          <span style="background:rgba(39,174,96,0.15);border:1px solid var(--safe);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700;color:var(--safe);">🟢 Tier 1–3 Active</span>
+          <span style="background:rgba(230,126,34,0.12);border:1px solid var(--warn);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700;color:var(--warn);">🟡 Tier 4–7 Active</span>
+          <span style="background:rgba(231,76,60,0.1);border:1px solid var(--danger);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700;color:var(--danger);">🔴 Tier 7–10 Active</span>
+        </div>
+      </div>
+
+      <!-- Tier 1 editor -->
+      <div id="plan-tier-0-card" style="border:2px solid var(--safe);border-radius:16px;overflow:hidden;">
+        <div style="background:rgba(39,174,96,0.1);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="togglePlanTier(0)">
+          <div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--safe);">Tier 1 · Low Distress</div>
+            <div style="font-size:13px;font-weight:600;color:var(--text);margin-top:2px;">Rating 1–3</div>
+          </div>
+          <svg id="plan-chevron-0" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="var(--safe)" stroke-width="2" style="transition:transform 0.2s;transform:rotate(180deg)"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div id="plan-tier-0-body" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px;">
+          <div style="font-size:11px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Clinician Note to Patient</div>
+          <textarea id="plan-tier-0-desc" style="min-height:64px;font-size:13px;line-height:1.55;" placeholder="Message shown at top of this tier..."></textarea>
+          <div style="font-size:11px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-top:4px;">Steps (one per line)</div>
+          <textarea id="plan-tier-0-steps" style="min-height:120px;font-size:13px;line-height:1.65;" placeholder="Step 1&#10;Step 2&#10;Step 3&#10;Step 4"></textarea>
+        </div>
+      </div>
+
+      <!-- Tier 2 editor -->
+      <div id="plan-tier-1-card" style="border:2px solid var(--warn);border-radius:16px;overflow:hidden;">
+        <div style="background:rgba(230,126,34,0.1);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="togglePlanTier(1)">
+          <div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--warn);">Tier 2 · Moderate Distress</div>
+            <div style="font-size:13px;font-weight:600;color:var(--text);margin-top:2px;">Rating 4–7</div>
+          </div>
+          <svg id="plan-chevron-1" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="var(--warn)" stroke-width="2" style="transition:transform 0.2s;transform:rotate(180deg)"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div id="plan-tier-1-body" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px;">
+          <div style="font-size:11px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Clinician Note to Patient</div>
+          <textarea id="plan-tier-1-desc" style="min-height:64px;font-size:13px;line-height:1.55;" placeholder="Message shown at top of this tier..."></textarea>
+          <div style="font-size:11px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-top:4px;">Steps (one per line)</div>
+          <textarea id="plan-tier-1-steps" style="min-height:120px;font-size:13px;line-height:1.65;" placeholder="Step 1&#10;Step 2&#10;Step 3&#10;Step 4"></textarea>
+        </div>
+      </div>
+
+      <!-- Tier 3 editor -->
+      <div id="plan-tier-2-card" style="border:2px solid var(--danger);border-radius:16px;overflow:hidden;">
+        <div style="background:rgba(231,76,60,0.08);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;" onclick="togglePlanTier(2)">
+          <div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--danger);">Tier 3 · Crisis</div>
+            <div style="font-size:13px;font-weight:600;color:var(--text);margin-top:2px;">Rating 7–10</div>
+          </div>
+          <svg id="plan-chevron-2" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="var(--danger)" stroke-width="2" style="transition:transform 0.2s;transform:rotate(180deg)"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div id="plan-tier-2-body" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px;">
+          <div style="font-size:11px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Clinician Note to Patient</div>
+          <textarea id="plan-tier-2-desc" style="min-height:64px;font-size:13px;line-height:1.55;" placeholder="Message shown at top of this tier..."></textarea>
+          <div style="font-size:11px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-top:4px;">Steps (one per line)</div>
+          <textarea id="plan-tier-2-steps" style="min-height:120px;font-size:13px;line-height:1.65;" placeholder="Step 1&#10;Step 2&#10;Step 3&#10;Step 4"></textarea>
+        </div>
+      </div>
+
+      <!-- Safety contacts (read-only) -->
+      <div style="background:var(--danger-glow);border:1px solid var(--danger);border-radius:14px;padding:14px 16px;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--danger);margin-bottom:8px;">⛑ Emergency Contacts (locked)</div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--text-muted);">
+          <div>🆘 Crisis Line: <strong style="color:var(--text);">988</strong></div>
+          <div>🏥 OVBH Direct: <strong style="color:var(--text);">(336) 794-3550</strong></div>
+          <div>👤 Peer Support Contact: <strong style="color:var(--text);">(336) 555-0182</strong></div>
+        </div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:10px;">Emergency contacts are always shown regardless of tier. Contact your supervisor to edit.</div>
+      </div>
+
+    </div>
+
+    <!-- Sticky bottom CTA -->
+    <div style="position:absolute;bottom:0;left:0;right:0;background:var(--bg);border-top:1px solid var(--border);padding:14px 18px max(14px,env(safe-area-inset-bottom,14px));display:flex;flex-direction:column;gap:10px;">
+      <button onclick="savePlanChanges(this)" class="btn btn-primary" style="width:100%;font-size:15px;">💾 Save Changes</button>
+      <button onclick="clinicianPushPlan(this)" style="width:100%;padding:12px;border-radius:12px;border:2px solid var(--accent);background:none;color:var(--accent);font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font-ui);">📲 Push Update to Patient</button>
+    </div>
+
+    <!-- Toast -->
+    <div id="plan-toast" style="position:absolute;bottom:90px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:#fff;font-size:13px;font-weight:600;padding:10px 20px;border-radius:20px;pointer-events:none;opacity:0;transition:opacity 0.3s;white-space:nowrap;z-index:999;"></div>
+  </div>
+</div>
+
 <!-- ===================== DRAWER ===================== -->
 <div class="drawer-overlay" id="drawer-overlay"></div>
 <div class="drawer" id="nav-drawer">
@@ -1752,11 +2247,11 @@ input[type=range]::-moz-range-thumb {
       <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M3 12L12 3l9 9"/><path d="M9 21V12h6v9"/></svg>
       Home
     </button>
-    <button class="drawer-item">
+    <button class="drawer-item" data-action="navTo" data-val="screen-settings">
       <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>
       Settings
     </button>
-    <button class="drawer-item">
+    <button class="drawer-item" data-action="navTo" data-val="screen-about">
       <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
       What is EQUA?
     </button>
@@ -1782,6 +2277,11 @@ function selectDistressType(btn) {
   document.querySelectorAll('.distress-type-card').forEach(function(b) { b.classList.remove('selected'); });
   btn.classList.add('selected');
   window._distressType = btn.dataset.type;
+}
+
+function selectDistressTypeAndAdvance(btn) {
+  selectDistressType(btn);
+  setTimeout(function() { showScreen('screen-distress-2'); }, 180);
 }
 
 function updateDistressIntensity(val) {
@@ -1836,9 +2336,400 @@ function toggleDistressTimer() {
   }
 }
 
+// ══════════════════════════════════════════
+// MARCUS'S PRE-LOADED PERSONAL CRISIS PLAN
+// Set by Dr. Rivera before discharge from Old Vineyard IOP
+// The patient can edit these; the scaffold is already there on first launch.
+// ══════════════════════════════════════════
+var MARCUS_CRISIS_PLAN = {
+  setBy: 'Dr. Rivera, LCSW',
+  setDate: 'Sep 5, 2026',
+  note: 'We wrote this together in your last IOP session. These are your words. Read this before things get hard.',
+  tiers: [
+    {
+      range: '1 – 3',
+      label: 'Low Distress',
+      color: 'var(--safe)',
+      colorGlow: 'rgba(39,174,96,0.10)',
+      description: 'Uncomfortable but manageable. Stay in your routine.',
+      steps: [
+        { icon: '🎧', text: 'Put on music — something that shifts the vibe, not amplifies it' },
+        { icon: '🚶', text: 'Walk outside for 10 minutes, no destination' },
+        { icon: '📓', text: 'Write 3 sentences in your journal about what\'s bothering you' },
+        { icon: '💊', text: 'Take your Naltrexone if you haven\'t yet today' }
+      ]
+    },
+    {
+      range: '4 – 7',
+      label: 'Moderate Distress',
+      color: 'var(--warn)',
+      colorGlow: 'rgba(230,126,34,0.10)',
+      description: 'This is the zone where the plan really matters. Don\'t white-knuckle it alone.',
+      steps: [
+        { icon: '📞', text: 'Call your peer support contact — even just saying "I\'m having a hard time" out loud helps' },
+        { icon: '🫁', text: 'Do 4-7-8 breathing for 4 full cycles before anything else' },
+        { icon: '❄️', text: 'Hold cold water on your wrists for 60 seconds — this is Dr. Rivera\'s #1 for you' },
+        { icon: '📱', text: 'Text Dr. Rivera if it doesn\'t drop below a 4 within 20 minutes' }
+      ]
+    },
+    {
+      range: '7 – 10',
+      label: 'High Crisis',
+      color: 'var(--danger)',
+      colorGlow: 'rgba(192,57,43,0.10)',
+      description: 'Do not be alone. This is what the plan is for.',
+      steps: [
+        { icon: '📞', text: 'Call your peer support contact or a trusted person — do not be alone right now' },
+        { icon: '🏥', text: 'Call Old Vineyard crisis line: (336) 794-3550' },
+        { icon: '🆘', text: 'If you feel unsafe: call 988 or go to the nearest ER' },
+        { icon: '🚗', text: 'Do not drive. Call someone to come be with you.' }
+      ]
+    }
+  ]
+};
+
+// ── RICH DISTRESS PLAN ──
+var _stepTimers = {};
+
+var DISTRESS_PLANS = {
+  craving: {
+    label: 'Craving',
+    emoji: '🔥',
+    scienceFact: 'A craving peaks in 15–20 minutes and then passes — even if you do nothing. Your prefrontal cortex (decision-making) goes offline during a craving spike. These steps buy time for it to come back online.',
+    steps: [
+      {
+        title: 'TIPP — Temperature Shift',
+        tag: 'DBT Distress Tolerance',
+        body: 'Hold cold water on your wrists or splash your face with cold water. Temperature change activates the dive reflex, slowing heart rate by up to 10–25% and interrupting the brain\'s craving loop in under 30 seconds.',
+        secs: 60,
+        label: '1-min cold water'
+      },
+      {
+        title: 'Urge Surf',
+        tag: 'Mindfulness / ACT',
+        body: 'Close your eyes. Notice the craving as a wave — observe it without fighting it. Where do you feel it in your body? Chest? Throat? Your job is not to stop the wave, just to ride it. Cravings peak then break on their own.',
+        secs: 180,
+        label: '3-min surf'
+      },
+      {
+        title: 'Distract with Intense Sensation',
+        tag: 'CBT Behavioral Activation',
+        body: 'Do something that demands your full attention RIGHT NOW: 20 jumping jacks, hold an ice cube, chew something strong (sour candy, gum), or call someone. Physical activation floods your brain with competing input.',
+        secs: 120,
+        label: '2-min distraction'
+      },
+      {
+        title: 'Call your support',
+        tag: 'Accountability',
+        body: 'Call your sponsor, peer support specialist, or a safe person from your network. Even if it goes to voicemail — say it out loud: "I\'m having a craving right now and I\'m choosing not to use." That verbal commitment matters.',
+        secs: 300,
+        label: '5-min call'
+      }
+    ]
+  },
+  shutdown: {
+    label: 'Shutting Down',
+    emoji: '😶‍🌫️',
+    scienceFact: 'Emotional shutdown is your nervous system\'s freeze response — your dorsal vagal nerve slams the brakes when threat feels overwhelming. Your body literally reduces energy output. The path out is gentle, bottom-up activation.',
+    steps: [
+      {
+        title: '5-4-3-2-1 Grounding',
+        tag: 'DBT Grounding',
+        body: 'Name OUT LOUD: 5 things you can SEE right now. 4 things you can TOUCH. 3 things you can HEAR. 2 things you can SMELL. 1 thing you can TASTE. This pulls your brain out of freeze mode and back into the present moment.',
+        secs: 120,
+        label: '2-min grounding'
+      },
+      {
+        title: 'Movement Activation',
+        tag: 'Somatic / Neuroscience',
+        body: 'Stand up. Shake your hands out. Roll your shoulders 5x backward. March in place for 30 seconds. Physical movement activates your sympathetic nervous system just enough to break the freeze — without triggering panic.',
+        secs: 60,
+        label: '1-min movement'
+      },
+      {
+        title: 'Orienting — Look Around',
+        tag: 'Polyvagal / Trauma-Informed',
+        body: 'Slowly turn your head left, then right. Let your eyes move around the room and land on something that feels neutral or pleasant. You\'re telling your nervous system: "I\'m safe here. I can look around. I\'m not trapped."',
+        secs: 90,
+        label: '90-sec orienting'
+      },
+      {
+        title: 'Reach out — one text',
+        tag: 'Connection',
+        body: 'Send one text to someone safe: "I\'m not okay right now but I\'m still here." You don\'t have to explain. Social engagement is the fastest off-ramp from dorsal shutdown — your nervous system is wired to co-regulate with another person.',
+        secs: 180,
+        label: '3-min connection'
+      }
+    ]
+  },
+  escalating: {
+    label: 'Escalating',
+    emoji: '⚡',
+    scienceFact: 'Escalation is your sympathetic nervous system in overdrive — cortisol and adrenaline are flooding your body. Your amygdala has hijacked your prefrontal cortex. You need to slow your physiology FIRST, before you can think clearly.',
+    steps: [
+      {
+        title: 'Paced Breathing — 4-7-8',
+        tag: 'Physiological / Evidence-Based',
+        body: 'Inhale for 4 counts. Hold for 7. Exhale SLOWLY for 8. Do this 4x. The long exhale activates your vagus nerve, triggering parasympathetic response. This is one of the fastest evidence-based ways to lower your heart rate.',
+        secs: 120,
+        label: '4 breath cycles'
+      },
+      {
+        title: 'STOP Skill',
+        tag: 'DBT Crisis Survival',
+        body: 'S — Stop. Don\'t act. T — Take a step back. Breathe. O — Observe. What is happening? What am I feeling? What is the situation? P — Proceed mindfully. Ask: "What would make this worse? What would make it better?" Don\'t do the first thing you want to do.',
+        secs: 90,
+        label: '90-sec STOP'
+      },
+      {
+        title: 'Cold Water / Temperature',
+        tag: 'DBT TIPP',
+        body: 'Submerge your face in cold water for 30 seconds or hold ice in your hands. This activates the mammalian dive reflex — your heart rate physically slows, interrupting the adrenaline spiral. It works even when nothing else does.',
+        secs: 60,
+        label: '1-min cold'
+      },
+      {
+        title: 'Opposite Action',
+        tag: 'DBT Emotion Regulation',
+        body: 'When anger says "go toward" — do the opposite. Walk away. Sit down. Soften your face. Unclench your fists. Lower your voice to a whisper. These physical actions send a "calm" signal up to your brain through your body.',
+        secs: 180,
+        label: '3-min opposite'
+      }
+    ]
+  },
+  overwhelmed: {
+    label: 'Overwhelmed',
+    emoji: '🌀',
+    scienceFact: 'Overwhelm occurs when perceived demands exceed perceived resources. Your working memory gets flooded and can\'t process inputs. The antidote is reducing cognitive load and anchoring to a single point of presence.',
+    steps: [
+      {
+        title: 'Box Breathing',
+        tag: 'Physiological Regulation',
+        body: 'Breathe IN for 4 counts. HOLD for 4. OUT for 4. HOLD for 4. Repeat 4x. Box breathing is used by Navy SEALs before high-pressure situations. It balances CO2 and O2 levels, reducing anxiety within 2 minutes.',
+        secs: 120,
+        label: '4 box cycles'
+      },
+      {
+        title: 'One Thing Right Now',
+        tag: 'CBT Behavioral Focus',
+        body: 'Pick ONE thing — not a list, not a plan, just the single next physical action in front of you. Say it out loud: "Right now I am going to ________." Overwhelm lives in thinking about everything at once. Doing one thing breaks the loop.',
+        secs: 60,
+        label: '1-min focus'
+      },
+      {
+        title: 'Safe Place Visualization',
+        tag: 'CBT / Imagery Rescripting',
+        body: 'Close your eyes. Picture a place where you feel completely safe and calm. Could be real or imaginary. Notice details: what does it look, sound, smell like? What does your body feel like there? Stay in that image. Your nervous system cannot fully distinguish vivid imagery from reality.',
+        secs: 180,
+        label: '3-min visualization'
+      },
+      {
+        title: 'Self-Compassion Phrase',
+        tag: 'ACT / Mindfulness',
+        body: 'Put one hand on your chest. Slowly repeat: "This is a moment of suffering. Suffering is part of life. May I give myself the kindness I need right now." Research shows self-compassion activates the same neural pathways as receiving compassion from another person.',
+        secs: 120,
+        label: '2-min compassion'
+      }
+    ]
+  }
+};
+
+// ── RICH DISTRESS PLAN — STEP BY STEP ──
+var _currentDistressStep = 0;
+var _stepTimerInterval = null;
+var _stepTimerRemaining = 0;
+var _stepTimerDone = false;
+
+function renderDistressPlan() {
+  var type = window._distressType || 'craving';
+  var plan = DISTRESS_PLANS[type];
+  if (!plan) return;
+  if (_stepTimerInterval) { clearInterval(_stepTimerInterval); _stepTimerInterval = null; }
+  _currentDistressStep = 0;
+  _stepTimerDone = false;
+  var hdr = document.getElementById('distress-plan-header-title');
+  if (hdr) hdr.textContent = plan.emoji + ' ' + plan.label;
+  var dotsEl = document.getElementById('d4-step-dots');
+  if (dotsEl) {
+    dotsEl.innerHTML = plan.steps.map(function(_, i) {
+      return '<div id="d4-dot-'+i+'" class="d4-dot"></div>';
+    }).join('');
+  }
+  // Show personal plan intro card first if intensity rated
+  var intensity = window._distressIntensity;
+  if (intensity && MARCUS_CRISIS_PLAN) {
+    var tier = intensity <= 3 ? MARCUS_CRISIS_PLAN.tiers[0] : intensity <= 6 ? MARCUS_CRISIS_PLAN.tiers[1] : MARCUS_CRISIS_PLAN.tiers[2];
+    var content = document.getElementById('d4-step-content');
+    if (content) {
+      content.innerHTML =
+        '<div style="background:var(--bg-card);border:2px solid ' + tier.color + ';border-radius:18px;overflow:hidden;margin-bottom:16px;">' +
+          '<div style="background:' + tier.colorGlow + ';padding:14px 18px;border-bottom:1px solid var(--border);">' +
+            '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:' + tier.color + ';margin-bottom:3px;">Your ' + tier.range + ' Plan</div>' +
+            '<div style="font-size:16px;font-weight:700;color:var(--text);">' + tier.label + '</div>' +
+            '<div style="font-size:12px;color:var(--text-muted);margin-top:4px;font-style:italic;">"' + tier.description + '"</div>' +
+          '</div>' +
+          '<div style="padding:14px 18px;display:flex;flex-direction:column;gap:10px;">' +
+            tier.steps.map(function(s) {
+              return '<div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.5;"><span style="flex-shrink:0;font-size:16px;">' + s.icon + '</span><span>' + s.text + '</span></div>';
+            }).join('') +
+          '</div>' +
+          '<div style="padding:0 18px 14px;border-top:1px solid var(--border);padding-top:12px;">' +
+            '<div style="font-size:11px;color:var(--text-dim);">Set by Dr. Rivera · Sep 5, 2026 · <span style="color:var(--accent);cursor:pointer;" onclick="showScreen(\'screen-aftercare\')">View full plan →</span></div>' +
+          '</div>' +
+        '</div>' +
+        '<div style="text-align:center;">' +
+          '<button onclick="showDistressStep(0)" style="width:100%;padding:14px;border-radius:14px;background:var(--accent);color:#fff;font-size:15px;font-weight:700;border:none;cursor:pointer;font-family:var(--font-ui);">Start coping steps →</button>' +
+        '</div>';
+      return; // let user click through to step 1
+    }
+  }
+  showDistressStep(0);
+}
+
+function showDistressStep(idx) {
+  var type = window._distressType || 'craving';
+  var plan = DISTRESS_PLANS[type];
+  if (!plan) return;
+  if (_stepTimerInterval) { clearInterval(_stepTimerInterval); _stepTimerInterval = null; }
+  _stepTimerRemaining = 0;
+  _stepTimerDone = false;
+  _currentDistressStep = idx;
+  var step = plan.steps[idx];
+  var total = plan.steps.length;
+  var counter = document.getElementById('d4-step-counter');
+  if (counter) counter.textContent = (idx+1) + ' / ' + total;
+  var bar = document.getElementById('d4-progress-bar');
+  if (bar) bar.style.width = Math.round(((idx+1)/total)*100) + '%';
+  plan.steps.forEach(function(_, i) {
+    var dot = document.getElementById('d4-dot-'+i);
+    if (!dot) return;
+    dot.className = 'd4-dot' + (i < idx ? ' done' : i === idx ? ' active' : '');
+  });
+  var mins = Math.floor(step.secs / 60);
+  var secs = step.secs % 60;
+  var timeLabel = mins + ':' + (secs < 10 ? '0' : '') + secs;
+  var content = document.getElementById('d4-step-content');
+  if (!content) return;
+  var scienceCard = idx === 0
+    ? '<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:16px;">' +
+        '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin-bottom:5px;">🧠 Why this works</div>' +
+        '<div style="font-size:12px;color:var(--text-muted);line-height:1.55;">' + plan.scienceFact + '</div>' +
+      '</div>'
+    : '';
+  content.innerHTML =
+    scienceCard +
+    '<div style="background:var(--bg-card);border:2px solid var(--accent);border-radius:18px;overflow:hidden;">' +
+      '<div style="background:var(--accent-glow);padding:16px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);">' +
+        '<div style="width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">' + (idx+1) + '</div>' +
+        '<div>' +
+          '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent);">' + step.tag + '</div>' +
+          '<div style="font-size:18px;font-weight:700;color:var(--text);line-height:1.2;margin-top:2px;">' + step.title + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div style="padding:18px;">' +
+        '<div style="font-size:14px;color:var(--text-muted);line-height:1.65;">' + step.body + '</div>' +
+      '</div>' +
+      '<div style="border-top:1px solid var(--border);padding:18px;display:flex;flex-direction:column;align-items:center;gap:12px;">' +
+        '<div id="d4-timer-display" style="font-family:var(--font-display);font-size:64px;font-weight:400;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-1px;">' + timeLabel + '</div>' +
+        '<button id="d4-timer-btn" onclick="toggleCurrentStepTimer(' + step.secs + ')" style="width:100%;padding:14px;border-radius:12px;border:2px solid var(--accent);background:var(--accent-glow);color:var(--accent);font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font-ui);transition:all 0.2s;">▶ Start — ' + step.label + '</button>' +
+        '<button onclick="advanceDistressStep()" style="background:none;border:none;cursor:pointer;font-size:12px;color:var(--text-dim);font-family:var(--font-ui);margin-top:4px;">Skip timer →</button>' +
+      '</div>' +
+    '</div>';
+  content.scrollTop = 0;
+  var nextBtn = document.getElementById('d4-next-btn');
+  if (nextBtn) {
+    if (idx < total - 1) {
+      nextBtn.textContent = 'Next Step →';
+      nextBtn.style.background = 'var(--accent)';
+    } else {
+      nextBtn.textContent = 'I made it through →';
+      nextBtn.style.background = 'var(--safe)';
+    }
+    nextBtn.style.animation = '';
+  }
+}
+
+function toggleCurrentStepTimer(totalSecs) {
+  if (_stepTimerInterval) {
+    clearInterval(_stepTimerInterval);
+    _stepTimerInterval = null;
+    var btn = document.getElementById('d4-timer-btn');
+    if (btn) btn.textContent = '⏸ Paused — tap to resume';
+  } else {
+    if (_stepTimerDone) return;
+    if (_stepTimerRemaining <= 0) _stepTimerRemaining = totalSecs;
+    var btn = document.getElementById('d4-timer-btn');
+    if (btn) btn.textContent = '⏱ Running — tap to pause';
+    _stepTimerInterval = setInterval(function() {
+      _stepTimerRemaining--;
+      var m = Math.floor(_stepTimerRemaining / 60);
+      var s = _stepTimerRemaining % 60;
+      var disp = document.getElementById('d4-timer-display');
+      if (disp) disp.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+      if (_stepTimerRemaining <= 0) {
+        clearInterval(_stepTimerInterval);
+        _stepTimerInterval = null;
+        _stepTimerDone = true;
+        var btn2 = document.getElementById('d4-timer-btn');
+        if (btn2) {
+          btn2.textContent = '✓ Step Complete!';
+          btn2.style.background = 'var(--safe)';
+          btn2.style.color = '#fff';
+          btn2.style.borderColor = 'var(--safe)';
+        }
+        var disp2 = document.getElementById('d4-timer-display');
+        if (disp2) disp2.style.color = 'var(--safe)';
+        var nextBtn = document.getElementById('d4-next-btn');
+        if (nextBtn) {
+          nextBtn.style.animation = 'pulse-cta 0.6s ease 3';
+          setTimeout(function() { nextBtn.style.animation = ''; }, 2000);
+        }
+      }
+    }, 1000);
+  }
+}
+
+function advanceDistressStep() {
+  var type = window._distressType || 'craving';
+  var plan = DISTRESS_PLANS[type];
+  if (!plan) return;
+  if (_stepTimerInterval) { clearInterval(_stepTimerInterval); _stepTimerInterval = null; }
+  _stepTimerRemaining = 0;
+  _stepTimerDone = false;
+  if (_currentDistressStep < plan.steps.length - 1) {
+    showDistressStep(_currentDistressStep + 1);
+  } else {
+    showScreen('screen-distress-5');
+  }
+}
+
+function handleDistressBack4() {
+  if (_stepTimerInterval) { clearInterval(_stepTimerInterval); _stepTimerInterval = null; }
+  _stepTimerRemaining = 0;
+  if (_currentDistressStep > 0) {
+    showDistressStep(_currentDistressStep - 1);
+  } else {
+    showScreen('screen-distress');
+  }
+}
+
+window.toggleCurrentStepTimer = toggleCurrentStepTimer;
+window.renderDistressPlan = renderDistressPlan;
+window.showDistressStep = showDistressStep;
+window.advanceDistressStep = advanceDistressStep;
+window.handleDistressBack4 = handleDistressBack4;
+
 // ── NAVIGATION ──
 var currentScreen = 'screen-role';
 var history = [];
+
+// Expose functions called from onclick attributes to global scope
+window.selectDistressTypeAndAdvance = selectDistressTypeAndAdvance;
+window.selectDistressType = selectDistressType;
+window.updateDistressIntensity = updateDistressIntensity;
+window.selectAlone = selectAlone;
+window.showDistressTimer = showDistressTimer;
+window.toggleDistressTimer = toggleDistressTimer;
 
 function showScreen(id) {
   var prev = document.getElementById(currentScreen);
@@ -1852,6 +2743,12 @@ function showScreen(id) {
 
   if (id === 'screen-clinician-home') loadClinicianDashboard();
   if (id === 'screen-home') updateNavTabs('screen-home');
+  if (id === 'screen-distress-4') renderDistressPlan();
+  if (id === 'screen-distress-5') {
+    var lbl = document.getElementById('distress-reassess-label');
+    var typeLabels = {craving:'Where is the craving now?',shutdown:'How numb or shut down do you feel now?',escalating:'How escalated do you feel now?',overwhelmed:'How overwhelmed do you feel now?'};
+    if (lbl) lbl.textContent = typeLabels[window._distressType] || 'Where is the intensity now?';
+  }
 }
 
 function updateNavTabs(id) {
@@ -1879,10 +2776,12 @@ document.addEventListener('click', function(e) {
 var drawerEl = document.getElementById('nav-drawer');
 var overlayEl = document.getElementById('drawer-overlay');
 
-document.getElementById('hamburger-btn').addEventListener('click', openDrawer);
-document.getElementById('more-tab').addEventListener('click', openDrawer);
+function safeOn(id, ev, fn) { var el = document.getElementById(id); if (el) el.addEventListener(ev, fn); }
+
+safeOn('hamburger-btn', 'click', openDrawer);
+safeOn('more-tab', 'click', openDrawer);
 overlayEl.addEventListener('click', closeDrawer);
-document.getElementById('drawer-close').addEventListener('click', function() {
+safeOn('drawer-close', 'click', function() {
   closeDrawer();
   showScreen('screen-home');
 });
@@ -1890,127 +2789,577 @@ document.getElementById('drawer-close').addEventListener('click', function() {
 function openDrawer() { drawerEl.classList.add('open'); overlayEl.classList.add('open'); }
 function closeDrawer() { drawerEl.classList.remove('open'); overlayEl.classList.remove('open'); }
 
-// ── CHECK-IN ──
-var ciStep = 1;
-var ciMood = null;
-var ciSleep = 7;
-var ciUrge = 'no';
-var MAX_CI = 5;
+// ══════════════════════════════════════════
+// DAILY CHECK-IN — full-bleed one-Q engine
+// ══════════════════════════════════════════
+var ci = { mood: null, sleep: 7, urge: null, note: '', step: 0 };
 
-var moodLabels = { rough:'😔 Rough', low:'😕 Low', okay:'😐 Okay', good:'🙂 Good', great:'😊 Great' };
+var CI_STEPS = [
+  { id: 'mood' },
+  { id: 'sleep' },
+  { id: 'urge' },
+  { id: 'note' },
+  { id: 'submit' }
+];
 
-function updateDots() {
-  var dots = document.querySelectorAll('#checkin-dots .step-dot');
-  var label = document.getElementById('checkin-step-label');
-  dots.forEach(function(d, i) { d.classList.toggle('active', i === ciStep - 1); });
-  label.textContent = 'Step ' + ciStep + ' of ' + MAX_CI;
-  document.getElementById('ci-nav-btns').style.display = ciStep > MAX_CI ? 'none' : 'block';
+function ciRender(idx) {
+  var area = document.getElementById('ci-question-area');
+  var cta  = document.getElementById('ci-cta-area');
+  var fill = document.getElementById('ci-progress-fill');
+  var lbl  = document.getElementById('ci-step-label');
+  if (!area || !cta) return;
+
+  ci.step = idx;
+  var total = CI_STEPS.length;
+  fill.style.width = Math.round((idx / total) * 100) + '%';
+  lbl.textContent = (idx + 1) + ' of ' + total;
+
+  var s = CI_STEPS[idx];
+  area.innerHTML = '';
+  cta.innerHTML = '';
+
+  // ── Mood ──
+  if (s.id === 'mood') {
+    area.innerHTML =
+      '<div class="font-display" style="font-size:28px;line-height:1.25;margin-bottom:8px;">How are you feeling<br>right now?</div>' +
+      '<p style="color:var(--text-muted);font-size:14px;margin-bottom:32px;">One tap — no wrong answer.</p>' +
+      '<div style="display:flex;flex-direction:column;gap:10px;">' +
+        ['😔 Rough|rough','😕 Low|low','😐 Okay|okay','🙂 Good|good','😊 Great|great'].map(function(m) {
+          var parts = m.split('|'); var label = parts[0]; var val = parts[1];
+          var sel = ci.mood === val;
+          return '<button onclick="ciPickMood(\''+val+'\')" style="display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:14px;border:2px solid '+(sel?'var(--accent)':'var(--border)')+';background:'+(sel?'var(--accent-glow)':'var(--bg-card)')+';cursor:pointer;font-family:var(--font-ui);transition:border-color 0.15s;">' +
+            '<span style="font-size:26px;line-height:1;">' + label.split(' ')[0] + '</span>' +
+            '<span style="font-size:15px;font-weight:600;color:var(--text);">' + label.split(' ').slice(1).join(' ') + '</span>' +
+          '</button>';
+        }).join('') +
+      '</div>';
+    cta.innerHTML = '<button class="btn btn-primary" onclick="ciNext()" style="opacity:'+(ci.mood?'1':'0.4')+';pointer-events:'+(ci.mood?'all':'none')+';">Continue →</button>';
+  }
+
+  // ── Sleep ──
+  if (s.id === 'sleep') {
+    area.innerHTML =
+      '<div class="font-display" style="font-size:28px;line-height:1.25;margin-bottom:8px;">How did you sleep?</div>' +
+      '<p style="color:var(--text-muted);font-size:14px;margin-bottom:48px;">Tap to set hours of sleep last night.</p>' +
+      '<div style="text-align:center;padding:20px 0;">' +
+        '<div style="display:flex;align-items:center;justify-content:center;gap:28px;">' +
+          '<button id="ci-sleep-minus" onclick="ciSleepAdj(-1)" style="width:56px;height:56px;border-radius:50%;border:2px solid var(--border);background:var(--bg-card);font-size:28px;font-weight:300;color:var(--text);cursor:pointer;">−</button>' +
+          '<div id="ci-sleep-num" style="font-family:var(--font-display);font-size:72px;font-weight:700;color:var(--accent);line-height:1;min-width:90px;text-align:center;font-variant-numeric:tabular-nums;">'+ci.sleep+'</div>' +
+          '<button id="ci-sleep-plus" onclick="ciSleepAdj(1)" style="width:56px;height:56px;border-radius:50%;border:2px solid var(--border);background:var(--bg-card);font-size:28px;font-weight:300;color:var(--text);cursor:pointer;">+</button>' +
+        '</div>' +
+        '<div style="font-size:16px;color:var(--text-muted);margin-top:12px;">hours</div>' +
+      '</div>';
+    cta.innerHTML = '<button class="btn btn-primary" onclick="ciNext()">Continue →</button>';
+  }
+
+  // ── Urge ──
+  if (s.id === 'urge') {
+    area.innerHTML =
+      '<div class="font-display" style="font-size:28px;line-height:1.25;margin-bottom:8px;">Any cravings or urges today?</div>' +
+      '<p style="color:var(--text-muted);font-size:14px;margin-bottom:32px;">Honest answers help your care team show up for you.</p>' +
+      '<div style="display:flex;flex-direction:column;gap:10px;">' +
+        [['Yes','yes'],['Mild / passing','mild'],['No','no']].map(function(pair) {
+          var label = pair[0]; var val = pair[1];
+          var sel = ci.urge === val;
+          return '<button onclick="ciPickUrge(\''+val+'\')" style="display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-radius:14px;border:2px solid '+(sel?'var(--accent)':'var(--border)')+';background:'+(sel?'var(--accent-glow)':'var(--bg-card)')+';cursor:pointer;font-family:var(--font-ui);">' +
+            '<span style="font-size:15px;font-weight:600;color:var(--text);">'+label+'</span>' +
+            (sel ? '<svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="var(--accent)" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>' : '') +
+          '</button>';
+        }).join('') +
+      '</div>';
+    cta.innerHTML = '<button class="btn btn-primary" onclick="ciUrgeNext()" style="opacity:'+(ci.urge?'1':'0.4')+';pointer-events:'+(ci.urge?'all':'none')+';">Continue →</button>';
+  }
+
+  // ── Note ──
+  if (s.id === 'note') {
+    area.innerHTML =
+      '<div class="font-display" style="font-size:28px;line-height:1.25;margin-bottom:8px;">Anything to share?</div>' +
+      '<p style="color:var(--text-muted);font-size:14px;margin-bottom:24px;">Optional — your care team will see this.</p>' +
+      '<textarea id="ci-note-input" placeholder="Type a note... (optional)" style="min-height:140px;font-size:15px;"></textarea>';
+    cta.innerHTML = '<button class="btn btn-primary" onclick="ciSubmitNote()">Continue →</button>';
+    setTimeout(function(){ var t = document.getElementById('ci-note-input'); if(t) t.value = ci.note; }, 50);
+  }
+
+  // ── Submit ──
+  if (s.id === 'submit') {
+    var moodMap = { rough:'😔 Rough', low:'😕 Low', okay:'😐 Okay', good:'🙂 Good', great:'😊 Great' };
+    var urgeMap = { yes:'Yes', mild:'Mild / passing', no:'No' };
+    fill.style.width = '100%';
+    area.innerHTML =
+      '<div class="font-display" style="font-size:28px;line-height:1.25;margin-bottom:8px;">Ready to share?</div>' +
+      '<p style="color:var(--text-muted);font-size:14px;margin-bottom:28px;">Your care team will be notified right away.</p>' +
+      '<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:20px;">' +
+        [['Mood', moodMap[ci.mood] || '—'],['Sleep', ci.sleep + ' hours'],['Cravings', urgeMap[ci.urge] || '—']].map(function(r, i) {
+          return '<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 18px;'+(i>0?'border-top:1px solid var(--border)':'')+'"><span style="font-size:14px;color:var(--text-muted);">'+r[0]+'</span><span style="font-size:14px;font-weight:600;color:var(--text);">'+r[1]+'</span></div>';
+        }).join('') +
+      '</div>';
+    cta.innerHTML =
+      '<button class="btn btn-primary" onclick="ciComplete(true)" style="margin-bottom:10px;">Share with care team</button>' +
+      '<button onclick="ciComplete(false)" style="background:none;border:none;cursor:pointer;display:block;width:100%;text-align:center;font-size:14px;color:var(--text-muted);font-family:var(--font-ui);">Keep private</button>';
+  }
 }
 
-function goCIStep(s) {
-  document.querySelectorAll('.checkin-step').forEach(function(el) { el.classList.remove('active'); });
-  if (s > MAX_CI) {
-    document.getElementById('ci-confirm').classList.add('active');
-    document.getElementById('ci-nav-btns').style.display = 'none';
-    document.getElementById('checkin-step-label').textContent = 'Done';
+function ciPickMood(val) {
+  ci.mood = val;
+  ciRender(0);
+  setTimeout(function(){ ciNext(); }, 280);
+}
+
+function ciPickUrge(val) {
+  ci.urge = val;
+  ciRender(CI_STEPS.findIndex(function(s){ return s.id==='urge'; }));
+}
+
+function ciSleepAdj(d) {
+  ci.sleep = Math.max(0, Math.min(12, ci.sleep + d));
+  var el = document.getElementById('ci-sleep-num');
+  if (el) el.textContent = ci.sleep;
+}
+
+function ciUrgeNext() {
+  if (!ci.urge) return;
+  // C-SSRS trigger: mood rough/low AND craving yes
+  if ((ci.mood === 'rough' || ci.mood === 'low') && ci.urge === 'yes') {
+    cssrsStart();
     return;
   }
-  ciStep = s;
-  var stepEl = document.getElementById('ci-step-' + s);
-  if (stepEl) stepEl.classList.add('active');
-  updateDots();
-  if (s > 1) document.getElementById('ci-back-btn').style.display = 'block';
-  else document.getElementById('ci-back-btn').style.display = 'none';
-  if (s === MAX_CI) {
-    document.getElementById('ci-summary-mood').textContent = ciMood ? moodLabels[ciMood] : '—';
-    document.getElementById('ci-summary-sleep').textContent = ciSleep + ' hours';
-    document.getElementById('ci-summary-urge').textContent = ciUrge.charAt(0).toUpperCase() + ciUrge.slice(1);
-  }
+  ciNext();
 }
 
-document.getElementById('ci-next-btn').addEventListener('click', function() {
-  if (ciStep === 1 && !ciMood) { return; }
-  goCIStep(ciStep + 1);
-});
-document.getElementById('ci-back-btn').addEventListener('click', function() {
-  if (ciStep > 1) goCIStep(ciStep - 1);
-});
-document.getElementById('ci-submit-btn').addEventListener('click', function() { goCIStep(MAX_CI + 1); });
-document.getElementById('ci-private-btn').addEventListener('click', function() { goCIStep(MAX_CI + 1); });
+function ciSubmitNote() {
+  var t = document.getElementById('ci-note-input');
+  if (t) ci.note = t.value;
+  ciNext();
+}
 
-// Mood selection
-document.querySelectorAll('.mood-btn').forEach(function(btn) {
-  btn.addEventListener('click', function() {
-    document.querySelectorAll('.mood-btn').forEach(function(b) { b.classList.remove('selected'); });
-    btn.classList.add('selected');
-    ciMood = btn.dataset.mood;
-    setTimeout(function() { goCIStep(2); }, 250);
-  });
-});
+function ciNext() {
+  if (ci.step < CI_STEPS.length - 1) ciRender(ci.step + 1);
+}
 
-// Sleep stepper
-document.getElementById('sleep-minus').addEventListener('click', function() {
-  ciSleep = Math.max(0, ciSleep - 1);
-  document.getElementById('sleep-val').textContent = ciSleep;
-});
-document.getElementById('sleep-plus').addEventListener('click', function() {
-  ciSleep = Math.min(12, ciSleep + 1);
-  document.getElementById('sleep-val').textContent = ciSleep;
-});
+function ciGoBack() {
+  if (ci.step > 0) ciRender(ci.step - 1);
+  else showScreen('screen-home');
+}
 
-// Urge toggle
-document.querySelectorAll('[data-urge]').forEach(function(btn) {
-  btn.addEventListener('click', function() {
-    document.querySelectorAll('[data-urge]').forEach(function(b) { b.classList.remove('selected'); });
-    btn.classList.add('selected');
-    ciUrge = btn.dataset.urge;
-  });
-});
+function ciComplete(share) {
+  // Show confirmation
+  var area = document.getElementById('ci-question-area');
+  var cta  = document.getElementById('ci-cta-area');
+  var fill = document.getElementById('ci-progress-fill');
+  fill.style.width = '100%';
+  area.innerHTML =
+    '<div style="text-align:center;padding:20px 0;">' +
+      '<div style="width:72px;height:72px;border-radius:50%;background:var(--accent-glow);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 20px;">✅</div>' +
+      '<div class="font-display" style="font-size:26px;margin-bottom:10px;">Check-in logged.</div>' +
+      '<p style="font-size:14px;color:var(--text-muted);line-height:1.6;">' + (share ? 'Dr. Rivera can see this. You didn\'t go through today alone.' : 'Your check-in is saved privately.') + '</p>' +
+    '</div>';
+  cta.innerHTML = '<button class="btn btn-secondary" onclick="showScreen(\'screen-home\')">Back to Home</button>';
+  document.getElementById('ci-step-label').textContent = 'Done';
+}
 
-// Reset check-in when navigating to it
+// Reset when navigating to check-in
 var origShowScreen = showScreen;
 showScreen = function(id) {
   if (id === 'screen-checkin') {
-    ciStep = 1; ciMood = null; ciSleep = 7; ciUrge = 'no';
-    document.querySelectorAll('.mood-btn').forEach(function(b) { b.classList.remove('selected'); });
-    document.querySelectorAll('[data-urge]').forEach(function(b) { b.classList.remove('selected'); });
-    var noBtn = document.querySelector('[data-urge="no"]');
-    if (noBtn) noBtn.classList.add('selected');
-    document.getElementById('sleep-val').textContent = '7';
-    goCIStep(1);
-    document.querySelectorAll('.checkin-step').forEach(function(el) { el.classList.remove('active'); });
-    document.getElementById('ci-step-1').classList.add('active');
-    document.getElementById('ci-nav-btns').style.display = 'block';
-    document.getElementById('ci-back-btn').style.display = 'none';
+    ci = { mood: null, sleep: 7, urge: null, note: '', step: 0 };
+    setTimeout(function(){ ciRender(0); }, 50);
+  }
+  if (id === 'screen-weekly') {
+    setTimeout(function(){ weeklyRender(0); }, 50);
   }
   origShowScreen(id);
 };
+window.showScreen = function(id) { showScreen(id); };
 
-// ── DISTRESS SLIDER ──
-var slider = document.getElementById('distress-slider');
-var distressVal = document.getElementById('distress-val');
-var distressLabel = document.getElementById('distress-label');
-var flagCard = document.getElementById('distress-flag-card');
+// Expose all onclick-called functions globally
+window.ciGoBack = ciGoBack;
+window.ciNext = ciNext;
+window.ciPickMood = ciPickMood;
+window.ciPickUrge = ciPickUrge;
+window.ciSleepAdj = ciSleepAdj;
+window.ciUrgeNext = ciUrgeNext;
+window.ciSubmitNote = ciSubmitNote;
+window.ciComplete = ciComplete;
+window.cssrsAnswer = cssrsAnswer;
+window.weeklyAnswer = weeklyAnswer;
+window.weeklyGoBack = weeklyGoBack;
 
-var distressLabels = ['No distress','Very low','Low','Mild','Manageable','Moderate','Significant','High','Severe','Critical','Extreme'];
+// ══════════════════════════════════════════
+// DISTRESS RATE SCREEN — personal plan reveal
+// ══════════════════════════════════════════
+function dratePickTier(val) {
+  val = parseInt(val, 10);
+  if (val <= 3) return MARCUS_CRISIS_PLAN.tiers[0];
+  if (val <= 6) return MARCUS_CRISIS_PLAN.tiers[1];
+  return MARCUS_CRISIS_PLAN.tiers[2];
+}
+function drateUpdate(val) {
+  val = parseInt(val, 10);
+  window._distressIntensity = val;
+  // number display
+  var numEl = document.getElementById('drate-num');
+  var lblEl = document.getElementById('drate-label');
+  if (numEl) numEl.textContent = val;
+  var labelMap = {1:'Barely there',2:'Very low',3:'Low',4:'Moderate',5:'Moderate',6:'Moderate',7:'High',8:'High',9:'Very high',10:'Crisis'};
+  if (lblEl) lblEl.textContent = labelMap[val] || '';
+  // color the number
+  var numColor = val <= 3 ? 'var(--safe)' : val <= 6 ? 'var(--warn)' : 'var(--danger)';
+  if (numEl) numEl.style.color = numColor;
+  // update plan card
+  var tier = dratePickTier(val);
+  var card = document.getElementById('drate-plan-card');
+  var tierHeader = document.getElementById('drate-plan-tier-header');
+  var tierLabel = document.getElementById('drate-plan-tier-label');
+  var tierRange = document.getElementById('drate-plan-tier-range');
+  var tierDesc = document.getElementById('drate-plan-description');
+  var tierSteps = document.getElementById('drate-plan-steps');
+  if (!card) return;
+  // border color
+  card.style.borderColor = tier.color;
+  if (tierHeader) tierHeader.style.background = tier.colorGlow;
+  if (tierLabel) { tierLabel.style.color = tier.color; tierLabel.textContent = 'Your ' + tier.range + ' Plan'; }
+  if (tierRange) tierRange.textContent = tier.label;
+  if (tierDesc) tierDesc.textContent = '“' + tier.description + '”';
+  if (tierSteps) {
+    tierSteps.innerHTML = tier.steps.map(function(s) {
+      return '<div style="display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.5;"><span style="flex-shrink:0;">' + s.icon + '</span><span>' + s.text + '</span></div>';
+    }).join('');
+  }
+}
+window.drateUpdate = drateUpdate;
 
-slider.addEventListener('input', function() {
-  var v = parseInt(this.value);
-  distressVal.textContent = v;
-  distressLabel.textContent = distressLabels[v] || '';
-  distressVal.style.color = v >= 7 ? 'var(--danger)' : v >= 5 ? 'var(--warn)' : 'var(--accent)';
-  flagCard.style.display = v >= 7 ? 'block' : 'none';
-});
+// init drate screen when navigated to; init plan editor when navigated to
+var _origShowScreenForDrate = showScreen;
+showScreen = function(id) {
+  _origShowScreenForDrate(id);
+  if (id === 'screen-distress-rate') {
+    setTimeout(function(){
+      var slider = document.getElementById('drate-slider');
+      if (slider) drateUpdate(slider.value);
+    }, 60);
+  }
+  if (id === 'screen-plan-editor') {
+    setTimeout(planEditorInit, 60);
+  }
+};
+window.showScreen = showScreen;
 
-// ── COPING CARDS ──
-document.getElementById('coping-breathing').addEventListener('click', function() {
-  var d = document.getElementById('breathing-detail');
-  d.style.display = d.style.display === 'none' ? 'block' : 'none';
-});
-document.getElementById('coping-grounding').addEventListener('click', function() {
-  var d = document.getElementById('grounding-detail');
-  d.style.display = d.style.display === 'none' ? 'block' : 'none';
-});
+// ── PLAN EDITOR (clinician) ──────────────────────────────
+function planEditorInit() {
+  if (!window.MARCUS_CRISIS_PLAN) return;
+  var plan = window.MARCUS_CRISIS_PLAN;
+  plan.tiers.forEach(function(tier, i) {
+    var descEl = document.getElementById('plan-tier-' + i + '-desc');
+    var stepsEl = document.getElementById('plan-tier-' + i + '-steps');
+    if (descEl) descEl.value = tier.description || '';
+    if (stepsEl) stepsEl.value = tier.steps.map(function(s){ return s.icon + ' ' + s.text; }).join('\n');
+    // apply textarea auto-style
+    [descEl, stepsEl].forEach(function(el) {
+      if (!el) return;
+      el.style.cssText += 'width:100%;box-sizing:border-box;border:1.5px solid var(--border);border-radius:10px;background:var(--bg-card);color:var(--text);padding:10px 12px;resize:vertical;font-family:var(--font-ui);outline:none;transition:border-color 0.2s;';
+      el.addEventListener('focus', function(){ this.style.borderColor = 'var(--accent)'; });
+      el.addEventListener('blur', function(){ this.style.borderColor = 'var(--border)'; });
+    });
+  });
+}
+
+function togglePlanTier(i) {
+  var body = document.getElementById('plan-tier-' + i + '-body');
+  var chevron = document.getElementById('plan-chevron-' + i);
+  if (!body) return;
+  var isOpen = body.style.display !== 'none';
+  body.style.display = isOpen ? 'none' : 'flex';
+  if (chevron) chevron.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+}
+window.togglePlanTier = togglePlanTier;
+
+function savePlanChanges(btn) {
+  if (!window.MARCUS_CRISIS_PLAN) return;
+  var plan = window.MARCUS_CRISIS_PLAN;
+  plan.tiers.forEach(function(tier, i) {
+    var descEl = document.getElementById('plan-tier-' + i + '-desc');
+    var stepsEl = document.getElementById('plan-tier-' + i + '-steps');
+    if (descEl) tier.description = descEl.value.trim();
+    if (stepsEl) {
+      var lines = stepsEl.value.split('\n').filter(function(l){ return l.trim(); });
+      tier.steps = lines.map(function(l) {
+        var m = l.trim().match(/^(\S+)\s+([\s\S]+)$/);
+        return m ? { icon: m[1], text: m[2] } : { icon: '•', text: l.trim() };
+      });
+    }
+  });
+  planShowToast('✓ Changes saved');
+  if (btn) { btn.textContent = '✓ Saved'; setTimeout(function(){ btn.textContent = '💾 Save Changes'; }, 2000); }
+}
+window.savePlanChanges = savePlanChanges;
+
+function clinicianPushPlan(btn) {
+  savePlanChanges(null);
+  var toast = document.getElementById('plan-toast');
+  if (btn) {
+    var orig = btn.innerHTML;
+    btn.innerHTML = '✓ Plan Sent to Marcus';
+    btn.style.background = 'var(--safe)';
+    btn.style.color = '#fff';
+    btn.style.border = 'none';
+    setTimeout(function(){
+      btn.innerHTML = orig;
+      btn.style.background = '';
+      btn.style.color = '';
+      btn.style.border = '';
+    }, 3000);
+  }
+  planShowToast('📲 Plan pushed to Marcus\'s app');
+}
+window.clinicianPushPlan = clinicianPushPlan;
+
+function planShowToast(msg) {
+  var toast = document.getElementById('plan-toast');
+  if (!toast) return;
+  toast.textContent = msg;
+  toast.style.opacity = '1';
+  setTimeout(function(){ toast.style.opacity = '0'; }, 2800);
+}
+window.planShowToast = planShowToast;
+// ────────────────────────────────────────────────────────
+
+// ══════════════════════════════════════════
+// C-SSRS SAFETY SCREENER (triggered flow)
+// ══════════════════════════════════════════
+var cssrsStep = 0;
+var cssrsAnswers = [];
+
+var CSSRS_QS = [
+  {
+    q: 'In the past week, have you wished you were dead or wished you could go to sleep and not wake up?',
+    opts: ['Yes', 'No'],
+    key: 'passive'
+  },
+  {
+    q: 'Have you had any thoughts of killing yourself?',
+    opts: ['Yes', 'No'],
+    key: 'active'
+  },
+  {
+    q: 'Have you been thinking about how you might do this?',
+    opts: ['Yes', 'No'],
+    key: 'plan'
+  }
+];
+
+function cssrsStart() {
+  cssrsStep = 0;
+  cssrsAnswers = [];
+  showScreen('screen-cssrs');
+  setTimeout(function(){ cssrsRender(0); }, 80);
+}
+
+function cssrsRender(idx) {
+  cssrsStep = idx;
+  var area = document.getElementById('cssrs-question-area');
+  var cta  = document.getElementById('cssrs-cta-area');
+  var fill = document.getElementById('cssrs-progress');
+  var lbl  = document.getElementById('cssrs-step-label');
+  if (!area) return;
+
+  fill.style.width = Math.round(((idx+1) / CSSRS_QS.length) * 100) + '%';
+  lbl.textContent = 'Safety check · ' + (idx+1) + ' of ' + CSSRS_QS.length;
+
+  var q = CSSRS_QS[idx];
+  area.innerHTML =
+    '<div style="display:inline-flex;align-items:center;gap:6px;background:var(--danger-glow);border:1px solid var(--danger);border-radius:20px;padding:4px 12px;margin-bottom:20px;">' +
+      '<span style="font-size:11px;font-weight:700;color:var(--danger);letter-spacing:0.5px;">SAFETY CHECK</span>' +
+    '</div>' +
+    '<div class="font-display" style="font-size:24px;line-height:1.3;margin-bottom:10px;">'+q.q+'</div>' +
+    '<p style="color:var(--text-muted);font-size:13px;margin-bottom:32px;">Your honesty keeps you safer. This goes directly to your care team.</p>' +
+    '<div style="display:flex;flex-direction:column;gap:12px;">' +
+      q.opts.map(function(opt) {
+        return '<button onclick="cssrsAnswer(\''+opt+'\')" style="padding:18px 20px;border-radius:14px;border:2px solid var(--border);background:var(--bg-card);cursor:pointer;font-family:var(--font-ui);font-size:16px;font-weight:600;color:var(--text);text-align:left;">'+opt+'</button>';
+      }).join('') +
+    '</div>';
+
+  cta.innerHTML =
+    '<a href="tel:988" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:12px;background:var(--danger-glow);border:1px solid var(--danger);text-decoration:none;">' +
+      '<span style="font-size:14px;font-weight:700;color:var(--danger);">Crisis line: call 988 now</span>' +
+    '</a>';
+}
+
+function cssrsAnswer(ans) {
+  cssrsAnswers.push({ q: CSSRS_QS[cssrsStep].key, a: ans });
+
+  // If "No" to passive ideation → safe, skip rest
+  if (cssrsStep === 0 && ans === 'No') {
+    cssrsComplete(false);
+    return;
+  }
+  // If "No" to active ideation → safe
+  if (cssrsStep === 1 && ans === 'No') {
+    cssrsComplete(false);
+    return;
+  }
+  // Any Yes on plan → high alert
+  if (cssrsStep === 2) {
+    cssrsComplete(ans === 'Yes');
+    return;
+  }
+  // Advance
+  cssrsRender(cssrsStep + 1);
+}
+
+function cssrsComplete(highAlert) {
+  var area = document.getElementById('cssrs-question-area');
+  var cta  = document.getElementById('cssrs-cta-area');
+  var fill = document.getElementById('cssrs-progress');
+  fill.style.width = '100%';
+
+  if (highAlert) {
+    area.innerHTML =
+      '<div style="text-align:center;padding:16px 0;">' +
+        '<div style="font-size:40px;margin-bottom:16px;">🚨</div>' +
+        '<div class="font-display" style="font-size:22px;margin-bottom:10px;">Your care team has been notified.</div>' +
+        '<p style="font-size:14px;color:var(--text-muted);line-height:1.65;margin-bottom:24px;">Dr. Rivera received an alert right now. You are not alone in this moment. Please reach out or call 988.</p>' +
+        '<div style="background:var(--danger-glow);border:1px solid var(--danger);border-radius:14px;padding:16px 18px;text-align:left;">' +
+          '<div style="font-size:12px;font-weight:700;color:var(--danger);letter-spacing:0.5px;margin-bottom:8px;">ALERT SENT — 7:08 AM</div>' +
+          '<div style="font-size:13px;color:var(--text);line-height:1.5;">Marcus R. completed C-SSRS safety screener. Passive ideation: Yes. Active ideation: Yes. Plan: Yes. Immediate follow-up required.</div>' +
+        '</div>' +
+      '</div>';
+    cta.innerHTML =
+      '<a href="tel:988" class="btn btn-danger" style="margin-bottom:10px;text-decoration:none;">Call 988 Now</a>' +
+      '<button onclick="showScreen(\'screen-home\')" style="background:none;border:none;cursor:pointer;display:block;width:100%;text-align:center;font-size:14px;color:var(--text-muted);font-family:var(--font-ui);">Back to Home</button>';
+  } else {
+    area.innerHTML =
+      '<div style="text-align:center;padding:16px 0;">' +
+        '<div style="width:64px;height:64px;border-radius:50%;background:var(--accent-glow);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px;">🌿</div>' +
+        '<div class="font-display" style="font-size:22px;margin-bottom:10px;">Thank you for being honest.</div>' +
+        '<p style="font-size:14px;color:var(--text-muted);line-height:1.65;">That took courage. Your care team can see your check-in. Let\'s finish logging today.</p>' +
+      '</div>';
+    cta.innerHTML = '<button class="btn btn-primary" onclick="showScreen(\'screen-checkin\');setTimeout(function(){ciRender('+(CI_STEPS.length-1)+');},80);">Finish check-in →</button>';
+  }
+}
+
+// ══════════════════════════════════════════
+// WEEKLY ASSESSMENT — PHQ-9 + GAD-7
+// ══════════════════════════════════════════
+var weeklyStep = 0;
+var weeklyScores = [];
+
+var PHQ9 = [
+  'Little interest or pleasure in doing things',
+  'Feeling down, depressed, or hopeless',
+  'Trouble falling or staying asleep, or sleeping too much',
+  'Feeling tired or having little energy',
+  'Poor appetite or overeating',
+  'Feeling bad about yourself — or that you are a failure',
+  'Trouble concentrating on things',
+  'Moving or speaking slowly — or being fidgety and restless',
+  'Thoughts that you would be better off dead or of hurting yourself'
+];
+
+var GAD7 = [
+  'Feeling nervous, anxious, or on edge',
+  'Not being able to stop or control worrying',
+  'Worrying too much about different things',
+  'Trouble relaxing',
+  'Being so restless it\'s hard to sit still',
+  'Becoming easily annoyed or irritable',
+  'Feeling afraid something awful might happen'
+];
+
+var WEEKLY_OPTS = [
+  { label: 'Not at all', val: 0 },
+  { label: 'Several days', val: 1 },
+  { label: 'More than half the days', val: 2 },
+  { label: 'Nearly every day', val: 3 }
+];
+
+var ALL_WEEKLY = PHQ9.map(function(q){ return { q:q, section:'PHQ-9' }; })
+  .concat(GAD7.map(function(q){ return { q:q, section:'GAD-7' }; }));
+
+function weeklyRender(idx) {
+  weeklyStep = idx;
+  var area = document.getElementById('weekly-question-area');
+  var cta  = document.getElementById('weekly-cta-area');
+  var fill = document.getElementById('weekly-progress-fill');
+  var lbl  = document.getElementById('weekly-step-label');
+  if (!area) return;
+
+  var total = ALL_WEEKLY.length;
+
+  // Done state
+  if (idx >= total) {
+    fill.style.width = '100%';
+    lbl.textContent = 'Done';
+    var phq = weeklyScores.slice(0,9).reduce(function(a,b){return a+b;},0);
+    var gad = weeklyScores.slice(9).reduce(function(a,b){return a+b;},0);
+    var phqLabel = phq<=4?'Minimal':phq<=9?'Mild':phq<=14?'Moderate':phq<=19?'Moderately Severe':'Severe';
+    var gadLabel = gad<=4?'Minimal':gad<=9?'Mild':gad<=14?'Moderate':'Severe';
+    area.innerHTML =
+      '<div style="text-align:center;padding:10px 0 24px;">' +
+        '<div style="font-size:32px;margin-bottom:16px;">📊</div>' +
+        '<div class="font-display" style="font-size:24px;margin-bottom:6px;">Assessment complete.</div>' +
+        '<p style="font-size:14px;color:var(--text-muted);margin-bottom:28px;">Your results are sent to Dr. Rivera.</p>' +
+      '</div>' +
+      '<div style="display:flex;flex-direction:column;gap:12px;">' +
+        '<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;">' +
+          '<div style="display:flex;justify-content:space-between;align-items:flex-start;">' +
+            '<div>' +
+              '<div style="font-size:11px;font-weight:700;letter-spacing:0.6px;color:var(--text-dim);margin-bottom:4px;">PHQ-9 · DEPRESSION</div>' +
+              '<div style="font-size:13px;color:var(--text-muted);">'+phqLabel+'</div>' +
+            '</div>' +
+            '<div style="font-size:36px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums;">'+phq+'</div>' +
+          '</div>' +
+        '</div>' +
+        '<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;">' +
+          '<div style="display:flex;justify-content:space-between;align-items:flex-start;">' +
+            '<div>' +
+              '<div style="font-size:11px;font-weight:700;letter-spacing:0.6px;color:var(--text-dim);margin-bottom:4px;">GAD-7 · ANXIETY</div>' +
+              '<div style="font-size:13px;color:var(--text-muted);">'+gadLabel+'</div>' +
+            '</div>' +
+            '<div style="font-size:36px;font-weight:700;color:#8B5CF6;font-variant-numeric:tabular-nums;">'+gad+'</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    cta.innerHTML = '<button class="btn btn-primary" onclick="showScreen(\'screen-home\')">Back to Home</button>';
+    return;
+  }
+
+  fill.style.width = Math.round((idx / total) * 100) + '%';
+  lbl.textContent = (idx + 1) + ' of ' + total;
+
+  var item = ALL_WEEKLY[idx];
+  var isFirst = idx === 0 || ALL_WEEKLY[idx-1].section !== item.section;
+
+  area.innerHTML =
+    (isFirst ? '<div style="display:inline-flex;align-items:center;gap:6px;background:var(--accent-glow);border:1px solid var(--accent);border-radius:20px;padding:4px 12px;margin-bottom:16px;"><span style="font-size:11px;font-weight:700;color:var(--accent);letter-spacing:0.5px;">'+item.section+'</span></div>' : '') +
+    '<p style="font-size:13px;color:var(--text-dim);margin-bottom:12px;">Over the <strong style="color:var(--text-muted);">last 2 weeks</strong>, how often have you been bothered by:</p>' +
+    '<div class="font-display" style="font-size:22px;line-height:1.35;margin-bottom:32px;">'+item.q+'</div>' +
+    '<div style="display:flex;flex-direction:column;gap:10px;">' +
+      WEEKLY_OPTS.map(function(opt) {
+        return '<button onclick="weeklyAnswer('+opt.val+')" style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-radius:14px;border:2px solid var(--border);background:var(--bg-card);cursor:pointer;font-family:var(--font-ui);font-size:14px;font-weight:500;color:var(--text);">'+
+          '<span>'+opt.label+'</span>' +
+          '<span style="font-size:13px;color:var(--text-dim);">'+opt.val+'</span>' +
+        '</button>';
+      }).join('') +
+    '</div>';
+
+  cta.innerHTML = idx > 0
+    ? '<button onclick="weeklyGoBack()" style="background:none;border:none;cursor:pointer;display:block;width:100%;text-align:center;font-size:14px;color:var(--text-muted);font-family:var(--font-ui);padding:8px;">← Previous question</button>'
+    : '';
+}
+
+function weeklyAnswer(val) {
+  weeklyScores[weeklyStep] = val;
+  // Auto-advance with brief flash
+  setTimeout(function(){ weeklyRender(weeklyStep + 1); }, 200);
+}
+
+function weeklyGoBack() {
+  if (weeklyStep > 0) weeklyRender(weeklyStep - 1);
+}
+
+// ── DISTRESS SLIDER (legacy — removed from active UI) ──
+
+// ── COPING CARDS (legacy — elements removed) ──
 
 // ── AFTERCARE GOALS ──
 document.querySelectorAll('.goal-cb').forEach(function(cb) {
@@ -2058,16 +3407,49 @@ document.querySelectorAll('.pin-key').forEach(function(key) {
   });
 });
 
+// ── CLINICIAN ACCORDION ──
+function toggleClinSection(id) {
+  var body = document.getElementById('body-' + id);
+  var chev = document.getElementById('chev-' + id);
+  if (!body) return;
+  var open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : 'flex';
+  if (chev) chev.style.transform = open ? 'rotate(0deg)' : 'rotate(180deg)';
+}
+window.toggleClinSection = toggleClinSection;
+
+function clinAccordionOpen(id) {
+  var body = document.getElementById('body-' + id);
+  var chev = document.getElementById('chev-' + id);
+  if (!body) return;
+  body.style.display = 'flex';
+  if (chev) chev.style.transform = 'rotate(180deg)';
+  var sec = document.getElementById(id);
+  if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+window.clinAccordionOpen = clinAccordionOpen;
+
+function toggleClinInfo() {
+  var body = document.getElementById('clin-info-body');
+  var chev = document.getElementById('chev-clin-info');
+  if (!body) return;
+  var open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : 'block';
+  if (chev) chev.style.transform = open ? 'rotate(0deg)' : 'rotate(180deg)';
+}
+window.toggleClinInfo = toggleClinInfo;
+
 // ── PATIENT ROSTER ──
 var patients = [
-  { id:'p1', name:'Marcus R.', initials:'MR', color:'#C0392B', status:'high', statusLabel:'High Risk', lastCheckin:'20m ago', trend:'↓', trendColor:'var(--safe)', days:47 },
-  { id:'p2', name:'Sarah M.', initials:'SM', color:'#8E44AD', status:'monitor', statusLabel:'Monitor', lastCheckin:'2h ago', trend:'→', trendColor:'var(--text-muted)', days:31 },
-  { id:'p3', name:'James T.', initials:'JT', color:'#8B4513', status:'high', statusLabel:'High Risk', lastCheckin:'5h ago', trend:'↑', trendColor:'var(--danger)', days:12 },
-  { id:'p4', name:'Destiny W.', initials:'DW', color:'#27AE60', status:'engaged', statusLabel:'Engaged', lastCheckin:'1d ago', trend:'↓', trendColor:'var(--safe)', days:58 },
-  { id:'p5', name:'Tyrell B.', initials:'TB', color:'#2980B9', status:'monitor', statusLabel:'Monitor', lastCheckin:'3d ago', trend:'→', trendColor:'var(--text-muted)', days:22 }
+  { id:'p1', name:'Marcus R.', initials:'MR', color:'#C0392B', status:'high', statusLabel:'High Risk', lastCheckin:'20m ago', trend:'↓', trendColor:'var(--safe)', days:47, phq:12 },
+  { id:'p2', name:'Sarah M.', initials:'SM', color:'#8E44AD', status:'monitor', statusLabel:'Monitor', lastCheckin:'2h ago', trend:'→', trendColor:'var(--text-muted)', days:31, phq:16 },
+  { id:'p3', name:'Jordan T.', initials:'JT', color:'#8B4513', status:'high', statusLabel:'High Risk', lastCheckin:'5h ago', trend:'↑', trendColor:'var(--danger)', days:12, phq:19 },
+  { id:'p4', name:'Destiny W.', initials:'DW', color:'#27AE60', status:'engaged', statusLabel:'Engaged', lastCheckin:'1d ago', trend:'↓', trendColor:'var(--safe)', days:58, phq:8 },
+  { id:'p5', name:'Tyrell B.', initials:'TB', color:'#2980B9', status:'monitor', statusLabel:'Monitor', lastCheckin:'3d ago', trend:'→', trendColor:'var(--text-muted)', days:22, phq:14 }
 ];
 
 var dotColors = { high:'var(--danger)', monitor:'var(--warn)', engaged:'var(--safe)', disengaged:'var(--text-dim)' };
+var statusBg = { high:'rgba(231,76,60,0.1)', monitor:'rgba(230,126,34,0.1)', engaged:'rgba(39,174,96,0.1)', disengaged:'var(--bg-card)' };
 var activeFilter = 'all';
 
 function renderRoster(filter) {
@@ -2075,30 +3457,31 @@ function renderRoster(filter) {
   if (!list) return;
   var filtered = filter === 'all' ? patients : patients.filter(function(p) { return p.status === filter; });
   list.innerHTML = filtered.map(function(p) {
-    return '<div class="patient-card" data-action="navTo" data-val="screen-patient-detail">' +
-      '<div class="avatar" style="background:' + p.color + ';">' + p.initials + '</div>' +
-      '<div class="patient-card-info">' +
-        '<div class="patient-name">' + p.name + '</div>' +
-        '<div class="patient-meta">' + p.statusLabel + ' · ' + p.days + ' days</div>' +
-      '</div>' +
-      '<div class="patient-stats">' +
-        '<div style="text-align:right;">' +
-          '<div style="font-size:16px; font-weight:700; color:' + p.trendColor + ';">' + p.trend + '</div>' +
-          '<div style="font-size:11px; color:var(--text-dim);">' + p.lastCheckin + '</div>' +
+    var statusColor = dotColors[p.status];
+    return '<div data-action="navTo" data-val="screen-patient-detail" style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:border-color 0.15s;" onmouseenter="this.style.borderColor=\'var(--accent)\'" onmouseleave="this.style.borderColor=\'var(--border)\'">' +
+      '<div class="avatar" style="background:' + p.color + ';width:38px;height:38px;font-size:12px;">' + p.initials + '</div>' +
+      '<div style="flex:1;min-width:0;">' +
+        '<div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">' +
+          '<span style="font-size:13px;font-weight:700;color:var(--text);">' + p.name + '</span>' +
+          '<span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;background:' + statusBg[p.status] + ';color:' + statusColor + ';border:1px solid ' + statusColor + ';">' + p.statusLabel + '</span>' +
         '</div>' +
-        '<div class="dot" style="background:' + dotColors[p.status] + '; margin-left:6px;"></div>' +
+        '<div style="font-size:11px;color:var(--text-muted);">' + p.days + ' days · PHQ-9: ' + p.phq + ' · Last check-in ' + p.lastCheckin + '</div>' +
+      '</div>' +
+      '<div style="display:flex;flex-direction:column;align-items:center;gap:2px;">' +
+        '<span style="font-size:18px;font-weight:700;color:' + p.trendColor + ';line-height:1;">' + p.trend + '</span>' +
+        '<div style="width:8px;height:8px;border-radius:50%;background:' + statusColor + ';"></div>' +
       '</div>' +
     '</div>';
   }).join('');
 }
 
-document.querySelectorAll('[data-filter]').forEach(function(chip) {
-  chip.addEventListener('click', function() {
-    document.querySelectorAll('[data-filter]').forEach(function(c) { c.classList.remove('active'); });
-    chip.classList.add('active');
-    activeFilter = chip.dataset.filter;
-    renderRoster(activeFilter);
-  });
+document.addEventListener('click', function(e) {
+  var chip = e.target.closest('[data-filter]');
+  if (!chip) return;
+  document.querySelectorAll('[data-filter]').forEach(function(c) { c.classList.remove('active'); });
+  chip.classList.add('active');
+  activeFilter = chip.dataset.filter;
+  renderRoster(activeFilter);
 });
 
 // ── CARE FLAGS ──
@@ -2116,16 +3499,19 @@ var demoFlags = [
 function renderFlags(flags) {
   var el = document.getElementById('care-flags-list');
   if (!el) return;
+  var sevColor = { high:'var(--danger)', moderate:'var(--warn)', low:'var(--text-dim)' };
+  var sevBg = { high:'rgba(231,76,60,0.08)', moderate:'rgba(230,126,34,0.08)', low:'var(--bg-card)' };
   el.innerHTML = flags.map(function(f) {
-    var cls = f.severity === 'high' ? 'high' : f.severity === 'moderate' ? 'moderate' : '';
-    return '<div class="alert-card ' + cls + '">' +
-      '<div style="font-size:18px;">' + (f.icon || '📋') + '</div>' +
-      '<div style="flex:1;">' +
-        '<div style="display:flex; justify-content:space-between; align-items:flex-start;">' +
-          '<div style="font-size:13px; font-weight:700; color:var(--text);">' + f.patient + '</div>' +
-          '<span style="font-size:11px; color:var(--text-dim);">' + (f.time || f.flagged_at || '') + '</span>' +
+    var sc = sevColor[f.severity] || 'var(--text-dim)';
+    var sb = sevBg[f.severity] || 'var(--bg-card)';
+    return '<div style="display:flex;align-items:flex-start;gap:10px;background:' + sb + ';border:1px solid ' + sc + ';border-radius:12px;padding:11px 13px;">' +
+      '<div style="font-size:17px;line-height:1.3;flex-shrink:0;">' + (f.icon || '📋') + '</div>' +
+      '<div style="flex:1;min-width:0;">' +
+        '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">' +
+          '<span style="font-size:13px;font-weight:700;color:var(--text);">' + f.patient + '</span>' +
+          '<span style="font-size:10px;color:var(--text-dim);white-space:nowrap;">' + (f.time || f.flagged_at || '') + '</span>' +
         '</div>' +
-        '<div style="font-size:12px; color:var(--text-muted); margin-top:2px;">' + f.instrument + ' · ' + f.score + '</div>' +
+        '<div style="font-size:12px;color:var(--text-muted);margin-top:2px;">' + f.instrument + ' · <strong style="color:' + sc + ';">' + f.score + '</strong></div>' +
       '</div>' +
     '</div>';
   }).join('');
@@ -2133,21 +3519,23 @@ function renderFlags(flags) {
 
 function loadClinicianDashboard() {
   renderRoster(activeFilter);
-  // Try Supabase, fall back to demo
+  renderFlags(demoFlags);
+  // Needs Attention open by default; others closed
+  var attnBody = document.getElementById('body-section-attention');
+  var attnChev = document.getElementById('chev-section-attention');
+  if (attnBody) { attnBody.style.display = 'flex'; }
+  if (attnChev) { attnChev.style.transform = 'rotate(180deg)'; }
+  // Try Supabase for live flags, fall back silently to demo
   try {
     fetch(SUPABASE_URL + '/rest/v1/care_alerts?order=flagged_at.desc&limit=50', {
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': 'Bearer ' + SUPABASE_KEY
-      }
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
     }).then(function(r) {
       if (r.ok) return r.json();
       throw new Error('non-200');
     }).then(function(data) {
       if (data && data.length > 0) renderFlags(data);
-      else renderFlags(demoFlags);
-    }).catch(function() { renderFlags(demoFlags); });
-  } catch(e) { renderFlags(demoFlags); }
+    }).catch(function() {});
+  } catch(e) {}
 }
 
 // ── INIT ──
