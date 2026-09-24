@@ -1796,407 +1796,109 @@ input[type=range]::-moz-range-thumb {
 
 <!-- ===================== SCREEN 8: CLINICIAN HOME ===================== -->
 <div class="screen" id="screen-clinician-home">
-  <div style="display:flex;flex-direction:column;height:100%;">
+  <div class="cx">
+    <div class="cx-legacy" hidden><div id="body-section-attention"></div><div id="chev-section-attention"></div><div id="care-flags-list"></div><div id="live-feed"></div><div id="sg-banner"></div></div>
 
-    <!-- Header -->
-    <div class="screen-header" style="flex-direction:column;align-items:stretch;padding-bottom:0;gap:0;">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px 10px;">
-        <div>
-          <div style="font-size:11px;font-weight:700;letter-spacing:0.6px;color:var(--text-dim);text-transform:uppercase;">Clinical View</div>
-          <div style="font-size:15px;font-weight:700;color:var(--text);">Dr. Rivera, LCSW</div>
-          <div style="font-size:11px;color:var(--text-muted);margin-top:1px;">Kira Health · IOP · Wed Sep 23</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="background:var(--bg-card2);border:1px solid var(--border);border-radius:20px;padding:4px 10px;font-size:11px;font-weight:600;color:var(--text-muted);">Synced 7:58 AM</div>
-          <button style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:18px;line-height:1;" data-action="navTo" data-val="screen-role" title="Lock">🔒</button>
-        </div>
+    <!-- TODAY -->
+    <div class="cx-pane" id="cx-today">
+      <div class="cx-top">
+        <div class="cx-eyebrow">Kira Health IOP</div>
+        <button class="cx-lock" onclick="showScreen('screen-role')" aria-label="Lock and exit"><span>🔒</span></button>
       </div>
+      <h1 class="cx-large">Today</h1>
+      <p class="cx-lede" id="cx-lede"></p>
 
-      <!-- Day-at-a-glance stat chips -->
-      <div style="display:flex;gap:8px;padding:0 18px 14px;overflow-x:auto;">
-        <button onclick="clinAccordionOpen('section-attention')" style="flex-shrink:0;display:flex;align-items:center;gap:6px;background:rgba(231,76,60,0.1);border:1.5px solid var(--danger);border-radius:20px;padding:6px 14px;cursor:pointer;font-family:var(--font-ui);">
-          <span style="font-size:11px;font-weight:700;color:var(--danger);">⚡ 2 Need Attention</span>
-        </button>
-        <button onclick="clinAccordionOpen('section-flags')" style="flex-shrink:0;display:flex;align-items:center;gap:6px;background:rgba(238,123,48,0.1);border:1.5px solid var(--warn);border-radius:20px;padding:6px 14px;cursor:pointer;font-family:var(--font-ui);">
-          <span style="font-size:11px;font-weight:700;color:var(--warn);">⚠️ 3 Care Flags</span>
-        </button>
-        <button onclick="clinAccordionOpen('section-roster')" style="flex-shrink:0;display:flex;align-items:center;gap:6px;background:var(--accent-glow);border:1.5px solid var(--accent);border-radius:20px;padding:6px 14px;cursor:pointer;font-family:var(--font-ui);">
-          <span style="font-size:11px;font-weight:700;color:var(--accent);">👥 5 Patients</span>
-        </button>
+      <h2 class="cx-h">Needs review</h2>
+      <div class="cx-group" id="cx-review"></div>
+
+      <h2 class="cx-h">Coming up</h2>
+      <div class="cx-group">
+        <div class="cx-row"><div class="cx-time">9:30</div><div class="cx-main"><b>IOP group</b><small>5 patients. Marcus and Jordan are flagged above.</small></div></div>
+        <div class="cx-row cx-tap" onclick="cxOpen('marcus')"><div class="cx-time">2:00</div><div class="cx-main"><b>Marcus R.</b><small>Individual session. He suggested a plan change.</small></div><span class="cx-chev"></span></div>
       </div>
+      <p class="cx-foot" id="cx-caught"></p>
     </div>
 
-    <div style="flex:1;overflow-y:auto;padding:0 0 80px;">
-
-      <div id="live-feed" aria-live="polite"></div>
-      <div id="sg-banner"></div>
-
-      <!-- ── ACCORDION: Needs Attention ── -->
-      <div id="section-attention" style="border-bottom:1px solid var(--border);">
-        <button onclick="toggleClinSection('section-attention')" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;background:none;border:none;cursor:pointer;font-family:var(--font-ui);text-align:left;">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <div style="width:3px;height:28px;background:var(--danger);border-radius:2px;flex-shrink:0;"></div>
-            <div>
-              <div style="font-size:13px;font-weight:700;color:var(--danger);">Needs Attention</div>
-              <div style="font-size:11px;color:var(--text-muted);margin-top:1px;">Before your morning group session</div>
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span style="background:var(--danger);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;">2</span>
-            <svg id="chev-section-attention" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="var(--text-muted)" stroke-width="2" style="transition:transform 0.25s;transform:rotate(180deg);flex-shrink:0;"><path d="M6 9l6 6 6-6"/></svg>
-          </div>
-        </button>
-        <div id="body-section-attention" style="padding:0 18px 16px;display:flex;flex-direction:column;gap:10px;">
-
-          <!-- Marcus attention card -->
-          <div style="background:var(--bg-card);border:1.5px solid var(--danger);border-radius:16px;overflow:hidden;">
-            <div style="background:rgba(231,76,60,0.07);padding:12px 14px;display:flex;align-items:center;gap:12px;">
-              <div class="avatar" style="background:#E5484D;font-size:13px;width:38px;height:38px;flex-shrink:0;">MR</div>
-              <div style="flex:1;min-width:0;">
-                <div style="display:flex;align-items:center;gap:6px;">
-                  <span style="font-size:14px;font-weight:700;color:var(--text);">Marcus R.</span>
-                  <span style="background:var(--danger);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;">High Risk</span>
-                </div>
-                <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Rated 8 last night. Used his crisis plan.</div>
-              </div>
-            </div>
-            <div style="padding:10px 14px;display:flex;gap:8px;">
-              <button onclick="showScreen('screen-patient-detail')" style="flex:1;padding:8px;border-radius:10px;border:none;background:var(--danger);color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-ui);">Review Now</button>
-              <button onclick="showScreen('screen-plan-editor')" style="flex:1;padding:8px;border-radius:10px;border:1.5px solid var(--accent);background:none;color:var(--accent);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-ui);">Crisis Plan</button>
-            </div>
-          </div>
-
-          <!-- James attention card -->
-          <div style="background:var(--bg-card);border:1.5px solid var(--warn);border-radius:16px;overflow:hidden;">
-            <div style="background:rgba(238,123,48,0.07);padding:12px 14px;display:flex;align-items:center;gap:12px;">
-              <div class="avatar" style="background:#8B4513;font-size:13px;width:38px;height:38px;flex-shrink:0;">JT</div>
-              <div style="flex:1;min-width:0;">
-                <div style="display:flex;align-items:center;gap:6px;">
-                  <span style="font-size:14px;font-weight:700;color:var(--text);">Jordan T.</span>
-                  <span style="background:var(--warn);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;">Rising Risk</span>
-                </div>
-                <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">AUDIT-C rising · 5h since last check-in</div>
-              </div>
-            </div>
-            <div style="padding:10px 14px;display:flex;gap:8px;">
-              <button onclick="showScreen('screen-patient-detail')" style="flex:1;padding:8px;border-radius:10px;border:none;background:var(--warn);color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-ui);">Review Now</button>
-              <button style="flex:1;padding:8px;border-radius:10px;border:1.5px solid var(--border);background:none;color:var(--text-muted);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-ui);">Send Nudge</button>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- ── ACCORDION: Care Flags ── -->
-      <div id="section-flags" style="border-bottom:1px solid var(--border);">
-        <button onclick="toggleClinSection('section-flags')" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;background:none;border:none;cursor:pointer;font-family:var(--font-ui);text-align:left;">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <div style="width:3px;height:28px;background:var(--warn);border-radius:2px;flex-shrink:0;"></div>
-            <div>
-              <div style="font-size:13px;font-weight:700;color:var(--warn);">Care Flags</div>
-              <div style="font-size:11px;color:var(--text-muted);margin-top:1px;">Clinical alerts from assessments &amp; check-ins</div>
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span style="background:var(--warn);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;">5</span>
-            <svg id="chev-section-flags" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="var(--text-muted)" stroke-width="2" style="transition:transform 0.25s;flex-shrink:0;"><path d="M6 9l6 6 6-6"/></svg>
-          </div>
-        </button>
-        <div id="body-section-flags" style="padding:0 18px 16px;display:none;flex-direction:column;gap:8px;">
-          <div id="care-flags-list" style="display:flex;flex-direction:column;gap:8px;">
-            <div style="text-align:center;padding:16px;color:var(--text-muted);font-size:13px;">Loading…</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── ACCORDION: Patient Roster ── -->
-      <div id="section-roster" style="border-bottom:1px solid var(--border);">
-        <button onclick="toggleClinSection('section-roster')" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;background:none;border:none;cursor:pointer;font-family:var(--font-ui);text-align:left;">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <div style="width:3px;height:28px;background:var(--accent);border-radius:2px;flex-shrink:0;"></div>
-            <div>
-              <div style="font-size:13px;font-weight:700;color:var(--text);">Patient Roster</div>
-              <div style="font-size:11px;color:var(--text-muted);margin-top:1px;">5 active · tap any patient to open their chart</div>
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span style="background:var(--accent);color:var(--on-accent);font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;">5</span>
-            <svg id="chev-section-roster" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="var(--text-muted)" stroke-width="2" style="transition:transform 0.25s;flex-shrink:0;"><path d="M6 9l6 6 6-6"/></svg>
-          </div>
-        </button>
-        <div id="body-section-roster" style="padding:0 18px 16px;display:none;flex-direction:column;gap:8px;">
-          <!-- Filter chips -->
-          <div class="filter-row" style="margin-bottom:4px;">
-            <span class="chip active" data-filter="all">All</span>
-            <span class="chip" data-filter="high">High Risk</span>
-            <span class="chip" data-filter="engaged">Engaged</span>
-            <span class="chip" data-filter="monitor">Monitor</span>
-          </div>
-          <div id="patient-roster" style="display:flex;flex-direction:column;gap:8px;"></div>
-        </div>
-      </div>
-
-      <!-- ── ACCORDION: Outcome Tracking ── -->
-      <div id="section-outcomes" style="border-bottom:1px solid var(--border);">
-        <button onclick="toggleClinSection('section-outcomes')" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;background:none;border:none;cursor:pointer;font-family:var(--font-ui);text-align:left;">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <div style="width:3px;height:28px;background:#8B5CF6;border-radius:2px;flex-shrink:0;"></div>
-            <div>
-              <div style="font-size:13px;font-weight:700;color:var(--text);">Outcome Tracking</div>
-              <div style="font-size:11px;color:var(--text-muted);margin-top:1px;">PHQ-9 trends · 4-week rolling view</div>
-            </div>
-          </div>
-          <svg id="chev-section-outcomes" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="var(--text-muted)" stroke-width="2" style="transition:transform 0.25s;flex-shrink:0;"><path d="M6 9l6 6 6-6"/></svg>
-        </button>
-        <div id="body-section-outcomes" style="padding:0 18px 16px;display:none;">
-          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:16px;">
-            <svg viewBox="0 0 320 160" style="width:100%;display:block;" aria-label="PHQ-9 outcomes">
-              <line x1="45" y1="10" x2="45" y2="120" stroke="var(--border)" stroke-width="1"/>
-              <line x1="45" y1="120" x2="300" y2="120" stroke="var(--border)" stroke-width="1"/>
-              <line x1="45" y1="10" x2="300" y2="10" stroke="var(--border)" stroke-width="0.5" stroke-dasharray="3 3"/>
-              <line x1="45" y1="65" x2="300" y2="65" stroke="var(--border)" stroke-width="0.5" stroke-dasharray="3 3"/>
-              <text x="40" y="14" fill="var(--text-dim)" font-size="8" text-anchor="end" font-family="DM Sans,sans-serif">27</text>
-              <text x="40" y="69" fill="var(--text-dim)" font-size="8" text-anchor="end" font-family="DM Sans,sans-serif">14</text>
-              <text x="40" y="124" fill="var(--text-dim)" font-size="8" text-anchor="end" font-family="DM Sans,sans-serif">0</text>
-              <text x="95" y="134" fill="var(--text-dim)" font-size="8" text-anchor="middle" font-family="DM Sans,sans-serif">Wk 1</text>
-              <text x="155" y="134" fill="var(--text-dim)" font-size="8" text-anchor="middle" font-family="DM Sans,sans-serif">Wk 2</text>
-              <text x="215" y="134" fill="var(--text-dim)" font-size="8" text-anchor="middle" font-family="DM Sans,sans-serif">Wk 3</text>
-              <text x="275" y="134" fill="var(--text-dim)" font-size="8" text-anchor="middle" font-family="DM Sans,sans-serif">Wk 4</text>
-              <polyline points="95,46.7 155,54.8 215,63 275,71.1" fill="none" stroke="#EE7B30" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <circle cx="275" cy="71.1" r="4" fill="#EE7B30" stroke="var(--bg-card)" stroke-width="2"/>
-              <polyline points="95,46.7 155,46.7 215,50.7 275,54.8" fill="none" stroke="var(--safe)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <circle cx="275" cy="54.8" r="4" fill="var(--safe)" stroke="var(--bg-card)" stroke-width="2"/>
-              <polyline points="95,87.4 155,79.3 215,71.1 275,63" fill="none" stroke="var(--danger)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 3"/>
-              <circle cx="275" cy="63" r="4" fill="var(--danger)" stroke="var(--bg-card)" stroke-width="2"/>
-            </svg>
-            <div style="display:flex;gap:16px;justify-content:center;margin-top:12px;">
-              <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-muted);"><div style="width:14px;height:3px;background:#EE7B30;border-radius:2px;"></div>Marcus R.</div>
-              <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-muted);"><div style="width:14px;height:3px;background:var(--safe);border-radius:2px;"></div>Sarah M.</div>
-              <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-muted);"><div style="width:14px;height:3px;background:var(--danger);border-radius:2px;border-top:1px dashed var(--danger);"></div>Jordan T.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── ACCORDION: Care Plans ── -->
-      <div id="section-plans" style="border-bottom:1px solid var(--border);">
-        <button onclick="toggleClinSection('section-plans')" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;background:none;border:none;cursor:pointer;font-family:var(--font-ui);text-align:left;">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <div style="width:3px;height:28px;background:var(--safe);border-radius:2px;flex-shrink:0;"></div>
-            <div>
-              <div style="font-size:13px;font-weight:700;color:var(--text);">Distress Plans</div>
-              <div style="font-size:11px;color:var(--text-muted);margin-top:1px;">Per-patient crisis plan status</div>
-            </div>
-          </div>
-          <svg id="chev-section-plans" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="var(--text-muted)" stroke-width="2" style="transition:transform 0.25s;flex-shrink:0;"><path d="M6 9l6 6 6-6"/></svg>
-        </button>
-        <div id="body-section-plans" style="padding:0 18px 16px;display:none;flex-direction:column;gap:8px;">
-          <div style="background:var(--bg-card);border:1.5px solid var(--safe);border-radius:14px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;">
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div class="avatar" style="background:#E5484D;font-size:12px;width:34px;height:34px;">MR</div>
-              <div>
-                <div style="font-size:13px;font-weight:700;color:var(--text);">Marcus R.</div>
-                <div style="font-size:11px;color:var(--safe);font-weight:600;">✓ Active plan · Sep 5</div>
-              </div>
-            </div>
-            <button onclick="showScreen('screen-plan-editor')" style="padding:6px 12px;border-radius:8px;border:1.5px solid var(--accent);background:none;color:var(--accent);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-ui);">Edit Plan</button>
-          </div>
-          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;opacity:0.7;">
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div class="avatar" style="background:#8E44AD;font-size:12px;width:34px;height:34px;">SM</div>
-              <div>
-                <div style="font-size:13px;font-weight:700;color:var(--text);">Sarah M.</div>
-                <div style="font-size:11px;color:var(--text-dim);">No plan set</div>
-              </div>
-            </div>
-            <button style="padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--text-muted);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-ui);">+ Create</button>
-          </div>
-          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;opacity:0.7;">
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div class="avatar" style="background:#8B4513;font-size:12px;width:34px;height:34px;">JT</div>
-              <div>
-                <div style="font-size:13px;font-weight:700;color:var(--text);">Jordan T.</div>
-                <div style="font-size:11px;color:var(--text-dim);">No plan set</div>
-              </div>
-            </div>
-            <button style="padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:none;color:var(--text-muted);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-ui);">+ Create</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── About This View (info strip) ── -->
-      <div style="padding:16px 18px;">
-        <button onclick="toggleClinInfo()" style="width:100%;display:flex;align-items:center;gap:8px;background:none;border:none;cursor:pointer;font-family:var(--font-ui);text-align:left;padding:0;">
-          <span style="font-size:13px;color:var(--text-dim);">＊</span>
-          <span style="font-size:12px;color:var(--text-dim);font-weight:600;">About this clinical view</span>
-          <svg id="chev-clin-info" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="var(--text-dim)" stroke-width="2" style="transition:transform 0.25s;margin-left:auto;"><path d="M6 9l6 6 6-6"/></svg>
-        </button>
-        <div id="clin-info-body" style="display:none;margin-top:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:16px;font-size:13px;color:var(--text-muted);line-height:1.65;">
-          <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px;">What you can do in Equa's Clinical View</div>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <div>📋 <strong style="color:var(--text);">Track outcomes</strong>, PHQ-9, GAD-7, AUDIT-C, and C-SSRS scores populate automatically as patients complete check-ins.</div>
-            <div>⚡ <strong style="color:var(--text);">Real-time alerts</strong>, Care flags surface the moment a patient's distress score or instrument score crosses a clinical threshold.</div>
-            <div>🗂 <strong style="color:var(--text);">Distress plans</strong>, Pre-load a personalized 3-tier crisis plan for any patient. They see it in their app the moment they rate distress.</div>
-            <div>📲 <strong style="color:var(--text);">Push updates</strong>, Edit a patient's plan anytime and push it live to their app without them needing to do anything.</div>
-            <div>👁 <strong style="color:var(--text);">360° patient view</strong>, Tap any patient to see their full chart: check-in history, assessment scores, distress ratings, and plan status.</div>
-          </div>
-          <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:11px;color:var(--text-dim);">All data is HIPAA-compliant. Equa does not store PHI without a signed BAA. · Kira Health · Equa v1.0 Beta</div>
-        </div>
-      </div>
-
-      <!-- Lock -->
-      <div style="padding:0 18px 24px;">
-        <button class="btn btn-secondary" data-action="navTo" data-val="screen-role" style="width:100%;">🔒 Lock &amp; Exit</button>
-      </div>
-
+    <!-- PATIENTS -->
+    <div class="cx-pane" id="cx-patients" hidden>
+      <div class="cx-top"><div class="cx-eyebrow">Kira Health IOP</div></div>
+      <h1 class="cx-large">Patients</h1>
+      <div class="cx-search"><span>🔍</span><input type="search" placeholder="Search" aria-label="Search patients" oninput="cxFilter(this.value)"></div>
+      <div class="cx-group" id="cx-roster"></div>
+      <p class="cx-foot">Mood is the PHQ-9 over 4 weeks. Lower is better.</p>
     </div>
+
+    <!-- OUTCOMES -->
+    <div class="cx-pane" id="cx-outcomes" hidden>
+      <div class="cx-top"><div class="cx-eyebrow">Kira Health IOP</div></div>
+      <h1 class="cx-large">Outcomes</h1>
+      <p class="cx-lede">Your group over the last 4 weeks.</p>
+      <div class="cx-cards">
+        <div class="cx-card"><small>Average mood score</small><b>16 <i>→</i> 12</b><span class="cx-good">Down 4 points</span></div>
+        <div class="cx-card"><small>Plan use</small><b id="cx-o-uses">14</b><span>times this month</span></div>
+        <div class="cx-card"><small>Average drop after plan</small><b>3.5</b><span>points on the 1 to 10 scale</span></div>
+        <div class="cx-card"><small>Attendance</small><b>86%</b><span>of group sessions</span></div>
+      </div>
+      <h2 class="cx-h">Mood score by week</h2>
+      <div class="cx-group cx-pad"><svg viewBox="0 0 300 130" class="cx-bars" id="cx-bars"></svg></div>
+      <p class="cx-foot">Demo data for Kira Health. In a pilot, this fills in from real check-ins.</p>
+    </div>
+
+    <nav class="cx-tabs" aria-label="Clinician">
+      <button class="on" onclick="cxTab('today',this)"><span>🏠</span>Today</button>
+      <button onclick="cxTab('patients',this)"><span>👥</span>Patients</button>
+      <button onclick="cxTab('outcomes',this)"><span>📈</span>Outcomes</button>
+    </nav>
   </div>
 </div>
 
-<!-- ===================== SCREEN 9: PATIENT DETAIL ===================== -->
 <div class="screen" id="screen-patient-detail">
-  <div style="display:flex; flex-direction:column; height:100%;">
+  <div class="cx cx-detail">
     <div class="screen-header">
-      <button class="back-btn" data-action="navTo" data-val="screen-clinician-home">
-        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-        Back
-      </button>
+      <button class="back-btn" onclick="showScreen('screen-clinician-home')"><svg width="12" height="20" viewBox="0 0 12 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-4px;margin-right:4px"><path d="M10 2 2 10l8 8"/></svg>Today</button>
       <span class="header-title">Marcus R.</span>
-      <span class="badge badge-high" style="font-size:11px;">High Risk</span>
+      <span style="width:60px"></span>
     </div>
-    <div class="content" style="flex:1; overflow-y:auto; padding-bottom:32px;">
-
-      <!-- Overview -->
-      <div>
-        <div class="section-label">Overview</div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-          <div class="card2" style="text-align:center;">
-            <div style="font-size:28px; font-weight:700; color:var(--accent); font-variant-numeric:tabular-nums;">47</div>
-            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Days in Program</div>
-          </div>
-          <div class="card2" style="text-align:center;">
-            <div style="font-size:28px; font-weight:700; color:var(--text); font-variant-numeric:tabular-nums;">88%</div>
-            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Attendance</div>
-          </div>
-          <div class="card2" style="text-align:center;">
-            <div style="font-size:22px; font-weight:700; color:var(--warn);">20m</div>
-            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Last Check-In</div>
-          </div>
-          <div class="card2" style="text-align:center;">
-            <div style="font-size:22px; font-weight:700; color:var(--safe);">↓</div>
-            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">PHQ-9 Trend</div>
-          </div>
-        </div>
+    <div class="cx-scroll">
+      <div class="cx-id">
+        <div class="cx-av cx-av-lg">MR</div>
+        <div><b>Marcus R.</b><small>Day 47 in IOP. Next session Thu at 2:00 PM.</small></div>
       </div>
 
-      <!-- Scores -->
-      <div>
-        <div class="section-label">Recent Scores</div>
-        <div class="card" style="padding:16px;">
-          <div style="margin-bottom:16px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <span style="font-size:13px; font-weight:600; color:var(--text-muted);">PHQ-9</span>
-              <span style="font-size:18px; font-weight:700; color:var(--accent);">12</span>
-            </div>
-            <svg viewBox="0 0 200 40" style="width:100%;display:block;">
-              <polyline points="10,32 60,26 110,20 160,14" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/>
-              <circle cx="10" cy="32" r="3" fill="var(--accent)"/>
-              <circle cx="60" cy="26" r="3" fill="var(--accent)"/>
-              <circle cx="110" cy="20" r="3" fill="var(--accent)"/>
-              <circle cx="160" cy="14" r="4" fill="var(--accent)" stroke="var(--bg-card)" stroke-width="1.5"/>
-            </svg>
-          </div>
-          <div class="divider" style="margin-bottom:16px;"></div>
-          <div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <span style="font-size:13px; font-weight:600; color:var(--text-muted);">AUDIT-C</span>
-              <span style="font-size:18px; font-weight:700; color:#EE7B30;">2</span>
-            </div>
-            <svg viewBox="0 0 200 40" style="width:100%;display:block;">
-              <polyline points="10,28 60,24 110,20 160,16" fill="none" stroke="#EE7B30" stroke-width="2" stroke-linecap="round"/>
-              <circle cx="10" cy="28" r="3" fill="#EE7B30"/>
-              <circle cx="60" cy="24" r="3" fill="#EE7B30"/>
-              <circle cx="110" cy="20" r="3" fill="#EE7B30"/>
-              <circle cx="160" cy="16" r="4" fill="#EE7B30" stroke="var(--bg-card)" stroke-width="1.5"/>
-            </svg>
-          </div>
-        </div>
+      <h2 class="cx-h">Since your last review</h2>
+      <div class="cx-group" id="cx-eps"></div>
+      <button class="cx-btn" id="cx-reviewed" onclick="cxReviewed()">Mark as reviewed</button>
+
+      <div id="cx-sugg-wrap">
+        <h2 class="cx-h">He suggested a change</h2>
+        <div id="cx-sugg"></div>
       </div>
 
-      <!-- Flags -->
-      <div>
-        <div class="section-label">Recent Flags</div>
-        <div style="display:flex; flex-direction:column; gap:8px;">
-          <div class="alert-card high">
-            <div style="font-size:18px;">🚨</div>
-            <div>
-              <div style="font-size:13px; font-weight:700; color:var(--danger);">Distress Score 8/10</div>
-              <div style="font-size:12px; color:var(--text-muted);">Craving episode self-reported · 20 min ago</div>
-            </div>
-          </div>
-          <div class="alert-card moderate">
-            <div style="font-size:18px;">⚠️</div>
-            <div>
-              <div style="font-size:13px; font-weight:700; color:var(--warn);">Mood: Low (😕)</div>
-              <div style="font-size:12px; color:var(--text-muted);">Daily check-in · 2 days ago</div>
-            </div>
-          </div>
-        </div>
+      <h2 class="cx-h">Scores, last 4 weeks</h2>
+      <div class="cx-group">
+        <div class="cx-row cx-score"><div class="cx-main"><b>Mood (PHQ-9)</b><small>Moderately severe to moderate</small></div><svg viewBox="0 0 70 28" class="cx-spark"><polyline points="4,6 25,11 46,17 66,21"/><circle cx="66" cy="21" r="3"/></svg><div class="cx-val">18 <i>→</i> 12</div></div>
+        <div class="cx-row cx-score"><div class="cx-main"><b>Anxiety (GAD-7)</b><small>Moderate to mild</small></div><svg viewBox="0 0 70 28" class="cx-spark"><polyline points="4,8 25,12 46,15 66,19"/><circle cx="66" cy="19" r="3"/></svg><div class="cx-val">13 <i>→</i> 9</div></div>
+        <div class="cx-row cx-score"><div class="cx-main"><b>Drinking (AUDIT-C)</b><small>Elevated to low risk</small></div><svg viewBox="0 0 70 28" class="cx-spark"><polyline points="4,8 25,13 46,17 66,22"/><circle cx="66" cy="22" r="3"/></svg><div class="cx-val">5 <i>→</i> 2</div></div>
+        <div class="cx-row"><div class="cx-main"><b>Safety screen (C-SSRS)</b><small>Last completed Sep 22</small></div><div class="cx-val cx-plain">Negative</div></div>
       </div>
 
-      <!-- Crisis Plan Status -->
-      <div>
-        <div class="section-label">Distress Plan</div>
-        <div style="background:var(--bg-card);border:1.5px solid var(--safe);border-radius:16px;overflow:hidden;">
-          <div style="background:rgba(61,184,122,0.09);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;">
-            <div>
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--safe);margin-bottom:3px;">✓ Plan Pre-loaded</div>
-              <div style="font-size:14px;font-weight:700;color:var(--text);">Personal Crisis Plan</div>
-              <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Set Sep 5, 2026 · Dr. Rivera, LCSW</div>
-            </div>
-            <div style="text-align:right;">
-              <div style="font-size:10px;color:var(--text-dim);">Awaiting in app</div>
-              <div style="font-size:12px;color:var(--safe);font-weight:600;">Active ✓</div>
-            </div>
-          </div>
-          <div style="padding:12px 18px;display:flex;flex-direction:column;gap:6px;">
-            <div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;">
-              <span style="color:var(--text-muted);">🟢 Tier 1–3 (Low)</span><span style="color:var(--text-dim);">4 steps · music, walk, journal, Naltrexone</span>
-            </div>
-            <div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;">
-              <span style="color:var(--text-muted);">🟡 Tier 4–6 (Moderate)</span><span style="color:var(--text-dim);">4 steps · peer support, breathing, cold water</span>
-            </div>
-            <div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;">
-              <span style="color:var(--text-muted);">🔴 Tier 7–10 (Crisis)</span><span style="color:var(--text-dim);">4 steps · peer contact, Kira Health, 988</span>
-            </div>
-          </div>
-          <div style="padding:0 18px 14px;display:flex;gap:8px;">
-            <button onclick="showScreen('screen-plan-editor')" style="flex:1;padding:8px;border-radius:10px;border:1.5px solid var(--accent);background:none;color:var(--accent);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-ui);">✏️ Edit Plan</button>
-            <button onclick="clinicianPushPlan(this)" style="flex:1;padding:8px;border-radius:10px;border:none;background:var(--accent);color:var(--on-accent);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-ui);">📲 Push to Patient</button>
-          </div>
-        </div>
+      <h2 class="cx-h">What he actually uses</h2>
+      <div class="cx-group">
+        <div class="cx-row"><div class="cx-main"><b>Texting peer support</b></div><div class="cx-val cx-plain">5 times</div></div>
+        <div class="cx-row"><div class="cx-main"><b>Walking outside</b></div><div class="cx-val cx-plain">4 times</div></div>
+        <div class="cx-row"><div class="cx-main"><b>Riding the urge</b></div><div class="cx-val cx-plain">3 times</div></div>
       </div>
 
-      <!-- Clinical Note -->
-      <div>
-        <div class="section-label">Clinical Note</div>
-        <textarea id="clinical-note" placeholder="Add clinical note..." style="min-height:90px;"></textarea>
-        <button class="btn btn-primary" style="margin-top:10px;">Save Note</button>
+      <h2 class="cx-h">Care</h2>
+      <div class="cx-group">
+        <div class="cx-row"><div class="cx-main"><b>Group attendance</b></div><div class="cx-val cx-plain">14 of 16</div></div>
+        <div class="cx-row cx-tap" onclick="showScreen('screen-plan-editor')"><div class="cx-main"><b>His plan</b><small>Written with you on Sep 5</small></div><span class="cx-link">Edit</span><span class="cx-chev"></span></div>
       </div>
-
-      <!-- Actions -->
-      <div>
-        <div class="section-label">Actions</div>
-        <div style="display:flex; flex-direction:column; gap:8px;">
-          <button class="btn btn-danger">📅 Schedule Urgent Session</button>
-          <button class="btn btn-secondary" style="border-color:var(--safe); color:var(--safe);">✓ Mark as Reviewed</button>
-        </div>
-      </div>
+      <p class="cx-foot">Scores are demo data. Plan use above is live from this demo.</p>
     </div>
   </div>
 </div>
 
-<!-- ===================== SCREEN: PLAN EDITOR ===================== -->
 <div class="screen hidden" id="screen-plan-editor">
   <div style="display:flex;flex-direction:column;height:100%;">
     <div class="screen-header">
@@ -4065,6 +3767,7 @@ sugg.seed = { id:'seed', tier:1, text:'Something that works for me: music helps 
 var cur = 1;
 function esc(t){ return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
 function when(iso){ var d=new Date(iso); return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()]+' '+(d.getMonth()+1)+'/'+d.getDate(); }
+window.equaPending = function(){ return pending(); };
 function pending(){ return Object.keys(sugg).map(function(k){return sugg[k];}).filter(function(x){return x.status==='new';}).sort(function(a,b){return new Date(b.at)-new Date(a.at);}); }
 
 window.sgOpen = function(){
@@ -4521,3 +4224,164 @@ window.equaRun = function(){ return run; };
 @keyframes txIn { from { opacity:0; transform:translateY(6px) } to { opacity:1; transform:none } }
 .reduce-motion .tx-typing i, .reduce-motion .tx-reply, .reduce-motion .tx-typing { animation:none; }
 </style>
+<style>
+/* ===== v35 CLINICIAN, APPLE STYLE ===== */
+.cx { display:flex; flex-direction:column; height:100%; background:var(--bg); position:relative; }
+.cx-pane { flex:1; overflow-y:auto; padding:calc(10px + env(safe-area-inset-top,0px)) 20px calc(96px + env(safe-area-inset-bottom,0px)); }
+.cx-top { display:flex; justify-content:space-between; align-items:center; min-height:34px; }
+.cx-eyebrow { font-size:13px; font-weight:500; color:var(--text-muted); }
+.cx-lock { background:var(--fill); border:none; width:34px; height:34px; border-radius:50%; color:var(--text); font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.cx-large { font-size:34px; font-weight:700; letter-spacing:-0.03em; color:var(--text); margin-top:2px; }
+.cx-lede { font-size:17px; color:var(--text-muted); margin-top:6px; line-height:1.4; }
+.cx-lede b { color:var(--text); font-weight:600; }
+.cx-h { font-size:13px; font-weight:600; color:var(--text-muted); margin:26px 0 8px 16px; }
+.cx-group { background:var(--bg-card); border-radius:14px; overflow:hidden; }
+.cx-pad { padding:14px 12px 8px; }
+.cx-row { display:flex; align-items:center; gap:12px; padding:12px 16px; min-height:44px; position:relative; }
+.cx-row + .cx-row::before { content:""; position:absolute; top:0; left:16px; right:0; height:0.5px; background:var(--border); }
+.cx-tap { cursor:pointer; }
+.cx-tap:active { background:var(--fill); }
+.cx-main { flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
+.cx-main b { font-size:17px; font-weight:600; color:var(--text); }
+.cx-main small { font-size:15px; color:var(--text-muted); line-height:1.35; }
+.cx-main .cx-also { font-size:14px; color:var(--accent); }
+.cx-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; align-self:flex-start; margin-top:8px; }
+.cx-when { font-size:15px; color:var(--text-muted); align-self:flex-start; white-space:nowrap; }
+.cx-chev { width:8px; height:8px; border-right:2px solid var(--text-dim); border-top:2px solid var(--text-dim); transform:rotate(45deg); flex-shrink:0; margin-right:4px; }
+.cx-time { font-family:var(--font-num); font-size:17px; font-weight:600; color:var(--text); width:46px; flex-shrink:0; align-self:flex-start; padding-top:1px; font-variant-numeric:tabular-nums; }
+.cx-foot { font-size:13px; color:var(--text-muted); margin:10px 16px 0; line-height:1.45; }
+.cx-av { width:40px; height:40px; border-radius:50%; background:var(--fill); color:var(--text); font-size:15px; font-weight:600; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.cx-av-lg { width:60px; height:60px; font-size:21px; }
+.cx-trend { font-family:var(--font-num); font-size:15px; font-weight:600; color:var(--text); white-space:nowrap; font-variant-numeric:tabular-nums; }
+.cx-trend i, .cx-val i, .cx-card b i { font-style:normal; color:var(--text-dim); font-weight:500; }
+.cx-search { display:flex; align-items:center; gap:8px; background:var(--fill); border-radius:10px; padding:8px 10px; margin:12px 0 18px; color:var(--text-muted); }
+.cx-search input { flex:1; border:none !important; background:transparent !important; padding:0 !important; font-size:17px !important; color:var(--text) !important; outline:none; }
+.cx-cards { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:18px; }
+.cx-card { background:var(--bg-card); border-radius:14px; padding:14px; display:flex; flex-direction:column; gap:2px; }
+.cx-card small { font-size:13px; color:var(--text-muted); font-weight:500; }
+.cx-card b { font-family:var(--font-num); font-size:28px; font-weight:700; color:var(--text); letter-spacing:-0.02em; margin-top:4px; font-variant-numeric:tabular-nums; }
+.cx-card span { font-size:13px; color:var(--text-muted); }
+.cx-card .cx-good { color:var(--safe); font-weight:600; }
+.cx-bars { width:100%; display:block; }
+.cx-tabs { position:absolute; left:0; right:0; bottom:0; display:flex; background:var(--material); -webkit-backdrop-filter:saturate(180%) blur(20px); backdrop-filter:saturate(180%) blur(20px); border-top:0.5px solid var(--border); padding:6px 0 calc(6px + env(safe-area-inset-bottom,0px)); z-index:5; }
+.cx-tabs button { flex:1; background:none; border:none; display:flex; flex-direction:column; align-items:center; gap:2px; font:500 10px var(--font-ui); color:#8E8E93; cursor:pointer; padding:4px 0; }
+.cx-tabs button span { font-size:22px; line-height:1; }
+.cx-tabs button.on { color:var(--accent); }
+.cx-detail .cx-scroll { flex:1; overflow-y:auto; padding:8px 20px 40px; }
+.cx-id { display:flex; align-items:center; gap:14px; margin:14px 0 4px; }
+.cx-id b { font-size:22px; font-weight:700; color:var(--text); letter-spacing:-0.02em; display:block; }
+.cx-id small { font-size:15px; color:var(--text-muted); }
+.cx-ep-num { font-family:var(--font-num); font-size:20px; font-weight:700; min-width:74px; display:flex; align-items:center; gap:4px; font-variant-numeric:tabular-nums; align-self:flex-start; }
+.cx-ep-num i { font-style:normal; color:var(--text-dim); font-weight:500; font-size:15px; }
+.cx-btn { width:100%; margin-top:10px; background:var(--bg-card); border:none; border-radius:14px; padding:14px; font:400 17px var(--font-ui); color:var(--accent); cursor:pointer; }
+.cx-btn:disabled { color:var(--text-muted); }
+.cx-spark { width:70px; height:28px; flex-shrink:0; }
+.cx-spark polyline { fill:none; stroke:var(--safe); stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.cx-spark circle { fill:var(--safe); }
+.cx-val { font-family:var(--font-num); font-size:17px; font-weight:600; color:var(--text); min-width:62px; text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+.cx-val.cx-plain { font-family:var(--font-ui); font-weight:400; color:var(--text-muted); }
+.cx-link { font-size:17px; color:var(--accent); }
+#cx-sugg .sg-card { background:var(--bg-card) !important; border-radius:14px; }
+#cx-sugg .sg-card + .sg-card { margin-top:10px; }
+.cx-empty { padding:16px; font-size:15px; color:var(--text-muted); }
+</style>
+
+<script>
+(function(){
+var TN={craving:'craving',overwhelmed:'overwhelm',shutdown:'shutting-down',escalating:'panic or anger',other:'distress'};
+function col(v){ return v>=8?'var(--danger)':v>=5?'var(--warn)':'var(--safe)'; }
+function clock(iso){ var d=new Date(iso), h=d.getHours(), m=d.getMinutes(), ap=h>=12?'PM':'AM'; h=h%12||12; return h+':'+(m<10?'0':'')+m+' '+ap; }
+function dayWord(iso){ var d=new Date(iso), n=new Date(); if (d.toDateString()===n.toDateString()) return 'Today'; if (new Date(n-864e5).toDateString()===d.toDateString()) return 'Last night'; return (d.getMonth()+1)+'/'+d.getDate(); }
+var reviewed = false;
+function eps(){ return (window.equaEpisodes?equaEpisodes():[]).filter(function(e){return e.before;}).sort(function(a,b){return new Date(b.at)-new Date(a.at);}); }
+function cap(t){ return t.charAt(0).toUpperCase()+t.slice(1); }
+function epLine(e){ var t = TN[e.type]||'distress';
+  if (!e.after) return 'Opened his ' + t + ' plan at ' + e.before + '. No follow-up rating yet.';
+  if (e.after >= 8) return cap(t) + ' still at ' + e.after + ' after his plan. Sent to 988.';
+  return cap(t) + ' went from ' + e.before + ' to ' + e.after + ' with his plan.'; }
+var PATIENTS = [
+  { id:'marcus', init:'MR', name:'Marcus R.', sub:'Day 47. Checked in 20 min ago.', from:18, to:12 },
+  { id:'jordan', init:'JT', name:'Jordan T.', sub:'Day 21. No check-in for 2 days.', from:11, to:14 },
+  { id:'aisha',  init:'AK', name:'Aisha K.',  sub:'Day 33. Checked in this morning.', from:15, to:9 },
+  { id:'devon',  init:'DW', name:'Devon W.',  sub:'Day 12. Checked in yesterday.', from:20, to:17 },
+  { id:'sam',    init:'SP', name:'Sam P.',    sub:'Day 58. Checked in this morning.', from:9, to:6 }
+];
+function review(){
+  var list = [], E = eps(), S = window.equaPending ? equaPending() : [];
+  if (!reviewed && (E.length || S.length)) {
+    var top = E[0], worst = E.reduce(function(m,e){ return Math.max(m, e.before||0); }, 0);
+    var line = top ? epLine(top) : 'Suggested a plan change.';
+    var extra = [];
+    if (E.length > 1) extra.push(E.length + ' plan uses since your last review');
+    if (S.length && top) extra.push('Suggested a plan change');
+    list.push({ id:'marcus', name:'Marcus R.', dot:col(worst), line:line, also:extra.join(' \u00b7 '), when: top ? (dayWord(top.at)==='Today' ? clock(top.at) : dayWord(top.at)) : '' , rank:worst });
+  }
+  list.push({ id:'jordan', name:'Jordan T.', dot:'var(--warn)', line:'Drinking screen went from 3 to 6. No check-in for 2 days.', also:'', when:'2d', rank:6 });
+  list.sort(function(a,b){ return b.rank-a.rank; });
+  return list;
+}
+function render(){
+  var R = review(), el = document.getElementById('cx-review'); if (!el) return;
+  var d = new Date(), days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'], mons=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var hr = d.getHours(), greet = hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
+  document.getElementById('cx-lede').innerHTML = greet + ', Dr. Rivera. ' + days[d.getDay()] + ', ' + mons[d.getMonth()] + ' ' + d.getDate() + '.<br><b>' + R.length + (R.length===1?' patient':' patients') + ' to review before group.</b>';
+  el.innerHTML = R.map(function(r){
+    return '<div class="cx-row cx-tap" onclick="cxOpen(\''+r.id+'\')"><span class="cx-dot" style="background:'+r.dot+'"></span>' +
+      '<div class="cx-main"><b>'+r.name+'</b><small>'+r.line+'</small>'+(r.also?'<span class="cx-also">'+r.also+'</span>':'')+'</div>' +
+      '<span class="cx-when">'+r.when+'</span><span class="cx-chev"></span></div>';
+  }).join('');
+  document.getElementById('cx-caught').textContent = 'Everyone else is steady. ' + (PATIENTS.length - R.length) + ' patients checked in with no flags.';
+  roster(); detail(); bars();
+}
+function roster(filter){
+  var el = document.getElementById('cx-roster'); if (!el) return;
+  var f = (filter||'').toLowerCase();
+  el.innerHTML = PATIENTS.filter(function(p){ return !f || p.name.toLowerCase().indexOf(f)>=0; }).map(function(p){
+    var good = p.to < p.from;
+    return '<div class="cx-row cx-tap" onclick="cxOpen(\''+p.id+'\')"><div class="cx-av">'+p.init+'</div><div class="cx-main"><b>'+p.name+'</b><small>'+p.sub+'</small></div>' +
+      '<span class="cx-trend" style="color:'+(good?'var(--safe)':'var(--danger)')+'">'+p.from+' <i>\u2192</i> '+p.to+'</span><span class="cx-chev"></span></div>';
+  }).join('');
+}
+function detail(){
+  var el = document.getElementById('cx-eps'); if (!el) return;
+  var E = eps();
+  el.innerHTML = (reviewed || !E.length) ? '<div class="cx-empty">Nothing new since your last review.</div>' : E.slice(0,4).map(function(e){
+    return '<div class="cx-row"><div class="cx-ep-num"><span style="color:'+col(e.before)+'">'+e.before+'</span>'+(e.after?'<i>\u2192</i><span style="color:'+col(e.after)+'">'+e.after+'</span>':'')+'</div>' +
+      '<div class="cx-main"><b style="font-size:16px;font-weight:500">'+epLine(e)+'</b><small>'+dayWord(e.at)+' at '+clock(e.at)+'</small></div></div>';
+  }).join('');
+  var btn = document.getElementById('cx-reviewed'); if (btn) { btn.disabled = reviewed; btn.textContent = reviewed ? 'Reviewed' : 'Mark as reviewed'; }
+  var S = window.equaPending ? equaPending() : [];
+  var sw = document.getElementById('cx-sugg-wrap'), se = document.getElementById('sg-editor'), sd = document.getElementById('cx-sugg');
+  if (sw) sw.hidden = !S.length;
+  if (sd && se) sd.innerHTML = se.innerHTML;
+}
+function bars(){
+  var el = document.getElementById('cx-bars'); if (!el) return;
+  var v = [16.4, 15.1, 13.6, 12.2], W=300, x0=34, bw=44, gap=(W-x0-4*bw)/4, max=20, H=100;
+  var g = '';
+  [0,10,20].forEach(function(t){ var y = 10 + H - t/max*H; g += '<line x1="'+x0+'" x2="'+W+'" y1="'+y+'" y2="'+y+'" style="stroke:var(--border)" stroke-width="0.5"/><text x="'+(x0-8)+'" y="'+(y+4)+'" text-anchor="end" font-size="10" style="fill:var(--text-muted)">'+t+'</text>'; });
+  v.forEach(function(val,i){ var h = val/max*H, x = x0 + gap/2 + i*(bw+gap), y = 10 + H - h;
+    g += '<rect x="'+x+'" y="'+y+'" width="'+bw+'" height="'+h+'" rx="6" style="fill:'+(i===v.length-1?'var(--accent)':'var(--fill)')+'"/>' +
+      '<text x="'+(x+bw/2)+'" y="'+(y-5)+'" text-anchor="middle" font-size="11" font-weight="600" style="fill:var(--text)">'+val+'</text>' +
+      '<text x="'+(x+bw/2)+'" y="126" text-anchor="middle" font-size="10" style="fill:var(--text-muted)">Week '+(i+1)+'</text>'; });
+  el.innerHTML = g;
+}
+window.cxTab = function(t, btn){
+  ['today','patients','outcomes'].forEach(function(k){ document.getElementById('cx-'+k).hidden = (k!==t); });
+  document.querySelectorAll('.cx-tabs button').forEach(function(b){ b.classList.toggle('on', b===btn); });
+};
+window.cxFilter = function(v){ roster(v); };
+window.cxOpen = function(id){
+  if (id === 'marcus') { showScreen('screen-patient-detail'); detail(); }
+  else if (window.stToast) stToast('This demo shows Marcus\u2019s full chart. Other patients open the same way.');
+};
+window.cxReviewed = function(){ reviewed = true; if (window.equaMarkReviewed) equaMarkReviewed(); render(); if (window.stToast) stToast('Marked as reviewed. New plan use will show up here.'); };
+var _ss = window.showScreen;
+window.showScreen = showScreen = function(id){ _ss(id); if (id==='screen-clinician-home' || id==='screen-patient-detail') render(); };
+setInterval(function(){
+  var a = document.querySelector('#screen-clinician-home.active, #screen-patient-detail.active');
+  if (a) { var n = eps().length + (window.equaPending?equaPending().length:0); if (n !== window._cxN) { window._cxN = n; if (n) reviewed = false; render(); } }
+}, 1500);
+render();
+})();
+</script>
